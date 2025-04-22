@@ -1,0 +1,9 @@
+{
+  "dialect": "postgres",
+  "outFile": "./src/database.types.ts",
+  "url": "env(DATABASE_URL)",
+  "camelCase": false,
+  "dateParser": "timestamp",
+  "numericParser": "string",
+  "typeOnlyImports": true
+}

@@ -1,0 +1,1 @@
+export const APP_PADDING_HORIZONTAL = 20

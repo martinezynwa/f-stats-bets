@@ -1,0 +1,22 @@
+{
+  "name": "@f-stats-bets/types",
+  "version": "0.0.1",
+  "private": true,
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "scripts": {
+    "build": "tsc",
+    "generate-types": "kysely-codegen --include-pattern=\"public.*\" --dialect postgres --out-file ./src/generated.types.ts && node scripts/generate-types.js && yarn build",
+    "clean": "rm -rf dist",
+    "dev": "tsc --watch"
+  },
+  "dependencies": {
+    "kysely": "^0.27.6",
+    "pg": "^8.11.3"
+  },
+  "devDependencies": {
+    "@types/pg": "^8.11.0",
+    "kysely-codegen": "^0.11.0",
+    "typescript": "^5.0.0"
+  }
+}

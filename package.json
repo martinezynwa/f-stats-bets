@@ -1,0 +1,14 @@
+{
+  "name": "f-stats-bets",
+  "private": true,
+  "workspaces": [
+    "apps/*",
+    "packages/*"
+  ],
+  "scripts": {
+    "client": "yarn workspace expo-client",
+    "server": "yarn workspace server",
+    "build:types": "yarn workspace types build"
+  },
+  "packageManager": "yarn@1.22.22"
+}

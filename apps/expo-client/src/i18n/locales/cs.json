@@ -1,0 +1,10 @@
+{
+  "home": {
+    "home": "Domovská stránka"
+  },
+  "profile": {
+    "profile": "Profil",
+    "changeLanguage": "Změnit jazyk",
+    "signOut": "Odhlásit se"
+  }
+}

@@ -1,0 +1,10 @@
+{
+  "home": {
+    "home": "Home"
+  },
+  "profile": {
+    "profile": "Profile",
+    "changeLanguage": "Change Language",
+    "signOut": "Sign Out"
+  }
+}
