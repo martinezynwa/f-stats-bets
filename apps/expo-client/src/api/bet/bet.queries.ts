@@ -1,9 +1,11 @@
 import { Bet } from '@f-stats-bets/types'
 import { useQuery } from '@tanstack/react-query'
 
-import { handleFetch } from '../fetch'
+import { useFetch } from '../fetch'
 
 export const useBets = () => {
+  const { handleFetch } = useFetch()
+
   return useQuery<Bet[]>({
     queryKey: ['bets'],
     queryFn: () => handleFetch<Bet[]>('/bets'),
@@ -11,6 +13,8 @@ export const useBets = () => {
 }
 
 export const useBet = (id: string) => {
+  const { handleFetch } = useFetch()
+
   return useQuery<Bet>({
     queryKey: ['bets', id],
     queryFn: () => handleFetch<Bet>(`/bets/${id}`),

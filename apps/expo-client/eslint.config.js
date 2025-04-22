@@ -29,6 +29,7 @@ export default [
         process: true,
         console: true,
         RequestInit: true,
+        require: true,
       },
     },
     plugins: {

@@ -7,10 +7,15 @@ import { useAuth } from '@/providers/AuthProvider'
 import { ScrollViewWrapper } from '@/ui'
 
 export const UserData = () => {
-  const { session } = useAuth()
+  const { session, setSession } = useAuth()
   const { changeLanguage, language, t } = useTranslation()
 
   const { handleSignOut } = useLoginLogout()
+
+  const onSignOut = async () => {
+    handleSignOut()
+    setSession(null)
+  }
 
   return (
     <ScrollViewWrapper>
@@ -31,7 +36,7 @@ export const UserData = () => {
         </TouchableOpacity>
         <TouchableOpacity
           style={{ backgroundColor: 'white', padding: 10, borderRadius: 5 }}
-          onPress={() => handleSignOut()}
+          onPress={onSignOut}
         >
           <Text>{t('profile.signOut')}</Text>
         </TouchableOpacity>

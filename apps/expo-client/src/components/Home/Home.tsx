@@ -6,7 +6,7 @@ import { ScrollViewWrapper } from '@/ui'
 export const Home = () => {
   const { data: bets, isLoading } = useBets()
 
-  if (isLoading) {
+  if (isLoading || !bets) {
     return <></>
   }
 

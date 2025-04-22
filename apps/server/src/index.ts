@@ -1,6 +1,6 @@
 import cors from 'cors'
 import dotenv from 'dotenv'
-import express from 'express'
+import express, { NextFunction, Request, Response } from 'express'
 import { errorHandler } from './lib'
 import betsRouter from './routes/bets'
 import usersRouter from './routes/users'
@@ -22,7 +22,9 @@ app.use(express.json())
 app.use('/users', usersRouter)
 app.use('/bets', betsRouter)
 
-app.use(errorHandler)
+app.use((err: Error, req: Request, res: Response, next: NextFunction) => {
+  errorHandler(err, req, res)
+})
 
 app.listen(process.env.PORT, () => {
   // eslint-disable-next-line no-console

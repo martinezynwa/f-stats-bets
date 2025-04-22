@@ -463,6 +463,7 @@ export interface User {
   avatar: string | null;
   createdAt: Generated<Timestamp | null>;
   id: string;
+  isVerified: boolean | null;
   name: string;
   providerAvatar: string | null;
   providerId: string;

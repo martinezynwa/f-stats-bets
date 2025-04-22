@@ -1,11 +1,12 @@
 import { User } from '@f-stats-bets/types'
 import { useQuery } from '@tanstack/react-query'
 
-import { handleFetch } from '../fetch'
+import { useFetch } from '../fetch'
 
 import { useAuth } from '@/providers/AuthProvider'
 
 export const useUser = () => {
+  const { handleFetch } = useFetch()
   const { session } = useAuth()
   const userId = session?.user.id!
 

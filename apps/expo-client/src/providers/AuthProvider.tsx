@@ -5,11 +5,13 @@ import { supabase } from '../lib/supabase'
 
 type AuthData = {
   session: Session | null
+  setSession: (session: Session | null) => void
   authLoading: boolean
 }
 
 const AuthContext = createContext<AuthData>({
   session: null,
+  setSession: () => null,
   authLoading: true,
 })
 
@@ -19,21 +21,20 @@ export default function AuthProvider({ children }: PropsWithChildren) {
 
   useEffect(() => {
     const fetchSession = async () => {
-      const { data } = await supabase.auth.getSession()
+      const { data: sessionData } = await supabase.auth.getSession()
 
+      setSession(sessionData.session)
       setAuthLoading(false)
-      setSession(data.session)
     }
 
     fetchSession()
-
-    // Listen for changes to the session
-    supabase.auth.onAuthStateChange((_event, session) => {
-      setSession(session)
-    })
   }, [])
 
-  return <AuthContext.Provider value={{ session, authLoading }}>{children}</AuthContext.Provider>
+  return (
+    <AuthContext.Provider value={{ session, setSession, authLoading }}>
+      {children}
+    </AuthContext.Provider>
+  )
 }
 
 export const useAuth = () => useContext(AuthContext)

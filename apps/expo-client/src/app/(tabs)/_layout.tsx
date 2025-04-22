@@ -76,7 +76,7 @@ export default function TabLayout() {
           options={{
             title: label,
             tabBarIcon: ({ focused }) => (
-              <TabBarIcon name={iconName} color={focused ? 'gray' : 'gray'} />
+              <TabBarIcon name={iconName} color={focused ? 'white' : 'gray'} />
             ),
           }}
         />

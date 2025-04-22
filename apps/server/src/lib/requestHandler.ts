@@ -1,6 +1,5 @@
 import { NextFunction, Request, Response } from 'express'
 import { z } from 'zod'
-import { ErrorCodes } from './errorHandler'
 
 type TypedRequestBody<T> = Request & { body: T }
 
@@ -16,25 +15,26 @@ export const validateRequestWithBody =
   <T extends z.ZodType>(handler: TypedRequestHandler<z.infer<T>>, schema: T) =>
   async (req: Request, res: Response, next: NextFunction) => {
     try {
+      console.log('req', req.body)
       const validatedData = schema.parse(req.body)
 
       req.body = validatedData
 
       await handler(req as TypedRequestBody<z.infer<T>>, res, next)
     } catch (error) {
-      if (error instanceof z.ZodError) {
-        const formattedErrors = error.errors.map(err => ({
+      const errors = (error as z.ZodError).errors
+
+      if (!!errors) {
+        const formattedErrors = errors.map(err => ({
           path: err.path.join('.'),
           message: err.message,
         }))
-
-        return res.status(ErrorCodes.BAD_REQUEST).json({
-          error: 'Validation failed',
-          details: formattedErrors,
-        })
+        console.error(formattedErrors)
+        return res.status(400).json(formattedErrors)
+      } else {
+        console.error(error)
+        return res.status(400).json('Error occurred')
       }
-
-      next(error)
     }
   }
 

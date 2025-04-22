@@ -1,7 +1,7 @@
 import { PropsWithChildren } from 'react'
 import { RefreshControl, ScrollView, StyleSheet, View } from 'react-native'
 
-import { HeaderTitle } from '../layout'
+import { HeaderTitle } from '../Layout'
 
 import { SafeAreaWrapper } from './SafeAreaWrapper'
 

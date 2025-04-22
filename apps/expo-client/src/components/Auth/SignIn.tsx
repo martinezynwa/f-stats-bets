@@ -1,42 +1,62 @@
-import { Stack } from 'expo-router'
+import { Ionicons } from '@expo/vector-icons'
+import { router } from 'expo-router'
 import React, { useState } from 'react'
-import { Button, StyleSheet, Text, TextInput, View } from 'react-native'
+import { Image, Keyboard, StyleSheet, Text, TextInput, View } from 'react-native'
 
 import { useLoginLogout } from './useLoginLogout'
 
-import { useAuth } from '@/providers/AuthProvider'
-import { Colors } from '@/ui'
+import { useTranslation } from '@/i18n/useTranslation'
+import { ActionButton, Colors, SubmitButton } from '@/ui'
 
 export const SignInScreenComponent = () => {
+  const { t } = useTranslation()
+
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
-
-  const { session } = useAuth()
 
   const { handleEmailSignIn } = useLoginLogout()
 
   return (
-    <View style={styles.container}>
-      <Stack.Screen options={{ title: 'Sign in' }} />
+    <View style={styles.container} onTouchStart={() => Keyboard.dismiss()}>
+      <View style={styles.logoContainer}>
+        <Image
+          source={require('../../../assets/icon.png')}
+          style={styles.logo}
+          resizeMode='contain'
+        />
+      </View>
 
-      <Text style={styles.label}>Email</Text>
+      <Text style={styles.label}>{t('login.label.email')}</Text>
       <TextInput
         value={email}
         onChangeText={setEmail}
-        placeholder='jon@gmail.com'
+        placeholder={t('login.label.email.placeholder')}
         style={styles.input}
+        placeholderTextColor='gray'
       />
 
-      <Text style={styles.label}>Password</Text>
+      <Text style={styles.label}>{t('login.label.password')}</Text>
       <TextInput
         value={password}
         onChangeText={setPassword}
-        placeholder=''
+        placeholder={t('login.label.password.placeholder')}
         style={styles.input}
         secureTextEntry
+        placeholderTextColor='gray'
       />
 
-      {!session && <Button title='Sign in' onPress={() => handleEmailSignIn(email, password)} />}
+      <View style={styles.buttonContainer}>
+        <SubmitButton
+          title={t('login.button.signIn')}
+          onPress={() => handleEmailSignIn(email, password)}
+          align='left'
+        />
+        <ActionButton
+          text={t('login.button.signUp')}
+          onPress={() => router.push('/sign-up')}
+          iconRight={<Ionicons name='arrow-forward' size={24} color='white' />}
+        />
+      </View>
     </View>
   )
 }
@@ -46,6 +66,15 @@ const styles = StyleSheet.create({
     padding: 20,
     justifyContent: 'center',
     flex: 1,
+    backgroundColor: Colors.loginBackground,
+  },
+  logoContainer: {
+    alignItems: 'center',
+    marginBottom: 30,
+  },
+  logo: {
+    width: 200,
+    height: 200,
   },
   label: {
     color: 'gray',
@@ -64,5 +93,8 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     color: Colors.text,
     marginVertical: 10,
+  },
+  buttonContainer: {
+    gap: 16,
   },
 })

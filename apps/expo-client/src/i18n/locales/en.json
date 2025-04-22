@@ -1,10 +1,17 @@
 {
-  "home": {
-    "home": "Home"
-  },
-  "profile": {
-    "profile": "Profile",
-    "changeLanguage": "Change Language",
-    "signOut": "Sign Out"
-  }
+  "login.button.signIn": "Sign In",
+  "login.button.signUp": "Sign Up",
+  "login.button.createAccount": "Create account",
+  "login.label.email": "Email",
+  "login.label.password": "Password",
+  "login.label.email.placeholder": "Enter your email",
+  "login.label.password.placeholder": "Enter your password",
+  "login.label.username": "Username",
+  "login.label.username.placeholder": "Enter your username",
+  "login.signUp.success": "User created successfully!",
+  "login.signUp.error": "Please fill in all fields",
+  "login.notVerified.title": "User is not verified yet",
+  "profile.profile": "Profile",
+  "profile.changeLanguage": "Change Language",
+  "profile.signOut": "Sign Out"
 }

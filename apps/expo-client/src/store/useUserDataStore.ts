@@ -1,17 +1,12 @@
+import { User } from '@f-stats-bets/types'
 import { create } from 'zustand'
 
-type UserDetails = {
-  username: string
-}
-
 type UserDataState = {
-  user: UserDetails
-  setUserData: (data: Partial<UserDataState>) => void
+  user: User | null
+  setUserData: (data: User) => void
 }
 
 export const useUserDataStore = create<UserDataState>(set => ({
-  user: {
-    username: '',
-  },
-  setUserData: data => set(state => ({ ...state, ...data })),
+  user: null,
+  setUserData: data => set({ user: data }),
 }))

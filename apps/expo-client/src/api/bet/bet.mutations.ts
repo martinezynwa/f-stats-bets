@@ -1,9 +1,10 @@
 import { Bet, CreateBetSchema, UpdateBetSchema } from '@f-stats-bets/types'
 import { useMutation, useQueryClient } from '@tanstack/react-query'
 
-import { handleFetch } from '../fetch'
+import { useFetch } from '../fetch'
 
 export const useCreateBet = () => {
+  const { handleFetch } = useFetch()
   const queryClient = useQueryClient()
 
   return useMutation({
@@ -19,6 +20,7 @@ export const useCreateBet = () => {
 }
 
 export const useUpdateBet = () => {
+  const { handleFetch } = useFetch()
   const queryClient = useQueryClient()
 
   return useMutation({
@@ -35,6 +37,7 @@ export const useUpdateBet = () => {
 }
 
 export const useDeleteBet = () => {
+  const { handleFetch } = useFetch()
   const queryClient = useQueryClient()
 
   return useMutation({

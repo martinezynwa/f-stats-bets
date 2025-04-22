@@ -1,13 +1,13 @@
 import React from 'react'
 
 import { SignInScreenComponent } from '@/components/Auth'
-import { ScrollViewWrapper } from '@/ui'
+import { SafeAreaWrapper } from '@/ui'
 
 const SignInScreen = () => {
   return (
-    <ScrollViewWrapper>
+    <SafeAreaWrapper>
       <SignInScreenComponent />
-    </ScrollViewWrapper>
+    </SafeAreaWrapper>
   )
 }
 
