@@ -7,8 +7,8 @@ import { GestureHandlerRootView } from 'react-native-gesture-handler'
 import { NotifierWrapper } from 'react-native-notifier'
 
 import { NotVerified } from '@/components/User/NotVerified'
-import { usePreloadAppCatalogData } from '@/hooks/usePreloadAppCatalogData'
 import { usePreloadAppData } from '@/hooks/usePreloadAppData'
+import { usePreloadUserData } from '@/hooks/usePreloadUserData'
 import '@/i18n'
 import AuthProvider, { useAuth } from '@/providers/AuthProvider'
 import QueryProvider from '@/providers/QueryProvider'
@@ -29,17 +29,18 @@ function AppContent() {
   const { session, authLoading } = useAuth()
   const { user } = useUserDataStore()
 
-  const { initialLoaded: appCatalogDataLoaded, error: appCatalogDataError } =
-    usePreloadAppCatalogData()
+  const { error: userDataError, initialLoaded: userDataLoaded } = usePreloadUserData(!!session)
 
-  const { error: appDataError, initialLoaded: appDataLoaded } = usePreloadAppData()
+  const { error: appDataError, initialLoaded: appDataLoaded } = usePreloadAppData(
+    userDataLoaded && !userDataError,
+  )
 
   useEffect(() => {
-    if (appCatalogDataError) throw appCatalogDataError
+    if (userDataError) throw userDataError
     if (appDataError) throw appDataError
-  }, [appCatalogDataError, appDataError])
+  }, [appDataError, userDataError])
 
-  const completelyLoaded = session ? appCatalogDataLoaded && appDataLoaded : true
+  const completelyLoaded = session ? appDataLoaded && userDataLoaded : true
 
   useEffect(() => {
     if (completelyLoaded) {
@@ -47,13 +48,8 @@ function AppContent() {
     }
   }, [completelyLoaded])
 
-  if (!completelyLoaded || authLoading) {
-    return <Loading />
-  }
-
-  if (session && !!user && !user.isVerified) {
-    return <NotVerified />
-  }
+  if (!completelyLoaded || authLoading) return <Loading />
+  if (session && !!user && !user.isVerified) return <NotVerified />
 
   return (
     <GestureHandlerRootView style={{ flex: 1 }}>

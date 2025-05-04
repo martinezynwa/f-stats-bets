@@ -1,0 +1,211 @@
+id,nationName,altNationName,flag,code
+0,Unknown,,https://,UNK
+1,Belgium,,https://media.api-sports.io/football/teams/1.png,BEL
+2,France,,https://media.api-sports.io/football/teams/2.png,FRA
+3,Croatia,,https://media.api-sports.io/football/teams/3.png,CRO
+4,Russia,,https://media.api-sports.io/football/teams/4.png,RUS
+5,Sweden,,https://media.api-sports.io/football/teams/5.png,SWE
+6,Brazil,,https://media.api-sports.io/football/teams/6.png,BRA
+7,Uruguay,,https://media.api-sports.io/football/teams/7.png,URU
+8,Colombia,,https://media.api-sports.io/football/teams/8.png,COL
+9,Spain,,https://media.api-sports.io/football/teams/9.png,SPA
+10,England,,https://media.api-sports.io/football/teams/10.png,ENG
+11,Panama,,https://media.api-sports.io/football/teams/11.png,PAN
+12,Japan,,https://media.api-sports.io/football/teams/12.png,JAP
+13,Senegal,,https://media.api-sports.io/football/teams/13.png,SEN
+14,Serbia,,https://media.api-sports.io/football/teams/14.png,SER
+15,Switzerland,,https://media.api-sports.io/football/teams/15.png,SWI
+16,Mexico,,https://media.api-sports.io/football/teams/16.png,MEX
+17,South Korea,Korea Republic,https://media.api-sports.io/football/teams/17.png,SOU
+18,Iceland,,https://media.api-sports.io/football/teams/18.png,ICE
+19,Nigeria,,https://media.api-sports.io/football/teams/19.png,NIG
+20,Australia,,https://media.api-sports.io/football/teams/20.png,AUS
+21,Denmark,,https://media.api-sports.io/football/teams/21.png,DEN
+22,Iran,,https://media.api-sports.io/football/teams/22.png,IRA
+23,Saudi Arabia,,https://media.api-sports.io/football/teams/23.png,SAU
+24,Poland,,https://media.api-sports.io/football/teams/24.png,POL
+25,Germany,,https://media.api-sports.io/football/teams/25.png,GER
+26,Argentina,,https://media.api-sports.io/football/teams/26.png,ARG
+27,Portugal,,https://media.api-sports.io/football/teams/27.png,POR
+28,Tunisia,,https://media.api-sports.io/football/teams/28.png,TUN
+29,Costa Rica,,https://media.api-sports.io/football/teams/29.png,COS
+30,Peru,,https://media.api-sports.io/football/teams/30.png,PER
+31,Morocco,,https://media.api-sports.io/football/teams/31.png,MOR
+32,Egypt,,https://media.api-sports.io/football/teams/32.png,EGY
+767,Wales,,https://media.api-sports.io/football/teams/767.png,WAL
+768,Italy,,https://media.api-sports.io/football/teams/768.png,ITA
+769,Hungary,,https://media.api-sports.io/football/teams/769.png,HUN
+770,Czech Republic,Czechia,https://media.api-sports.io/football/teams/770.png,CZE
+771,Northern Ireland,,https://media.api-sports.io/football/teams/771.png,NOR
+772,Ukraine,,https://media.api-sports.io/football/teams/772.png,UKR
+773,Slovakia,,https://media.api-sports.io/football/teams/773.png,SLO
+774,Romania,,https://media.api-sports.io/football/teams/774.png,ROM
+775,Austria,,https://media.api-sports.io/football/teams/775.png,AUS
+776,Rep. Of Ireland,Republic of Ireland,https://media.api-sports.io/football/teams/776.png,IRE
+777,Turkey,Türkiye,https://media.api-sports.io/football/teams/777.png,TUR
+778,Albania,,https://media.api-sports.io/football/teams/778.png,ALB
+1090,Norway,,https://media.api-sports.io/football/teams/1090.png,NOR
+1091,Slovenia,,https://media.api-sports.io/football/teams/1091.png,SLO
+1092,Latvia,,https://media.api-sports.io/football/teams/1092.png,LAT
+1093,Gibraltar,,https://media.api-sports.io/football/teams/1093.png,GIB
+1094,Armenia,,https://media.api-sports.io/football/teams/1094.png,ARM
+1095,Kazakhstan,,https://media.api-sports.io/football/teams/1095.png,KAZ
+1096,Azerbaijan,,https://media.api-sports.io/football/teams/1096.png,AZE
+1097,Lithuania,,https://media.api-sports.io/football/teams/1097.png,LIT
+1098,Faroe Islands,,https://media.api-sports.io/football/teams/1098.png,FAR
+1099,Finland,,https://media.api-sports.io/football/teams/1099.png,FIN
+1100,Belarus,,https://media.api-sports.io/football/teams/1100.png,BEL
+1101,Estonia,,https://media.api-sports.io/football/teams/1101.png,EST
+1102,Luxembourg,,https://media.api-sports.io/football/teams/1102.png,LUX
+1103,Bulgaria,,https://media.api-sports.io/football/teams/1103.png,BUL
+1104,Georgia,,https://media.api-sports.io/football/teams/1104.png,GEO
+1105,FYR Macedonia,North Macedonia,https://media.api-sports.io/football/teams/1105.png,MAC
+1106,Cyprus,,https://media.api-sports.io/football/teams/1106.png,CYP
+1107,Liechtenstein,,https://media.api-sports.io/football/teams/1107.png,LIE
+1108,Scotland,,https://media.api-sports.io/football/teams/1108.png,SCO
+1109,Montenegro,,https://media.api-sports.io/football/teams/1109.png,MON
+1110,Andorra,,https://media.api-sports.io/football/teams/1110.png,AND
+1111,Kosovo,,https://media.api-sports.io/football/teams/1111.png,SOV
+1112,Malta,,https://media.api-sports.io/football/teams/1112.png,MAL
+1113,Bosnia & Herzegovina,Bosnia and Herzegovina,https://media.api-sports.io/football/teams/1113.png,BOS
+1114,Moldova,,https://media.api-sports.io/football/teams/1114.png,MOL
+1115,San Marino,,https://media.api-sports.io/football/teams/1115.png,SAN
+1116,Israel,,https://media.api-sports.io/football/teams/1116.png,ISR
+1117,Greece,,https://media.api-sports.io/football/teams/1117.png,GRE
+1118,Netherlands,,https://media.api-sports.io/football/teams/1118.png,NET
+1489,Tanzania,,https://media.api-sports.io/football/teams/1489.png,TAN
+1490,Madagascar,,https://media.api-sports.io/football/teams/1490.png,MAD
+1491,Mauritania,,https://media.api-sports.io/football/teams/1491.png,MAU
+1492,Gambia,,https://media.api-sports.io/football/teams/1492.png,GAM
+1493,Namibia,,https://media.api-sports.io/football/teams/1493.png,NAM
+1494,Sao Tome and Principe,São Tomé e Príncipe,https://media.api-sports.io/football/teams/1494.png,PRN
+1495,Malawi,,https://media.api-sports.io/football/teams/1495.png,MAL
+1496,South Sudan,,https://media.api-sports.io/football/teams/1496.png,SSU
+1497,Mauritius,,https://media.api-sports.io/football/teams/1497.png,MAU
+1498,Eritrea,,https://media.api-sports.io/football/teams/1498.png,ERI
+1499,Sierra Leone,,https://media.api-sports.io/football/teams/1499.png,SIE
+1500,Mali,,https://media.api-sports.io/football/teams/1500.png,MAL
+1501,Ivory Coast,Côte d'Ivoire,https://media.api-sports.io/football/teams/1501.png,IVO
+1502,Burkina Faso,,https://media.api-sports.io/football/teams/1502.png,BUR
+1503,Gabon,,https://media.api-sports.io/football/teams/1503.png,GAB
+1504,Ghana,,https://media.api-sports.io/football/teams/1504.png,GHA
+1505,Niger,,https://media.api-sports.io/football/teams/1505.png,NIG
+1506,Ethiopia,,https://media.api-sports.io/football/teams/1506.png,ETH
+1507,Zambia,,https://media.api-sports.io/football/teams/1507.png,ZAM
+1508,Congo DR,,https://media.api-sports.io/football/teams/1508.png,CON
+1509,Guinea,,https://media.api-sports.io/football/teams/1509.png,GUI
+1510,Sudan,,https://media.api-sports.io/football/teams/1510.png,SUD
+1511,Kenya,,https://media.api-sports.io/football/teams/1511.png,KEN
+1512,Mozambique,,https://media.api-sports.io/football/teams/1512.png,MOZ
+1513,Guinea-Bissau,,https://media.api-sports.io/football/teams/1513.png,GUI
+1514,Rwanda,,https://media.api-sports.io/football/teams/1514.png,RWA
+1515,Seychelles,,https://media.api-sports.io/football/teams/1515.png,SEY
+1516,Benin,,https://media.api-sports.io/football/teams/1516.png,BEN
+1517,Congo,,https://media.api-sports.io/football/teams/1517.png,CON
+1518,Lesotho,,https://media.api-sports.io/football/teams/1518.png,LES
+1519,Uganda,,https://media.api-sports.io/football/teams/1519.png,UGA
+1520,Botswana,,https://media.api-sports.io/football/teams/1520.png,BOT
+1521,Equatorial Guinea,,https://media.api-sports.io/football/teams/1521.png,EQU
+1522,Zimbabwe,,https://media.api-sports.io/football/teams/1522.png,ZIM
+1523,Chad,,https://media.api-sports.io/football/teams/1523.png,CHA
+1524,Comoros,,https://media.api-sports.io/football/teams/1524.png,COM
+1525,Liberia,,https://media.api-sports.io/football/teams/1525.png,LIB
+1526,Libya,,https://media.api-sports.io/football/teams/1526.png,LIB
+1527,Central African Republic,,https://media.api-sports.io/football/teams/1527.png,CEN
+1528,Burundi,,https://media.api-sports.io/football/teams/1528.png,BUR
+1529,Angola,,https://media.api-sports.io/football/teams/1529.png,ANG
+1530,Cameroon,,https://media.api-sports.io/football/teams/1530.png,CAM
+1531,South Africa,,https://media.api-sports.io/football/teams/1531.png,SOU
+1532,Algeria,,https://media.api-sports.io/football/teams/1532.png,ALG
+1533,Cape Verde Islands,Cape Verde,https://media.api-sports.io/football/teams/1533.png,CAP
+1534,Togo,,https://media.api-sports.io/football/teams/1534.png,TOG
+1535,Djibouti,,https://media.api-sports.io/football/teams/1535.png,DJI
+1536,Tajikistan,,https://media.api-sports.io/football/teams/1536.png,TAJ
+1537,India,,https://media.api-sports.io/football/teams/1537.png,IND
+1538,Malaysia,,https://media.api-sports.io/football/teams/1538.png,MAL
+1539,Turkmenistan,,https://media.api-sports.io/football/teams/1539.png,TUR
+1540,Bhutan,,https://media.api-sports.io/football/teams/1540.png,BHU
+1542,Vietnam,,https://media.api-sports.io/football/teams/1542.png,VIE
+1543,Cambodia,,https://media.api-sports.io/football/teams/1543.png,CAM
+1545,Nepal,,https://media.api-sports.io/football/teams/1545.png,NEP
+1546,Singapore,,https://media.api-sports.io/football/teams/1546.png,SIN
+1547,Bahrain,,https://media.api-sports.io/football/teams/1547.png,BAH
+1548,Jordan,,https://media.api-sports.io/football/teams/1548.png,JOR
+1549,Maldives,,https://media.api-sports.io/football/teams/1549.png,MAL
+1550,Yemen,,https://media.api-sports.io/football/teams/1550.png,YEM
+1551,Lebanon,,https://media.api-sports.io/football/teams/1551.png,LEB
+1552,Oman,,https://media.api-sports.io/football/teams/1552.png,OMA
+1553,Afghanistan,,https://media.api-sports.io/football/teams/1553.png,AFG
+1554,Kyrgyzstan,Kyrgyz Republic,https://media.api-sports.io/football/teams/1554.png,KYR
+1555,Philippines,,https://media.api-sports.io/football/teams/1555.png,PHI
+1556,Myanmar,,https://media.api-sports.io/football/teams/1556.png,MYA
+1557,Chinese Taipei,,https://media.api-sports.io/football/teams/1557.png,CHI
+1558,Laos,,https://media.api-sports.io/football/teams/1558.png,LAO
+1560,Bangladesh,,https://media.api-sports.io/football/teams/1560.png,BAN
+1561,North Korea,,https://media.api-sports.io/football/teams/1561.png,NOR
+1562,Palestine,,https://media.api-sports.io/football/teams/1562.png,PAL
+1563,United Arab Emirates,,https://media.api-sports.io/football/teams/1563.png,UAE
+1564,Thailand,,https://media.api-sports.io/football/teams/1564.png,THA
+1565,Syria,,https://media.api-sports.io/football/teams/1565.png,SYR
+1566,China,,https://media.api-sports.io/football/teams/1566.png,CHI
+1567,Iraq,,https://media.api-sports.io/football/teams/1567.png,IRA
+1568,Uzbekistan,,https://media.api-sports.io/football/teams/1568.png,UZB
+1569,Qatar,,https://media.api-sports.io/football/teams/1569.png,QAT
+1570,Kuwait,,https://media.api-sports.io/football/teams/1570.png,KUW
+1571,Indonesia,,https://media.api-sports.io/football/teams/1571.png,IND
+2379,Venezuela,,https://media.api-sports.io/football/teams/2379.png,VEN
+2380,Paraguay,,https://media.api-sports.io/football/teams/2380.png,PAR
+2381,Bolivia,,https://media.api-sports.io/football/teams/2381.png,BOL
+2382,Ecuador,,https://media.api-sports.io/football/teams/2382.png,ECU
+2383,Chile,,https://media.api-sports.io/football/teams/2383.png,CHI
+2384,USA,,https://media.api-sports.io/football/teams/2384.png,USA
+2385,Jamaica,,https://media.api-sports.io/football/teams/2385.png,JAM
+2386,Haiti,,https://media.api-sports.io/football/teams/2386.png,HAI
+2388,Cuba,,https://media.api-sports.io/football/teams/2388.png,CUB
+2995,Eswatini,,https://media.api-sports.io/football/teams/2995.png,ESW
+4460,Hong Kong,,https://media.api-sports.io/football/teams/4460.png,HON
+4672,Honduras,,https://media.api-sports.io/football/teams/4672.png,HON
+4673,New Zealand,,https://media.api-sports.io/football/teams/4673.png,ZEA
+4767,Mação,,https://media.api-sports.io/football/teams/4767.png,MAÇ
+5157,Bahamas,,https://media.api-sports.io/football/teams/5157.png,BAH
+5158,Bermuda,,https://media.api-sports.io/football/teams/5158.png,BER
+5159,El Salvador,,https://media.api-sports.io/football/teams/5159.png,SAL
+5160,Fiji,,https://media.api-sports.io/football/teams/5160.png,FIJ
+5161,Guatemala,,https://media.api-sports.io/football/teams/5161.png,GUA
+5162,Guyana,,https://media.api-sports.io/football/teams/5162.png,GUY
+5163,New Caledonia,,https://media.api-sports.io/football/teams/5163.png,NEW
+5164,Nicaragua,,https://media.api-sports.io/football/teams/5164.png,NIC
+5165,Solomon Islands,,https://media.api-sports.io/football/teams/5165.png,SOL
+5166,Sri Lanka,,https://media.api-sports.io/football/teams/5166.png,LAN
+5167,Tahiti,,https://media.api-sports.io/football/teams/5167.png,TAH
+5168,Trinidad and Tobago,,https://media.api-sports.io/football/teams/5168.png,TRI
+5169,Turks and Caicos Islands,,https://media.api-sports.io/football/teams/5169.png,TUR
+5170,Vanuatu,,https://media.api-sports.io/football/teams/5170.png,VAN
+5526,Antigua and Barbuda,,https://media.api-sports.io/football/teams/5526.png,ANT
+5527,Barbados,,https://media.api-sports.io/football/teams/5527.png,BAR
+5528,Belize,,https://media.api-sports.io/football/teams/5528.png,BEL
+5529,Canada,,https://media.api-sports.io/football/teams/5529.png,CAN
+5530,Curaçao,,https://media.api-sports.io/football/teams/5530.png,CUR
+5531,Dominica,,https://media.api-sports.io/football/teams/5531.png,DOM
+5532,Dominican Republic,,https://media.api-sports.io/football/teams/5532.png,DOM
+5533,Grenada,,https://media.api-sports.io/football/teams/5533.png,GRE
+5534,Mongolia,,https://media.api-sports.io/football/teams/5534.png,MON
+5535,Pakistan,,https://media.api-sports.io/football/teams/5535.png,PAK
+5536,St. Kitts and Nevis,,https://media.api-sports.io/football/teams/5536.png,ST.
+5537,Timor-Leste,,https://media.api-sports.io/football/teams/5537.png,TIM
+5538,Brunei,,https://media.api-sports.io/football/teams/5538.png,BRU
+5539,Puerto Rico,,https://media.api-sports.io/football/teams/5539.png,PUE
+5540,St. Lucia,,https://media.api-sports.io/football/teams/5540.png,ST.
+5541,St. Vincent / Grenadines,,https://media.api-sports.io/football/teams/5541.png,ST.
+5542,Tonga,,https://media.api-sports.io/football/teams/5542.png,TON
+8050,Somalia,,https://media.api-sports.io/football/teams/8050.png,SOM
+8119,Guam,,https://media.api-sports.io/football/teams/8119.png,GUA
+8150,Anguilla,,https://media.api-sports.io/football/teams/8150.png,ANG
+8167,Aruba,,https://media.api-sports.io/football/teams/8167.png,ARU
+8168,British Virgin Islands,,https://media.api-sports.io/football/teams/8168.png,BRI
+8169,Cayman Islands,,https://media.api-sports.io/football/teams/8169.png,CAY
+8170,Montserrat,,https://media.api-sports.io/football/teams/8170.png,MON
+8171,Suriname,,https://media.api-sports.io/football/teams/8171.png,SUR
+8172,US Virgin Islands,,https://media.api-sports.io/football/teams/8172.png,UNI
+8174,Cook Islands,,https://media.api-sports.io/football/teams/8174.png,COO
+8175,Papua New Guinea,,https://media.api-sports.io/football/teams/8175.png,PAP

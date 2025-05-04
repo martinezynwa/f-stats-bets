@@ -15,6 +15,20 @@ const content = fs.readFileSync(generatedFilePath, 'utf8')
 
 fs.writeFileSync(generatedFilePath, warningComment + content)
 
+// Extract custom types (like FederationType, LeagueType, etc.)
+const customTypeRegex = /export type (\w+) = ([^;]+);/g
+const customTypes = []
+let customTypeMatch
+
+while ((customTypeMatch = customTypeRegex.exec(content)) !== null) {
+  const typeName = customTypeMatch[1]
+  const typeDefinition = customTypeMatch[2]
+  if (!typeName.includes('Generated') && !typeName.includes('Json')) {
+    customTypes.push({ name: typeName, definition: typeDefinition })
+  }
+}
+
+// Extract table interfaces
 const tableRegex = /export interface (\w+) {([^}]+)}/g
 const tables = []
 let match
@@ -26,14 +40,21 @@ while ((match = tableRegex.exec(content)) !== null) {
   }
 }
 
-function createDatabaseTypesFile(tables) {
+function createDatabaseTypesFile(tables, customTypes) {
   let content = `/**
  * This file exports database types with Selectable, Insertable, and Updateable wrappers.
  * These types are derived from the generated types.
  */
 
-import type { Selectable, Insertable, Updateable } from 'kysely'
+import type { Selectable, Insertable, Updateable, ColumnType } from 'kysely'
 import type { DB } from './generated.types'
+
+// Export custom types
+${customTypes.map(type => `export type ${type.name} = ${type.definition}`).join('\n')}
+
+export interface DatabaseTypes {
+${tables.map(table => `  ${table}: Selectable<DB['${table}']>`).join('\n')}
+}
 
 `
 
@@ -46,7 +67,7 @@ import type { DB } from './generated.types'
   return content
 }
 
-const databaseTypesContent = createDatabaseTypesFile(tables)
+const databaseTypesContent = createDatabaseTypesFile(tables, customTypes)
 fs.writeFileSync(databaseFilePath, databaseTypesContent)
 
 console.log('Types generated successfully, now building them...')

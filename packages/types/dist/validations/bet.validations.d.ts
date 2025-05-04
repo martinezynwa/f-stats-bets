@@ -11,10 +11,10 @@ export declare const updateBetSchema: z.ZodObject<{
     id: z.ZodString;
     name: z.ZodString;
 }, "strip", z.ZodTypeAny, {
-    name: string;
     id: string;
+    name: string;
 }, {
-    name: string;
     id: string;
+    name: string;
 }>;
 export type UpdateBetSchema = z.infer<typeof updateBetSchema>;

@@ -4,6 +4,26 @@ import { supabase } from '@/lib/supabase'
 export const useFetch = () => {
   const toast = useToast()
 
+  const createQueryString = (
+    params: Record<string, string | string[] | number | number[] | undefined>,
+  ) => {
+    const parts: string[] = []
+
+    Object.entries(params).forEach(([key, value]) => {
+      if (value !== undefined && value !== null) {
+        if (Array.isArray(value)) {
+          value.forEach(item =>
+            parts.push(`${encodeURIComponent(key)}=${encodeURIComponent(item)}`),
+          )
+        } else {
+          parts.push(`${encodeURIComponent(key)}=${encodeURIComponent(value)}`)
+        }
+      }
+    })
+
+    return parts.join('&')
+  }
+
   const handleFetch = async <T>(endpoint: string, options: RequestInit = {}): Promise<T> => {
     const {
       data: { session },
@@ -48,5 +68,5 @@ export const useFetch = () => {
     return responseData
   }
 
-  return { handleFetch }
+  return { handleFetch, createQueryString }
 }

@@ -1,0 +1,18 @@
+import { Router } from 'express'
+import { validateRequest } from 'src/lib'
+import { getLeagues } from 'src/services/league/league.service.queries'
+
+const router = Router()
+
+//router.use(requireAuth)
+
+router.get(
+  '/',
+  validateRequest(async (_req, res) => {
+    const leagues = await getLeagues()
+
+    res.json(leagues)
+  }),
+)
+
+export default router

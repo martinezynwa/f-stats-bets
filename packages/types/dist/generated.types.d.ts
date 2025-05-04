@@ -3,6 +3,7 @@
  * DO NOT modify this file directly.
  */
 import type { ColumnType } from "kysely";
+export type FederationType = "AFRICA" | "ASIA" | "EUROPE" | "NORTH_CENTRAL_AMERICA" | "OCEANIA" | "SOUTH_AMERICA" | "WORLD";
 export type Generated<T> = T extends ColumnType<infer S, infer I, infer U> ? ColumnType<S, I | undefined, U> : ColumnType<T, T | undefined, T>;
 export type Json = ColumnType<JsonValue, string, string>;
 export type JsonArray = JsonValue[];
@@ -11,6 +12,8 @@ export type JsonObject = {
 };
 export type JsonPrimitive = boolean | number | string | null;
 export type JsonValue = JsonArray | JsonObject | JsonPrimitive;
+export type LeagueType = "ClubTournament" | "Friendly" | "League" | "LeagueCup" | "NationalTournament" | "Totals" | "Unassigned";
+export type OrganizationType = "AFC" | "AUSTRIA" | "BELGIUM" | "CAF" | "CONCACAF" | "CONMEBOL" | "CZECH" | "ENGLAND" | "FIFA" | "FRANCE" | "GERMANY" | "ITALY" | "NETHERLANDS" | "OFC" | "PORTUGAL" | "SPAIN" | "TURKEY" | "UEFA";
 export type Timestamp = ColumnType<Date, Date | string, Date | string>;
 export interface Bet {
     betCompetitionId: string;
@@ -18,59 +21,11 @@ export interface Bet {
     createdAt: Generated<Timestamp | null>;
     fixtureGoalsBet: Json | null;
     fixtureId: number;
-    fixtureResultBet: "0" | "1" | "2" | null;
+    fixtureResultBet: string | null;
     fixtureScorersBet: Json | null;
     isEvaluated: Generated<boolean>;
     leagueId: string;
     oddValue: Json | null;
-    season: number;
-    updatedAt: Timestamp | null;
-    userId: string;
-}
-export interface BetCompetition {
-    betCompetitionId: Generated<string>;
-    competition1stTeamPoints: number | null;
-    competition2ndTeamPoints: number | null;
-    competition3rdTeamPoints: number | null;
-    competition4thTeamPoints: number | null;
-    competitionTopAssistPoints: number | null;
-    competitionTopCleanSheetsPoints: number | null;
-    competitionTopScorerPoints: number | null;
-    createdAt: Generated<Timestamp | null>;
-    createdBy: string;
-    dateEnd: string | null;
-    dateStart: string | null;
-    fixtureResultPoints: number | null;
-    hasFinished: boolean;
-    isGlobal: boolean;
-    name: string;
-    playerLimit: number;
-    private: boolean;
-    resultGoalsAwayPoints: number | null;
-    resultGoalsHomePoints: number | null;
-    resultGoalsPoints: number | null;
-    resultScorersPoints: number | null;
-    season: number;
-    updatedAt: Timestamp | null;
-}
-export interface BetCompetitionToLeague {
-    betCompetitionId: string;
-    leagueId: string;
-}
-export interface BetEvaluated {
-    betCompetitionId: string;
-    betId: string;
-    createdAt: Generated<Timestamp | null>;
-    fixtureAwayGoalsPoints: number | null;
-    fixtureGoalsPoints: number | null;
-    fixtureHomeGoalsPoints: number | null;
-    fixtureId: number;
-    fixtureResultPoints: number | null;
-    fixtureScorers: Json | null;
-    fixtureScorersCorrect: number | null;
-    fixtureScorersIncorrect: number | null;
-    fixtureScorersPoints: number | null;
-    id: Generated<string>;
     season: number;
     updatedAt: Timestamp | null;
     userId: string;
@@ -94,6 +49,7 @@ export interface Fixture {
     homeTeamGoalsHalf: number | null;
     homeTeamGoalsPenalty: number | null;
     homeTeamId: string;
+    id: Generated<string | null>;
     leagueId: string;
     oddsId: string | null;
     referee: string | null;
@@ -104,15 +60,6 @@ export interface Fixture {
     updatedAt: Timestamp | null;
     venue: string | null;
 }
-export interface FixtureRound {
-    apiLeagueId: number;
-    dateStarted: string;
-    hasStarted: boolean;
-    id: Generated<string>;
-    leagueId: string;
-    round: number;
-    season: number;
-}
 export interface League {
     apiLeagueId: number;
     countPlayerStats: boolean | null;
@@ -120,30 +67,20 @@ export interface League {
     createdAt: Generated<Timestamp | null>;
     dateEnd: string;
     dateStart: string;
-    federation: "AFRICA" | "ASIA" | "EUROPE" | "NORTH_CENTRAL_AMERICA" | "OCEANIA" | "SOUTH_AMERICA" | "WORLD";
+    federation: FederationType;
     flag: string;
-    gamesPlayed: number;
+    gamesPlayed: Generated<number>;
     groupStage: boolean | null;
     id: Generated<string>;
-    isForUnassigned: Generated<boolean>;
+    isForUnassigned: Generated<boolean | null>;
     logo: string;
     name: string;
     national: boolean;
-    organization: "AFC" | "AUSTRIA" | "BELGIUM" | "CAF" | "CONCACAF" | "CONMEBOL" | "CZECH" | "ENGLAND" | "FIFA" | "FRANCE" | "GERMANY" | "ITALY" | "NETHERLANDS" | "OFC" | "PORTUGAL" | "SPAIN" | "TURKEY" | "UEFA" | null;
+    organization: OrganizationType | null;
     season: number;
-    supported: boolean;
-    type: string;
+    supported: Generated<boolean>;
+    type: LeagueType;
     updatedAt: Timestamp | null;
-}
-export interface Log {
-    action: string;
-    additionalData: Json | null;
-    createdAt: Generated<Timestamp | null>;
-    id: string;
-    message: string;
-    type: "Error" | "Info" | "Job";
-    updatedAt: Timestamp | null;
-    userId: string | null;
 }
 export interface Nation {
     altNationName: string | null;
@@ -152,281 +89,13 @@ export interface Nation {
     id: number;
     nationName: string;
 }
-export interface Odds {
-    createdAt: Generated<Timestamp | null>;
-    fixtureId: number;
-    leagueId: string;
-    matchWinner: Json;
-    oddsId: Generated<string>;
-    season: number;
-    updatedAt: Timestamp | null;
-}
-export interface Player {
-    age: number | null;
-    apiTeamId: number;
-    assignedToNT: boolean | null;
-    birthCountry: string | null;
-    birthDate: string | null;
-    createdAt: Generated<Timestamp | null>;
-    firstName: string;
-    height: string | null;
-    id: number;
-    isInDebutSeason: boolean | null;
-    lastName: string;
-    name: string;
-    nationId: number | null;
-    photo: string | null;
-    teamId: string;
-    updatedAt: Timestamp | null;
-    weight: string | null;
-}
-export interface PlayerFixtureStats {
-    apiLeagueId: number;
-    apiTeamId: number | null;
-    assists: number | null;
-    captain: boolean | null;
-    cardsRed: number | null;
-    cardsYellow: number | null;
-    conceded: number | null;
-    createdAt: Generated<Timestamp | null>;
-    date: string | null;
-    dribblesAttempts: number | null;
-    dribblesPast: number | null;
-    dribblesSuccess: number | null;
-    duelsTotal: number | null;
-    duelsWon: number | null;
-    fixtureId: number;
-    foulsCommited: number | null;
-    foulsDrawn: number | null;
-    goals: number | null;
-    id: Generated<string>;
-    leagueId: string;
-    minutes: number | null;
-    number: number | null;
-    offsides: number | null;
-    passesAccuracy: number | null;
-    passesKey: number | null;
-    passesTotal: number | null;
-    penaltyCommited: number | null;
-    penaltyMissed: number | null;
-    penaltySaved: number | null;
-    penaltyScored: number | null;
-    penaltyWon: number | null;
-    playerId: number;
-    position: string | null;
-    rating: number | null;
-    saves: number | null;
-    season: number;
-    shotsOn: number | null;
-    shotsTotal: number | null;
-    substitute: boolean | null;
-    tacklesBlocks: number | null;
-    tacklesInterceptions: number | null;
-    tacklesTotal: number | null;
-    teamId: string;
-    updatedAt: Timestamp | null;
-}
-export interface PlayerSeasonExtraStats {
-    apiLeagueId: number;
-    appearencesStreak: Json;
-    assistsAmount: Json;
-    assistsStreak: Json;
-    assistsTeamPercentage: number;
-    cleanSheetsStreak: Json;
-    goalOrAssistStreak: Json;
-    goalsAmount: Json;
-    goalsFixtureChangers: Json;
-    goalsStreak: Json;
-    goalsTeamPercentage: number;
-    id: Generated<string>;
-    leagueId: string;
-    playerId: number;
-    playerSeasonStatsId: string;
-    ratingTotals: Json;
-    season: number;
-    teamId: string;
-}
-export interface PlayerSeasonStats {
-    apiLeagueId: number;
-    appearences: number;
-    assists: number;
-    assistsFrequency: number;
-    assistsPerGame: number;
-    cardsRed: number;
-    cardsYellow: number;
-    conceded: number;
-    concededPerGame: number;
-    dribblesAttempts: number;
-    dribblesAttemptsPerGame: number;
-    dribblesPast: number;
-    dribblesPastPerGame: number;
-    dribblesSuccess: number;
-    dribblesSuccessPerGame: number;
-    duelsTotal: number;
-    duelsTotalPerGame: number;
-    duelsWon: number;
-    duelsWonPerGame: number;
-    eligibileAppearencesForRating: number;
-    eligibleForRanking: Generated<boolean>;
-    foulsCommited: number;
-    foulsCommitedPerGame: number;
-    foulsDrawn: number;
-    foulsDrawnPerGame: number;
-    goals: number;
-    goalsAssists: number | null;
-    goalsFrequency: number;
-    goalsPerGame: number;
-    id: Generated<string>;
-    isInDebutSeason: boolean | null;
-    leagueId: string;
-    lineups: number;
-    minutes: number;
-    minutesPerGame: number;
-    number: number;
-    offsides: number;
-    passesAccuracy: number;
-    passesKey: number;
-    passesKeyPerGame: number;
-    passesTotal: number;
-    passesTotalPerGame: number;
-    penaltyCommited: number;
-    penaltyMissed: number;
-    penaltySaved: number;
-    penaltyScored: number;
-    penaltyWon: number;
-    playerId: number;
-    playerSeasonExtraStatsId: string | null;
-    position: string;
-    rating: number;
-    saves: number;
-    savesPerGame: number;
-    season: number;
-    shotsOn: number;
-    shotsOnPerGame: number;
-    shotsTotal: number;
-    shotsTotalPerGame: number;
-    substitutesBench: number;
-    substitutesIn: number;
-    tacklesBlocks: number;
-    tacklesBlocksPerGame: number;
-    tacklesInterceptions: number;
-    tacklesInterceptionsPerGame: number;
-    tacklesTotal: number;
-    tacklesTotalPerGame: number;
-    teamId: string;
-}
-export interface PlayerToTeam {
-    apiTeamId: number;
-    playerId: number;
-    season: number;
-    teamId: string;
-}
 export interface Season {
-    isActual: boolean;
+    isActual: Generated<boolean>;
     isSupported: boolean | null;
     seasonEndDate: string;
     seasonId: number;
     seasonStartDate: string;
     supportedLeagues: Json;
-}
-export interface SeasonBet {
-    betCompetitionId: string;
-    competition1stTeamId: string;
-    competition2ndTeamId: string;
-    competition3rdTeamId: string;
-    competition4thTeamId: string;
-    createdAt: Generated<Timestamp | null>;
-    id: Generated<string>;
-    isEvaluated: Generated<boolean>;
-    leagueId: string;
-    season: number;
-    topAssistsPlayerIds: Json | null;
-    topCleanSheetsPlayerIds: Json | null;
-    topScorerPlayerIds: Json | null;
-    updatedAt: Timestamp | null;
-    userId: string;
-}
-export interface SeasonBetEvaluated {
-    betCompetitionId: string;
-    betId: string;
-    competition1stTeamPoints: number | null;
-    competition2ndTeamPoints: number | null;
-    competition3rdTeamPoints: number | null;
-    competition4thTeamPoints: number | null;
-    fixtureId: number;
-    id: Generated<string>;
-    season: number;
-    topAssistPoints: number | null;
-    topCleanSheetPoints: number | null;
-    topScorerPoints: number | null;
-    userId: string;
-}
-export interface Team {
-    apiLeagueId: number;
-    apiTeamId: number;
-    code: string | null;
-    country: string;
-    createdAt: Generated<Timestamp | null>;
-    id: Generated<string>;
-    isForUnassigned: Generated<boolean>;
-    leagueId: string;
-    logo: string | null;
-    name: string;
-    national: boolean;
-    season: number;
-    updatedAt: Timestamp | null;
-    venue: string;
-}
-export interface TeamStatsInLeague {
-    awayDraw: number | null;
-    awayLoss: number | null;
-    awayWin: number | null;
-    biggestLossAway: string | null;
-    biggestLossHome: string | null;
-    biggestWinAway: string | null;
-    biggestWinHome: string | null;
-    cardsRedTotal: number | null;
-    cardsYellowTotal: number | null;
-    cleanSheetsTotal: number | null;
-    cleanSheetsTotalAway: number | null;
-    cleanSheetsTotalHome: number | null;
-    draw: number | null;
-    failedToScoreTotal: number | null;
-    failedToScoreTotalAway: number | null;
-    failedToScoreTotalHome: number | null;
-    form: string | null;
-    games: number | null;
-    gamesAway: number | null;
-    gamesHome: number | null;
-    goalsConceded: number | null;
-    goalsConcededAfterHalfTime: number | null;
-    goalsConcededAway: number | null;
-    goalsConcededBeforeHalfTime: number | null;
-    goalsConcededHome: number | null;
-    goalsConcededPerGame: number | null;
-    goalsConcededPerGameAway: number | null;
-    goalsConcededPerGameHome: number | null;
-    goalsDifference: number | null;
-    goalsScored: number | null;
-    goalsScoredAfterHalfTime: number | null;
-    goalsScoredAway: number | null;
-    goalsScoredBeforeHalfTime: number | null;
-    goalsScoredHome: number | null;
-    goalsScoredPerGame: number | null;
-    goalsScoredPerGameAway: number | null;
-    goalsScoredPerGameHome: number | null;
-    homeDraw: number | null;
-    homeLoss: number | null;
-    homeWin: number | null;
-    id: Generated<string>;
-    leagueId: string;
-    loss: number | null;
-    penaltyMissedTotal: number | null;
-    penaltyScoredTotal: number | null;
-    points: number | null;
-    season: number;
-    teamId: string;
-    win: number | null;
 }
 export interface User {
     avatar: string | null;
@@ -438,85 +107,21 @@ export interface User {
     providerId: string;
     providerName: string;
     updatedAt: Timestamp | null;
-}
-export interface UserBetCompetitionStats {
-    betCompetitionId: string;
-    competition1stTeamPoints: Generated<number>;
-    competition2ndTeamPoints: Generated<number>;
-    competition3rdTeamPoints: Generated<number>;
-    competition4thTeamPoints: Generated<number>;
-    competitionAssistPoints: Generated<number>;
-    competitionCleanSheetsPoints: Generated<number>;
-    competitionScorerPoints: Generated<number>;
-    id: Generated<string>;
-    season: number;
-    totalCompetitionPoints: Generated<number>;
-    totalFixtureResultBets: Generated<number>;
-    totalFixtureResultIncorrect: Generated<number>;
-    totalFixtureResultPercentage: Generated<number>;
-    totalFixtureResultPoints: Generated<number>;
-    totalFixtureResultSuccess: Generated<number>;
-    totalResultBets: Generated<number>;
-    totalResultBetsIncorrect: Generated<number>;
-    totalResultBetsPercentage: Generated<number>;
-    totalResultBetsSuccess: Generated<number>;
-    totalResultGoalsAwayBets: Generated<number>;
-    totalResultGoalsAwayIncorrect: Generated<number>;
-    totalResultGoalsAwayPercentage: Generated<number>;
-    totalResultGoalsAwayPoints: Generated<number>;
-    totalResultGoalsAwaySuccess: Generated<number>;
-    totalResultGoalsBets: Generated<number>;
-    totalResultGoalsHomeBets: Generated<number>;
-    totalResultGoalsHomeIncorrect: Generated<number>;
-    totalResultGoalsHomePercentage: Generated<number>;
-    totalResultGoalsHomePoints: Generated<number>;
-    totalResultGoalsHomeSuccess: Generated<number>;
-    totalResultGoalsIncorrect: Generated<number>;
-    totalResultGoalsPercentage: Generated<number>;
-    totalResultGoalsPoints: Generated<number>;
-    totalResultGoalsSuccess: Generated<number>;
-    totalResultPoints: Generated<number>;
-    totalResultScorerBets: Generated<number>;
-    totalResultScorerIncorrect: Generated<number>;
-    totalResultScorerPercentage: Generated<number>;
-    totalResultScorerPoints: Generated<number>;
-    totalResultScorerSuccess: Generated<number>;
-    userId: string;
+    userSettingsId: string | null;
 }
 export interface UserSettings {
     createdAt: Generated<Timestamp | null>;
     id: Generated<string>;
     leagueOrder: string | null;
     updatedAt: Timestamp | null;
-    userId: string;
-}
-export interface UserToBetCompetition {
-    betCompetitionId: string;
-    userId: string;
+    userId: string | null;
 }
 export interface DB {
     Bet: Bet;
-    BetCompetition: BetCompetition;
-    BetCompetitionToLeague: BetCompetitionToLeague;
-    BetEvaluated: BetEvaluated;
     Fixture: Fixture;
-    FixtureRound: FixtureRound;
     League: League;
-    Log: Log;
     Nation: Nation;
-    Odds: Odds;
-    Player: Player;
-    PlayerFixtureStats: PlayerFixtureStats;
-    PlayerSeasonExtraStats: PlayerSeasonExtraStats;
-    PlayerSeasonStats: PlayerSeasonStats;
-    PlayerToTeam: PlayerToTeam;
     Season: Season;
-    SeasonBet: SeasonBet;
-    SeasonBetEvaluated: SeasonBetEvaluated;
-    Team: Team;
-    TeamStatsInLeague: TeamStatsInLeague;
     User: User;
-    UserBetCompetitionStats: UserBetCompetitionStats;
     UserSettings: UserSettings;
-    UserToBetCompetition: UserToBetCompetition;
 }

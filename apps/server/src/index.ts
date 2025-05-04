@@ -2,8 +2,13 @@ import cors from 'cors'
 import dotenv from 'dotenv'
 import express, { NextFunction, Request, Response } from 'express'
 import { errorHandler } from './lib'
-import betsRouter from './routes/bets'
-import usersRouter from './routes/users'
+import betsRouter from './routes/bet.routes'
+import fixturesRouter from './routes/fixture.routes'
+import leaguesRouter from './routes/league.routes'
+import nationsRouter from './routes/nation.routes'
+import seasonsRouter from './routes/season.routes'
+import seedRouter from './routes/seed.routes'
+import usersRouter from './routes/user.routes'
 
 dotenv.config()
 
@@ -19,14 +24,19 @@ app.use(
 
 app.use(express.json())
 
-app.use('/users', usersRouter)
 app.use('/bets', betsRouter)
-
+app.use('/fixtures', fixturesRouter)
+app.use('/leagues', leaguesRouter)
+app.use('/nations', nationsRouter)
+app.use('/seasons', seasonsRouter)
+app.use('/users', usersRouter)
+app.use('/seed', seedRouter)
+// Error handling middleware
 app.use((err: Error, req: Request, res: Response, next: NextFunction) => {
   errorHandler(err, req, res)
 })
 
-app.listen(process.env.PORT, () => {
-  // eslint-disable-next-line no-console
-  console.log(`Server running: ${process.env.SERVER_URL}`)
+const PORT = process.env.PORT || 3001
+app.listen(PORT, () => {
+  console.log(`Server is running on port ${PORT}`)
 })

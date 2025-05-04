@@ -1,22 +1,31 @@
 import { StyleSheet, Text, View } from 'react-native'
 
-import { useBets } from '@/api'
+import { useFixturesWithBets } from '@/api'
+import { getCurrentDate } from '@/lib/util/date-and-time'
 import { ScrollViewWrapper } from '@/ui'
 
 export const Home = () => {
-  const { data: bets, isLoading } = useBets()
+  const { data } = useFixturesWithBets({
+    dateFrom: getCurrentDate(),
+    dateTo: getCurrentDate(),
+  })
 
-  if (isLoading || !bets) {
+  if (!data) {
     return <></>
   }
 
   return (
     <ScrollViewWrapper>
       <View style={styles.container}>
-        {bets?.map(bet => (
-          <Text key={bet.betId} style={{ color: 'white' }}>
-            {bet.betId}
-          </Text>
+        {Object.entries(data).map(([leagueId, fixtures]) => (
+          <View key={leagueId}>
+            <Text style={styles.item}>{leagueId}</Text>
+            {fixtures.map(fixture => (
+              <Text style={styles.item} key={fixture.Fixture.fixtureId}>
+                {fixture.Fixture.date}
+              </Text>
+            ))}
+          </View>
         ))}
       </View>
     </ScrollViewWrapper>

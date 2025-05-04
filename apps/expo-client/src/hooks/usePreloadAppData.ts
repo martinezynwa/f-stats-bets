@@ -1,17 +1,30 @@
 import { useEffect, useState } from 'react'
 
-import { useBets } from '@/api'
+import { useFixturesWithBets } from '@/api'
+import { useLeagues } from '@/api/league/league.queries'
+import { useSeasons } from '@/api/season/season.queries'
+import { getCurrentDate } from '@/lib/util/date-and-time'
 
-export const usePreloadAppData = () => {
+export const usePreloadAppData = (enabled: boolean) => {
   const [initialLoaded, setInitialLoaded] = useState(false)
 
-  const { isFetched: betsFetched, error: betsError } = useBets()
+  const { isFetched: seasonsFetched, error: seasonsError } = useSeasons({ supported: true })
+
+  const { isFetched: leaguesFetched, error: leaguesError } = useLeagues()
+
+  const { isFetched: betsFetched, error: betsError } = useFixturesWithBets({
+    input: { dateFrom: getCurrentDate(), dateTo: getCurrentDate() },
+    enabled,
+  })
+
+  const isFetched = leaguesFetched && betsFetched && seasonsFetched
+  const error = leaguesError || betsError || seasonsError
 
   useEffect(() => {
-    if (betsFetched && !initialLoaded) {
+    if (isFetched && !initialLoaded) {
       setInitialLoaded(true)
     }
-  }, [betsFetched, initialLoaded])
+  }, [isFetched, initialLoaded])
 
-  return { error: betsError, initialLoaded }
+  return { error, initialLoaded }
 }

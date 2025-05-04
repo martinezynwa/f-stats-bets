@@ -1,4 +1,4 @@
-import { DB } from '@f-stats-bets/types'
+import { DatabaseTypes } from '@f-stats-bets/types'
 import dotenv from 'dotenv'
 import { Kysely, PostgresDialect } from 'kysely'
 import { Pool } from 'pg'
@@ -15,8 +15,8 @@ const dialect = new PostgresDialect({
   }),
 })
 
-const db = new Kysely<DB>({
+const db = new Kysely<DatabaseTypes>({
   dialect,
 })
 
-export { db, DB }
+export { db }

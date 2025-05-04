@@ -1,14 +1,19 @@
 ## TODO
-- [] Expo project build
+
+- [] 3rd party api calls for fixtures
+
 - [] fixtures-bets
+- [] Expo project build
 
 
 
+## 0.0.1
+- [x] tables sql generation
+- [x] seed base data
+- [x] preload app data
 
-## 0.0.2
 - [x] register process
 - [x] init username process
 - [x] login/logout
 
-## 0.0.1
 - [x] basic setup
