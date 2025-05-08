@@ -2,7 +2,13 @@ import { createBetSchema, updateBetSchema } from '@f-stats-bets/types'
 import { Router } from 'express'
 import { sendNotFound, validateRequest, validateRequestWithBody } from 'src/lib'
 import { requireAuth } from 'src/middleware'
-import { createBet, getAllBets, getBetById, removeBet, updateBet } from 'src/services'
+import {
+  createBet,
+  getAllBets,
+  getBetById,
+  removeBet,
+  updateBet,
+} from '../services/bet/bet.service.queries'
 
 const router = Router()
 

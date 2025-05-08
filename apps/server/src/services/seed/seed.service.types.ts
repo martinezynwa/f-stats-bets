@@ -1,1 +1,2 @@
-export type TableName = 'League' | 'Nation' | 'Season'
+export type TableWithoutRelations = 'League' | 'Nation' | 'Season'
+export type TableWithRelations = 'Team'

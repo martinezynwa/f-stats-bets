@@ -1,6 +1,6 @@
 import { Router } from 'express'
 import { validateRequest } from 'src/lib'
-import { getLeagues } from 'src/services/league/league.service.queries'
+import { getLeagues } from '../services/league/league.service.queries'
 
 const router = Router()
 

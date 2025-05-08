@@ -1,6 +1,6 @@
 import { Router } from 'express'
 import { validateRequest } from 'src/lib'
-import { getNations } from 'src/services/nation/nation.service.queries'
+import { getNations } from '../services/nation/nation.service.queries'
 
 const router = Router()
 

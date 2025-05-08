@@ -1,0 +1,5 @@
+@baseUrl = http://localhost:3001/leagues
+
+### Get all leagues
+GET {{baseUrl}}
+Content-Type: application/json

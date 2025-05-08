@@ -1,7 +1,12 @@
 import { registerUserSchema } from '@f-stats-bets/types'
 import { Request, Response, Router } from 'express'
 import { validateRequest, validateRequestWithBody } from 'src/lib'
-import { getAllUsers, getUserById, getUserSettings, registerUser } from 'src/services'
+import {
+  getAllUsers,
+  getUserById,
+  getUserSettings,
+  registerUser,
+} from '../services/user/user.service.queries'
 
 const router = Router()
 

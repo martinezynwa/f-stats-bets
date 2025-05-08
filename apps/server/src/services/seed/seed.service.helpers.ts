@@ -1,15 +1,19 @@
 import fs from 'fs'
+import path from 'path'
 import { db } from '../../db'
-import { TableName } from './seed.service.types'
+import { TableWithRelations, TableWithoutRelations } from './seed.service.types'
 
-export const seedFromCSV = async (table: TableName, filePath: string) => {
+export const getAssetPath = (fileName: string) =>
+  path.join(__dirname, `../../assets/seed/${fileName}`)
+
+export const parseCsv = (filePath: string) => {
   const content = fs.readFileSync(filePath, 'utf8')
   const lines = content.split('\n').filter(line => line.trim())
   const headers = lines[0].split(',').map(header => header.trim())
   const rows = lines.slice(1).map(line => line.split(',').map(cell => cell.trim()))
 
-  for (const row of rows) {
-    const data = headers.reduce((acc, header, index) => {
+  return rows.map(row =>
+    headers.reduce((acc, header, index) => {
       const value = row[index]
 
       if (value === '') return { ...acc, [header]: null }
@@ -27,10 +31,15 @@ export const seedFromCSV = async (table: TableName, filePath: string) => {
       }
 
       return { ...acc, [header]: value }
-    }, {})
+    }, {}),
+  )
+}
 
-    console.log(data)
+export const handleCsvSeed = async (
+  table: TableWithoutRelations | TableWithRelations,
+  filePath: string,
+) => {
+  const dataToInsert = parseCsv(filePath)
 
-    await db.insertInto(table).values(data).execute()
-  }
+  await db.insertInto(table).values(dataToInsert).execute()
 }

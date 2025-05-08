@@ -1,7 +1,7 @@
 import { fixturesBetsSchema } from '@f-stats-bets/types'
 import { Router } from 'express'
 import { validateRequestWithParams } from 'src/lib'
-import { getFixturesWithBets } from 'src/services/fixture/fixture.service.queries'
+import { getFixturesWithBets } from '../services/fixture/fixture.service.queries'
 
 const router = Router()
 

@@ -3,6 +3,7 @@ import dotenv from 'dotenv'
 import express, { NextFunction, Request, Response } from 'express'
 import { errorHandler } from './lib'
 import betsRouter from './routes/bet.routes'
+import externalRouter from './routes/external.routes'
 import fixturesRouter from './routes/fixture.routes'
 import leaguesRouter from './routes/league.routes'
 import nationsRouter from './routes/nation.routes'
@@ -25,13 +26,14 @@ app.use(
 app.use(express.json())
 
 app.use('/bets', betsRouter)
+app.use('/external', externalRouter)
 app.use('/fixtures', fixturesRouter)
 app.use('/leagues', leaguesRouter)
 app.use('/nations', nationsRouter)
 app.use('/seasons', seasonsRouter)
 app.use('/users', usersRouter)
 app.use('/seed', seedRouter)
-// Error handling middleware
+
 app.use((err: Error, req: Request, res: Response, next: NextFunction) => {
   errorHandler(err, req, res)
 })

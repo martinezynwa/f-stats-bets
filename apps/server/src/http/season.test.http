@@ -1,0 +1,14 @@
+@baseUrl = http://localhost:3001/season
+
+### Get all seasons
+GET {{baseUrl}}
+Content-Type: application/json
+
+### Get supported seasons
+GET {{baseUrl}}/supported
+Content-Type: application/json
+
+### Create season
+POST {{baseUrl}}
+Content-Type: application/json
+{}

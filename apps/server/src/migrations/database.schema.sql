@@ -2,13 +2,15 @@ DROP TABLE IF EXISTS "Bet" CASCADE;
 DROP TABLE IF EXISTS "Fixture" CASCADE;
 DROP TABLE IF EXISTS "League" CASCADE;
 DROP TABLE IF EXISTS "Nation" CASCADE;
+DROP TABLE IF EXISTS "Team" CASCADE;
 DROP TABLE IF EXISTS "Season" CASCADE;
 DROP TABLE IF EXISTS "User" CASCADE;
 DROP TABLE IF EXISTS "UserSettings" CASCADE;
-
+DROP TABLE IF EXISTS "Log" CASCADE;
 DROP TYPE IF EXISTS federation_type;
 DROP TYPE IF EXISTS organization_type;
 DROP TYPE IF EXISTS league_type;
+DROP TYPE IF EXISTS log_type;
 
 CREATE TYPE federation_type AS ENUM (
     'AFRICA',
@@ -51,12 +53,29 @@ CREATE TYPE league_type AS ENUM (
     'Totals'
 );
 
+CREATE TYPE log_type AS ENUM (
+    'INFO',
+    'ERROR',
+    'WARNING'
+);
+
+CREATE TABLE IF NOT EXISTS "Log" (
+    "id" UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    "createdAt" TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
+    "type" log_type NOT NULL,
+    "action" TEXT NOT NULL,
+    "message" TEXT NOT NULL,
+    "userId" UUID,
+    "additionalData" JSONB
+);
+
 CREATE TABLE IF NOT EXISTS "UserSettings" (
     "id" UUID PRIMARY KEY DEFAULT gen_random_uuid(),
     "createdAt" TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
     "leagueOrder" TEXT,
     "updatedAt" TIMESTAMP WITH TIME ZONE,
-    "userId" UUID UNIQUE NOT NULL
+    "userId" UUID UNIQUE NOT NULL,
+    "providerId" TEXT NOT NULL
 );
 
 CREATE TABLE IF NOT EXISTS "User" (
@@ -85,7 +104,7 @@ CREATE TABLE IF NOT EXISTS "Season" (
 
 CREATE TABLE IF NOT EXISTS "League" (
     "id" UUID PRIMARY KEY DEFAULT gen_random_uuid(),
-    "apiLeagueId" INTEGER NOT NULL,
+    "externalLeagueId" INTEGER NOT NULL,
     "countPlayerStats" BOOLEAN,
     "country" TEXT NOT NULL,
     "createdAt" TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
@@ -114,10 +133,27 @@ CREATE TABLE IF NOT EXISTS "Nation" (
     "nationName" TEXT NOT NULL
 );
 
+CREATE TABLE IF NOT EXISTS "Team" (
+    "id" UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    "externalLeagueId" INTEGER NOT NULL,
+    "externalTeamId" INTEGER NOT NULL,
+    "code" TEXT,
+    "country" TEXT NOT NULL,
+    "createdAt" TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
+    "isForUnassigned" BOOLEAN DEFAULT FALSE,
+    "leagueId" UUID NOT NULL REFERENCES "League"("id"),
+    "logo" TEXT,
+    "name" TEXT NOT NULL,
+    "national" BOOLEAN NOT NULL,
+    "season" INTEGER NOT NULL REFERENCES "Season"("seasonId"),
+    "updatedAt" TIMESTAMP WITH TIME ZONE,
+    "venue" TEXT
+);
+
 CREATE TABLE IF NOT EXISTS "Fixture" (
     "id" UUID DEFAULT gen_random_uuid(),
-    "apiLeagueId" INTEGER NOT NULL,
-    "awayTeamApiId" INTEGER NOT NULL,
+    "externalLeagueId" INTEGER NOT NULL,
+    "awayTeamExternalId" INTEGER NOT NULL,
     "awayTeamGoalsExtra" INTEGER,
     "awayTeamGoalsFinish" INTEGER,
     "awayTeamGoalsHalf" INTEGER,
@@ -128,7 +164,7 @@ CREATE TABLE IF NOT EXISTS "Fixture" (
     "elapsed" INTEGER,
     "fixtureId" INTEGER PRIMARY KEY,
     "fixtureRoundId" TEXT,
-    "homeTeamApiId" INTEGER NOT NULL,
+    "homeTeamExternalId" INTEGER NOT NULL,
     "homeTeamGoalsExtra" INTEGER,
     "homeTeamGoalsFinish" INTEGER,
     "homeTeamGoalsHalf" INTEGER,
@@ -161,11 +197,12 @@ CREATE TABLE IF NOT EXISTS "Bet" (
     "userId" UUID NOT NULL REFERENCES "User"("id")
 );
 
--- Enable Row Level Security
 ALTER TABLE "User" ENABLE ROW LEVEL SECURITY;
 ALTER TABLE "UserSettings" ENABLE ROW LEVEL SECURITY;
 ALTER TABLE "League" ENABLE ROW LEVEL SECURITY;
 ALTER TABLE "Nation" ENABLE ROW LEVEL SECURITY;
+ALTER TABLE "Team" ENABLE ROW LEVEL SECURITY;
 ALTER TABLE "Season" ENABLE ROW LEVEL SECURITY;
 ALTER TABLE "Fixture" ENABLE ROW LEVEL SECURITY;
 ALTER TABLE "Bet" ENABLE ROW LEVEL SECURITY;
+ALTER TABLE "Log" ENABLE ROW LEVEL SECURITY;
