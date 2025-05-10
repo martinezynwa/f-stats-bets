@@ -91,7 +91,6 @@ export interface Fixture {
     homeTeamId: string;
     id: Generated<string | null>;
     leagueId: string;
-    oddsId: string | null;
     referee: string | null;
     round: number;
     season: number;
@@ -99,6 +98,15 @@ export interface Fixture {
     teamIdWon: string | null;
     updatedAt: Timestamp | null;
     venue: string | null;
+}
+export interface FixtureRound {
+    dateStarted: string;
+    externalLeagueId: number;
+    hasStarted: Generated<boolean>;
+    id: Generated<string>;
+    leagueId: string;
+    round: number;
+    season: number;
 }
 export interface League {
     countPlayerStats: boolean | null;
@@ -160,7 +168,7 @@ export interface Team {
     national: boolean;
     season: number;
     updatedAt: Timestamp | null;
-    venue: string;
+    venue: string | null;
 }
 export interface User {
     avatar: string | null;
@@ -184,6 +192,7 @@ export interface UserSettings {
 export interface DB {
     Bet: Bet;
     Fixture: Fixture;
+    FixtureRound: FixtureRound;
     League: League;
     Log: Log;
     Nation: Nation;

@@ -1,0 +1,25 @@
+@baseUrl = http://localhost:3001/external
+
+### Fetch fixtures
+## params - externalLeagueIds, ?season, ?dateFrom, ?dateTo
+GET {{baseUrl}}/fixtures
+Content-Type: application/json
+
+{
+  "externalLeagueIds": [39],
+  "season": 2024,
+  "dateFrom": "2024-08-15",
+  "dateTo": "2024-08-20"
+}
+
+### Fetch and insert fixtures
+## params - externalLeagueIds, ?season, ?dateFrom, ?dateTo
+POST {{baseUrl}}/insert-fixtures
+Content-Type: application/json
+
+{
+  "externalLeagueIds": [39],
+  "season": 2024,
+  "dateFrom": "2024-08-01",
+  "dateTo": "2025-08-18"
+}

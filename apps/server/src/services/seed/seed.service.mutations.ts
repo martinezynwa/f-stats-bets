@@ -5,6 +5,7 @@ import path from 'path'
 import { db } from '../../db'
 import { getAssetPath, handleCsvSeed, parseCsv } from './seed.service.helpers'
 import { TableWithRelations, TableWithoutRelations } from './seed.service.types'
+
 export const initDatabase = async () => {
   try {
     const schemaPath = path.join(__dirname, '../../migrations/database.schema.sql')

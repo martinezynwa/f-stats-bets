@@ -1,6 +1,8 @@
+import { LogType } from '@f-stats-bets/types'
 import { ENDPOINTS, SUBENDPOINTS } from '../constants/enums'
 import { ExternalResponse } from '../types/external/common'
 import { logger } from './logger'
+import { mockHandler } from './mockHandler'
 
 export enum RequestMethod {
   GET = 'GET',
@@ -24,6 +26,11 @@ export const externalRequestHandler = async <T>({
   subEndpoint,
   responseArray,
 }: ExternalRequestHandlerProps<T>): Promise<T[]> => {
+  if (process.env.MOCK === 'true') {
+    //@ts-ignore
+    return mockHandler({ endpoint, params })
+  }
+
   try {
     const url = new URL(`${process.env.API_FOOTBALL_HOST}${endpoint}${subEndpoint ?? ''}`)
 
@@ -72,7 +79,7 @@ export const externalRequestHandler = async <T>({
     })
   } catch (error) {
     await logger({
-      type: 'ERROR',
+      type: LogType.ERROR,
       action: 'Fetch error',
       message: `Error during API call for endpoint: ${process.env.API_FOOTBALL_HOST}${endpoint}${subEndpoint}`,
     })

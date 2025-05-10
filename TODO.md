@@ -1,5 +1,6 @@
 ## TODO
-- [] 3rd party api calls for fixtures
+- [] init new league
+- [] fixture round logic
 - [] one click seed base db data from external api
 - [] type safe backend routes
 - [] fix imports on server
@@ -10,6 +11,9 @@
 
 
 ## 0.0.1
+- [x] mock external api
+- [x] fixtures fetch and insert
+
 - [x] fetch and create League
 - [x] fetch and create Teams
 - [x] Teams csv

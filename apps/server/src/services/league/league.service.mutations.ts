@@ -1,7 +1,7 @@
 import { InsertLeague } from '@f-stats-bets/types'
 import { db } from '../../db'
-import { InsertLeagueToDbProps } from '../fixture/league.service.types'
 import { getLeagueDetails } from './league.service.helpers'
+import { InsertLeagueToDbProps } from './league.service.types'
 
 export const insertLeagueToDb = async ({ leagueData, season }: InsertLeagueToDbProps) => {
   const { type, groupStage, supported, national, federation, organization } = getLeagueDetails(
