@@ -5,7 +5,7 @@ import { ExternalFixtureResponse } from '../../types/external/external-fixture.t
 import { prepareFixturesForInsertion } from './fixture.service.helpers'
 import { FixtureDetailWithRound } from './fixture.service.types'
 
-export const insertFixtures = async (fixtures: InsertFixture[]) => {
+export const createFixtures = async (fixtures: InsertFixture[]) => {
   const added = await db.insertInto('Fixture').values(fixtures).returningAll().execute()
 
   return added
@@ -15,7 +15,7 @@ export const insertFixtures = async (fixtures: InsertFixture[]) => {
  * Based on external service response, determine which fixtures are new or updated
  * and insert or update them in the database
  */
-export const fixturesUpsert = async (
+export const upsertFixtures = async (
   externalFixturesData: ExternalFixtureResponse[],
   season: number,
 ) => {
@@ -85,13 +85,14 @@ export const fixturesUpsert = async (
       season,
     )
 
-    const insertedFixtures = await insertFixtures(fixturesToInsert)
+    const newFixtures = await createFixtures(fixturesToInsert)
 
-    const fixtureIds = insertedFixtures.map(fixture => fixture.fixtureId)
+    const fixtureIds = newFixtures.map(fixture => fixture.fixtureId)
+    const newFixtureRounds = await createFixtureRounds(fixtureIds)
 
-    await fixtureRoundsCreate(fixtureIds)
+    await updateFixturesWithFixtureRound(newFixtureRounds, newFixtures)
 
-    response.newFixtures.push(...insertedFixtures)
+    response.newFixtures.push(...newFixtures)
   }
 
   if (updatedFixtureData.updatedFixtures.length > 0) {
@@ -103,7 +104,12 @@ export const fixturesUpsert = async (
   return response
 }
 
-export const fixtureRoundsCreate = async (fixtureIds: number[]) => {
+/**
+ * Create FixtureRound[]
+ *
+ * use-case once Fixture[] is created
+ */
+export const createFixtureRounds = async (fixtureIds: number[]) => {
   const fixtures = await db
     .selectFrom('Fixture')
     .select(['fixtureId', 'externalLeagueId', 'leagueId', 'season', 'round', 'date'])
@@ -125,7 +131,7 @@ export const fixtureRoundsCreate = async (fixtureIds: number[]) => {
     {} as Record<string, FixtureDetailWithRound[]>,
   )
 
-  const roundsStarts = Object.entries(rounds).map(([_, items]) => {
+  const fixtureRounds = Object.entries(rounds).map(([_, items]) => {
     const sorted = items.sort((a, b) => new Date(a.date).getTime() - new Date(b.date).getTime())
 
     const { externalLeagueId, leagueId, season, round, date } = sorted[0]!
@@ -140,12 +146,76 @@ export const fixtureRoundsCreate = async (fixtureIds: number[]) => {
     }
   })
 
-  await db.insertInto('FixtureRound').values(roundsStarts).returningAll().execute()
+  const added = await db.insertInto('FixtureRound').values(fixtureRounds).returningAll().execute()
+
+  return added
 }
 
+/**
+ * Update existing Fixture[] with FixtureRound[] reference
+ *
+ * use-case once Fixture is created
+ */
 export const updateFixturesWithFixtureRound = async (
   fixtureRoundData: FixtureRound[],
   fixtures: FixtureDetailWithRound[],
-) => {}
+) => {
+  const fixturesWithFixtureRound = fixtureRoundData.flatMap(item =>
+    fixtures
+      .filter(f => `${f.leagueId}${f.round}` === `${item.leagueId}${item.round}`)
+      .map(f => ({
+        fixtureId: f.fixtureId,
+        fixtureRoundId: item.id,
+      })),
+  )
 
-export const updateExistingFixturesWithNewDate = async (fixtures: Fixture[]) => {}
+  const updatedFixtures = await db.transaction().execute(async trx => {
+    const updates = fixturesWithFixtureRound.map(fixture =>
+      trx
+        .updateTable('Fixture')
+        .set({ fixtureRoundId: fixture.fixtureRoundId })
+        .where('fixtureId', '=', fixture.fixtureId)
+        .returningAll()
+        .execute(),
+    )
+    return await Promise.all(updates)
+  })
+
+  return updatedFixtures
+}
+
+/**
+ * Used for jobs
+ *
+ * Update of many existing fixtures with new data
+ *
+ * date, referee, venue
+ */
+export const updateExistingFixturesWithNewDate = async (fixtures: Fixture[]) => {
+  try {
+    const updated = await db.transaction().execute(async trx => {
+      const updates = fixtures.map(fixture =>
+        trx
+          .updateTable('Fixture')
+          .set(fixture)
+          .where('fixtureId', '=', fixture.fixtureId)
+          .returningAll()
+          .execute(),
+      )
+      return await Promise.all(updates)
+    })
+
+    return updated
+  } catch (error) {
+    throw error
+  }
+}
+
+/**
+ * Update existing FixtureRound[] hasStarted boolean
+ *
+ * use-case once 1st game in round finished
+ */
+export const updateManyFixtureRoundStatus = async (fixtures: Fixture[]) => {
+  //TODO
+}

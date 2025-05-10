@@ -40,3 +40,9 @@ To start the backend server:
 ```bash
 yarn dev
 ```
+
+If you want to use mock data instead of real API calls, set the `MOCK` environment variable:
+```bash
+MOCK=true
+```
+This will use mock handlers from `src/mock` directory. Make sure to update the mock handlers in `mockHandler.ts` with the appropriate logic for the use case.

@@ -1,6 +1,7 @@
 ## TODO
+- [] fixture round logic for various league types
 - [] init new league
-- [] fixture round logic
+- [] job for fixtures
 - [] one click seed base db data from external api
 - [] type safe backend routes
 - [] fix imports on server
@@ -11,6 +12,7 @@
 
 
 ## 0.0.1
+- [x] fixture round update
 - [x] mock external api
 - [x] fixtures fetch and insert
 

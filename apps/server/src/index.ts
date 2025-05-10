@@ -40,5 +40,7 @@ app.use((err: Error, req: Request, res: Response, next: NextFunction) => {
 
 const PORT = process.env.PORT || 3001
 app.listen(PORT, () => {
-  console.log(`Server is running on port ${PORT}`)
+  console.log(
+    `Server is running on ${process.env.SERVER_URL} ${process.env.MOCK === 'true' ? '| External API service is mocked locally.' : ''}`,
+  )
 })
