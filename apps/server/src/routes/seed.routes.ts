@@ -21,6 +21,16 @@ export const seedBaseDataValidationSchema = z.object({
 })
 export type SeedBaseDataValidationSchema = z.infer<typeof seedBaseDataValidationSchema>
 
+export const seedFromExternalApiValidationSchema = z.object({
+  seasons: z.array(z.number()),
+  dateFrom: z.string(),
+  dateTo: z.string(),
+})
+
+export type SeedFromExternalApiValidationSchema = z.infer<
+  typeof seedFromExternalApiValidationSchema
+>
+
 const router = Router()
 
 //router.use(requireAuth)
@@ -83,11 +93,10 @@ router.post(
 router.post(
   '/seed-from-external-api',
   validateRequestWithBody(async (req: Request, res: Response) => {
-    //TODO implementation
-    await seedDatabaseFromExternalApi(req.body.tablesWithoutRelations)
+    await seedDatabaseFromExternalApi(req.body)
 
     res.json({ text: 'Database seeded from external API' })
-  }, seedBaseDataValidationSchema),
+  }, seedFromExternalApiValidationSchema),
 )
 
 export default router

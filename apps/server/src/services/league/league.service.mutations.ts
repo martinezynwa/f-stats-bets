@@ -1,12 +1,16 @@
 import { InsertLeague } from '@f-stats-bets/types'
+import { getSupportedLeagueDetail } from 'src/assets/league-data'
 import { db } from '../../db'
-import { getLeagueDetails } from './league.service.helpers'
 import { InsertLeagueToDbProps } from './league.service.types'
 
 export const insertLeagueToDb = async ({ leagueData, season }: InsertLeagueToDbProps) => {
-  const { type, groupStage, supported, national, federation, organization } = getLeagueDetails(
-    leagueData.league.id,
-  )
+  const leagueDetail = getSupportedLeagueDetail(leagueData.league.id)
+
+  if (!leagueDetail) {
+    throw new Error(`League ${leagueData.league.id} not supported`)
+  }
+
+  const { type, variant, federation, organization } = leagueDetail
 
   const data: InsertLeague = {
     season,
@@ -17,13 +21,13 @@ export const insertLeagueToDb = async ({ leagueData, season }: InsertLeagueToDbP
     name: leagueData.league.name,
     dateStart: leagueData.seasons[0]!.start,
     dateEnd: leagueData.seasons[0]!.end,
-    gamesPlayed: 0,
-    groupStage,
     type,
-    supported,
-    national,
     federation,
     organization,
+    national: variant === 'nation',
+    supported: true, //TODO, allow unsupported leagues
+    gamesPlayed: 0, //TODO
+    groupStage: false, //TODO
   }
 
   const added = await db

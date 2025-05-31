@@ -1,11 +1,11 @@
-import { FederationType, OrganizationType } from '@packages/types'
+import { FederationType, LeagueType, OrganizationType } from '@f-stats-bets/types'
 
 export type SupportedLeague = Record<
   string,
   {
     id: number
     name: string
-    type: 'Cup' | 'League'
+    type: LeagueType
     variant: 'nation' | 'club'
     seasons: number[]
     federation: FederationType
@@ -14,12 +14,34 @@ export type SupportedLeague = Record<
   }[]
 >
 
+export const getSupportedLeagues = (season: number) =>
+  Object.values(supportedLeagues).flatMap(leagues =>
+    leagues
+      .filter(league => !league.disabled)
+      .flatMap(league =>
+        league.seasons.map(season => ({
+          id: league.id,
+          season,
+          isNational: league.variant === 'nation',
+          federation: league.federation,
+          type: league.type,
+          organization: league.organization,
+        })),
+      )
+      .filter(league => league.season === season),
+  )
+
+export const getSupportedLeagueDetail = (leagueId: number) =>
+  Object.values(supportedLeagues)
+    .flatMap(leagues => leagues)
+    .find(league => league.id === leagueId) ?? null
+
 export const supportedLeagues: SupportedLeague = {
   International: [
     {
       id: 1,
       name: 'World Cup',
-      type: 'Cup',
+      type: LeagueType.NATIONAL_TOURNAMENT,
       variant: 'nation',
       federation: FederationType.WORLD,
       organization: OrganizationType.FIFA,
@@ -29,7 +51,7 @@ export const supportedLeagues: SupportedLeague = {
     {
       id: 4,
       name: 'Euro Championship',
-      type: 'Cup',
+      type: LeagueType.NATIONAL_TOURNAMENT,
       variant: 'nation',
       federation: FederationType.EUROPE,
       organization: OrganizationType.UEFA,
@@ -38,7 +60,7 @@ export const supportedLeagues: SupportedLeague = {
     {
       id: 19,
       name: 'Africa Cup of Nations',
-      type: 'Cup',
+      type: LeagueType.NATIONAL_TOURNAMENT,
       variant: 'nation',
       federation: FederationType.AFRICA,
       organization: OrganizationType.CAF,
@@ -48,7 +70,7 @@ export const supportedLeagues: SupportedLeague = {
     {
       id: 7,
       name: 'Asian Cup',
-      type: 'Cup',
+      type: LeagueType.NATIONAL_TOURNAMENT,
       variant: 'nation',
       federation: FederationType.ASIA,
       organization: OrganizationType.AFC,
@@ -58,7 +80,7 @@ export const supportedLeagues: SupportedLeague = {
     {
       id: 9,
       name: 'Copa America',
-      type: 'Cup',
+      type: LeagueType.NATIONAL_TOURNAMENT,
       variant: 'nation',
       federation: FederationType.SOUTH_AMERICA,
       organization: OrganizationType.CONMEBOL,
@@ -67,7 +89,7 @@ export const supportedLeagues: SupportedLeague = {
     {
       id: 22,
       name: 'CONCACAF Gold Cup',
-      type: 'Cup',
+      type: LeagueType.NATIONAL_TOURNAMENT,
       variant: 'nation',
       federation: FederationType.NORTH_CENTRAL_AMERICA,
       organization: OrganizationType.CONCACAF,
@@ -77,7 +99,7 @@ export const supportedLeagues: SupportedLeague = {
     {
       id: 5,
       name: 'UEFA Nations League',
-      type: 'League',
+      type: LeagueType.NATIONAL_TOURNAMENT,
       variant: 'nation',
       federation: FederationType.EUROPE,
       organization: OrganizationType.UEFA,
@@ -88,7 +110,7 @@ export const supportedLeagues: SupportedLeague = {
     {
       id: 15,
       name: 'FIFA Club World Cup',
-      type: 'Cup',
+      type: LeagueType.CLUB_TOURNAMENT,
       variant: 'club',
       federation: FederationType.WORLD,
       organization: OrganizationType.FIFA,
@@ -97,7 +119,7 @@ export const supportedLeagues: SupportedLeague = {
     {
       id: 10,
       name: 'International Friendlies',
-      type: 'League',
+      type: LeagueType.FRIENDLY,
       variant: 'nation',
       federation: FederationType.WORLD,
       organization: OrganizationType.FIFA,
@@ -108,7 +130,7 @@ export const supportedLeagues: SupportedLeague = {
     {
       id: 2,
       name: 'UEFA Champions League',
-      type: 'Cup',
+      type: LeagueType.CLUB_TOURNAMENT,
       variant: 'club',
       federation: FederationType.EUROPE,
       organization: OrganizationType.UEFA,
@@ -117,7 +139,7 @@ export const supportedLeagues: SupportedLeague = {
     {
       id: 3,
       name: 'UEFA Europa League',
-      type: 'Cup',
+      type: LeagueType.CLUB_TOURNAMENT,
       variant: 'club',
       federation: FederationType.EUROPE,
       organization: OrganizationType.UEFA,
@@ -126,7 +148,7 @@ export const supportedLeagues: SupportedLeague = {
     {
       id: 848,
       name: 'UEFA Europa Conference League',
-      type: 'Cup',
+      type: LeagueType.CLUB_TOURNAMENT,
       variant: 'club',
       federation: FederationType.EUROPE,
       organization: OrganizationType.UEFA,
@@ -135,7 +157,7 @@ export const supportedLeagues: SupportedLeague = {
     {
       id: 531,
       name: 'UEFA Super Cup',
-      type: 'Cup',
+      type: LeagueType.CLUB_TOURNAMENT,
       variant: 'club',
       federation: FederationType.EUROPE,
       organization: OrganizationType.UEFA,
@@ -146,7 +168,7 @@ export const supportedLeagues: SupportedLeague = {
     {
       id: 39,
       name: 'Premier League',
-      type: 'League',
+      type: LeagueType.LEAGUE,
       variant: 'club',
       federation: FederationType.EUROPE,
       organization: OrganizationType.ENGLAND,
@@ -155,7 +177,7 @@ export const supportedLeagues: SupportedLeague = {
     {
       id: 45,
       name: 'FA Cup',
-      type: 'Cup',
+      type: LeagueType.LEAGUE_CUP,
       variant: 'club',
       federation: FederationType.EUROPE,
       organization: OrganizationType.ENGLAND,
@@ -165,7 +187,7 @@ export const supportedLeagues: SupportedLeague = {
     {
       id: 48,
       name: 'League Cup',
-      type: 'Cup',
+      type: LeagueType.LEAGUE_CUP,
       variant: 'club',
       federation: FederationType.EUROPE,
       organization: OrganizationType.ENGLAND,
@@ -175,7 +197,7 @@ export const supportedLeagues: SupportedLeague = {
     {
       id: 528,
       name: 'Community Shield',
-      type: 'Cup',
+      type: LeagueType.LEAGUE_CUP,
       variant: 'club',
       federation: FederationType.EUROPE,
       organization: OrganizationType.ENGLAND,
@@ -187,7 +209,7 @@ export const supportedLeagues: SupportedLeague = {
     {
       id: 78,
       name: 'Bundesliga',
-      type: 'League',
+      type: LeagueType.LEAGUE,
       variant: 'club',
       federation: FederationType.EUROPE,
       organization: OrganizationType.GERMANY,
@@ -196,7 +218,7 @@ export const supportedLeagues: SupportedLeague = {
     {
       id: 81,
       name: 'DFB Pokal',
-      type: 'Cup',
+      type: LeagueType.LEAGUE_CUP,
       variant: 'club',
       federation: FederationType.EUROPE,
       organization: OrganizationType.GERMANY,
@@ -206,7 +228,7 @@ export const supportedLeagues: SupportedLeague = {
     {
       id: 529,
       name: 'Germany Super Cup',
-      type: 'Cup',
+      type: LeagueType.LEAGUE_CUP,
       variant: 'club',
       federation: FederationType.EUROPE,
       organization: OrganizationType.GERMANY,
@@ -218,7 +240,7 @@ export const supportedLeagues: SupportedLeague = {
     {
       id: 140,
       name: 'La Liga',
-      type: 'League',
+      type: LeagueType.LEAGUE,
       variant: 'club',
       federation: FederationType.EUROPE,
       organization: OrganizationType.SPAIN,
@@ -227,7 +249,7 @@ export const supportedLeagues: SupportedLeague = {
     {
       id: 143,
       name: 'Copa del Rey',
-      type: 'Cup',
+      type: LeagueType.LEAGUE_CUP,
       variant: 'club',
       federation: FederationType.EUROPE,
       organization: OrganizationType.SPAIN,
@@ -237,7 +259,7 @@ export const supportedLeagues: SupportedLeague = {
     {
       id: 556,
       name: 'Spain Super Cup',
-      type: 'Cup',
+      type: LeagueType.LEAGUE_CUP,
       variant: 'club',
       federation: FederationType.EUROPE,
       organization: OrganizationType.SPAIN,
@@ -249,7 +271,7 @@ export const supportedLeagues: SupportedLeague = {
     {
       id: 135,
       name: 'Serie A',
-      type: 'League',
+      type: LeagueType.LEAGUE,
       variant: 'club',
       federation: FederationType.EUROPE,
       organization: OrganizationType.ITALY,
@@ -258,7 +280,7 @@ export const supportedLeagues: SupportedLeague = {
     {
       id: 137,
       name: 'Coppa Italia',
-      type: 'Cup',
+      type: LeagueType.LEAGUE_CUP,
       variant: 'club',
       federation: FederationType.EUROPE,
       organization: OrganizationType.ITALY,
@@ -268,7 +290,7 @@ export const supportedLeagues: SupportedLeague = {
     {
       id: 547,
       name: 'Italy Super Cup',
-      type: 'Cup',
+      type: LeagueType.LEAGUE_CUP,
       variant: 'club',
       federation: FederationType.EUROPE,
       organization: OrganizationType.ITALY,
@@ -280,7 +302,7 @@ export const supportedLeagues: SupportedLeague = {
     {
       id: 61,
       name: 'Ligue 1',
-      type: 'League',
+      type: LeagueType.LEAGUE,
       variant: 'club',
       federation: FederationType.EUROPE,
       organization: OrganizationType.FRANCE,
@@ -289,7 +311,7 @@ export const supportedLeagues: SupportedLeague = {
     {
       id: 66,
       name: 'Coupe de France',
-      type: 'Cup',
+      type: LeagueType.LEAGUE_CUP,
       variant: 'club',
       federation: FederationType.EUROPE,
       organization: OrganizationType.FRANCE,
@@ -299,7 +321,7 @@ export const supportedLeagues: SupportedLeague = {
     {
       id: 526,
       name: 'France Super Cup',
-      type: 'Cup',
+      type: LeagueType.LEAGUE_CUP,
       variant: 'club',
       federation: FederationType.EUROPE,
       organization: OrganizationType.FRANCE,
@@ -311,7 +333,7 @@ export const supportedLeagues: SupportedLeague = {
     {
       id: 94,
       name: 'Primeira Liga',
-      type: 'League',
+      type: LeagueType.LEAGUE,
       variant: 'club',
       federation: FederationType.EUROPE,
       organization: OrganizationType.PORTUGAL,
@@ -320,7 +342,7 @@ export const supportedLeagues: SupportedLeague = {
     {
       id: 96,
       name: 'Taça de Portugal',
-      type: 'Cup',
+      type: LeagueType.LEAGUE_CUP,
       variant: 'club',
       federation: FederationType.EUROPE,
       organization: OrganizationType.PORTUGAL,
@@ -330,7 +352,7 @@ export const supportedLeagues: SupportedLeague = {
     {
       id: 97,
       name: 'Taça da Liga',
-      type: 'Cup',
+      type: LeagueType.LEAGUE_CUP,
       variant: 'club',
       federation: FederationType.EUROPE,
       organization: OrganizationType.PORTUGAL,
@@ -340,7 +362,7 @@ export const supportedLeagues: SupportedLeague = {
     {
       id: 550,
       name: 'Portugal Super Cup',
-      type: 'Cup',
+      type: LeagueType.LEAGUE_CUP,
       variant: 'club',
       federation: FederationType.EUROPE,
       organization: OrganizationType.PORTUGAL,
@@ -352,7 +374,7 @@ export const supportedLeagues: SupportedLeague = {
     {
       id: 88,
       name: 'Eredivisie',
-      type: 'League',
+      type: LeagueType.LEAGUE,
       variant: 'club',
       federation: FederationType.EUROPE,
       organization: OrganizationType.NETHERLANDS,
@@ -361,7 +383,7 @@ export const supportedLeagues: SupportedLeague = {
     {
       id: 90,
       name: 'KNVB Beker',
-      type: 'Cup',
+      type: LeagueType.LEAGUE_CUP,
       variant: 'club',
       federation: FederationType.EUROPE,
       organization: OrganizationType.NETHERLANDS,
@@ -371,7 +393,7 @@ export const supportedLeagues: SupportedLeague = {
     {
       id: 543,
       name: 'Netherlands Super Cup',
-      type: 'Cup',
+      type: LeagueType.LEAGUE_CUP,
       variant: 'club',
       federation: FederationType.EUROPE,
       organization: OrganizationType.NETHERLANDS,
@@ -383,7 +405,7 @@ export const supportedLeagues: SupportedLeague = {
     {
       id: 144,
       name: 'Jupiler Pro League',
-      type: 'League',
+      type: LeagueType.LEAGUE,
       variant: 'club',
       federation: FederationType.EUROPE,
       organization: OrganizationType.BELGIUM,
@@ -392,7 +414,7 @@ export const supportedLeagues: SupportedLeague = {
     {
       id: 147,
       name: 'Belgium Cup',
-      type: 'Cup',
+      type: LeagueType.LEAGUE_CUP,
       variant: 'club',
       federation: FederationType.EUROPE,
       organization: OrganizationType.BELGIUM,
@@ -402,7 +424,7 @@ export const supportedLeagues: SupportedLeague = {
     {
       id: 519,
       name: 'Belgium Super Cup',
-      type: 'Cup',
+      type: LeagueType.LEAGUE_CUP,
       variant: 'club',
       federation: FederationType.EUROPE,
       organization: OrganizationType.BELGIUM,
@@ -414,7 +436,7 @@ export const supportedLeagues: SupportedLeague = {
     {
       id: 218,
       name: 'Bundesliga',
-      type: 'League',
+      type: LeagueType.LEAGUE,
       variant: 'club',
       federation: FederationType.EUROPE,
       organization: OrganizationType.AUSTRIA,
@@ -423,7 +445,7 @@ export const supportedLeagues: SupportedLeague = {
     {
       id: 220,
       name: 'Austria Cup',
-      type: 'Cup',
+      type: LeagueType.LEAGUE_CUP,
       variant: 'club',
       federation: FederationType.EUROPE,
       organization: OrganizationType.AUSTRIA,
@@ -435,7 +457,7 @@ export const supportedLeagues: SupportedLeague = {
     {
       id: 203,
       name: 'Super Lig',
-      type: 'League',
+      type: LeagueType.LEAGUE,
       variant: 'club',
       federation: FederationType.EUROPE,
       organization: OrganizationType.TURKEY,
@@ -444,7 +466,7 @@ export const supportedLeagues: SupportedLeague = {
     {
       id: 206,
       name: 'Turkey Cup',
-      type: 'Cup',
+      type: LeagueType.LEAGUE_CUP,
       variant: 'club',
       federation: FederationType.EUROPE,
       organization: OrganizationType.TURKEY,
@@ -454,7 +476,7 @@ export const supportedLeagues: SupportedLeague = {
     {
       id: 551,
       name: 'Turkey Super Cup',
-      type: 'Cup',
+      type: LeagueType.LEAGUE_CUP,
       variant: 'club',
       federation: FederationType.EUROPE,
       organization: OrganizationType.TURKEY,
@@ -466,7 +488,7 @@ export const supportedLeagues: SupportedLeague = {
     {
       id: 345,
       name: 'Fortuna Liga',
-      type: 'League',
+      type: LeagueType.LEAGUE,
       variant: 'club',
       federation: FederationType.EUROPE,
       organization: OrganizationType.CZECH,
@@ -475,7 +497,7 @@ export const supportedLeagues: SupportedLeague = {
     {
       id: 347,
       name: 'MOL Cup',
-      type: 'Cup',
+      type: LeagueType.LEAGUE_CUP,
       variant: 'club',
       federation: FederationType.EUROPE,
       organization: OrganizationType.CZECH,

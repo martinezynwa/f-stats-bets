@@ -37,5 +37,7 @@ POST {{baseUrl}}/seed-from-external-api
 Content-Type: application/json
 
 {
-   "seasons": [2025]
+   "seasons": [2025],
+   "dateFrom": "2024-07-01",
+   "dateTo": "2025-06-30"
 }

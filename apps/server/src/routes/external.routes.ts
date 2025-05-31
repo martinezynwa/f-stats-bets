@@ -35,13 +35,13 @@ router.post(
   validateRequestWithBody(async (req, res) => {
     const { externalLeagueId, season, leagueId } = req.body
 
-    const leagueData = await fetchTeamsInfo(externalLeagueId, season)
+    const teamsData = await fetchTeamsInfo(externalLeagueId, season)
 
     const added = await insertTeamsToDb({
       leagueId,
       externalLeagueId,
       season,
-      teamsData: leagueData,
+      teamsData,
     })
 
     res.json(added)

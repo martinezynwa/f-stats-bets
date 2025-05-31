@@ -6,10 +6,10 @@ GET {{baseUrl}}/fixtures
 Content-Type: application/json
 
 {
-  "externalLeagueIds": [39],
+  "externalLeagueIds": [78,345],
   "season": 2024,
-  "dateFrom": "2024-08-15",
-  "dateTo": "2024-08-20"
+  "dateFrom": "2025-05-17",
+  "dateTo": "2025-05-17"
 }
 
 ### Fetch and insert fixtures

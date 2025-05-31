@@ -5,6 +5,8 @@ import { ExternalFixtureResponse } from '../../types/external/external-fixture.t
 
 /**
  * Fetch fixtures for multiple leagues
+ * @dateFrom - YYYY-MM-DD format
+ * @dateTo - YYYY-MM-DD format
  */
 export const fetchFixtures = async (input: InsertFixturesValidationSchema) => {
   const { externalLeagueIds, season, dateFrom, dateTo } = input

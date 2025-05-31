@@ -1,17 +1,21 @@
 ## TODO
-- [] fixture round logic for various league types
-- [] init new league
-- [] job for fixtures
-- [] one click seed base db data from external api
+
+- [] fix eslint on server
 - [] type safe backend routes
 - [] fix imports on server
 
+- [] init new league
 - [] fixtures-bets
+- [] job for fixtures
+
 - [] Expo project build
+- [] fixture round logic for various league types
 
 
 
 ## 0.0.1
+- [x] one click seed base db data from external api
+
 - [x] fixture round update
 - [x] mock external api
 - [x] fixtures fetch and insert

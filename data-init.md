@@ -15,7 +15,7 @@ Creating of `UserSettings.csv` is optional and creates UserSettings
 POST /seed/init-users
 ```
 
-## Data Seeding Options (steps 3 and 4)
+## Data Seeding Options (either step 3 or step 4)
 After initializing the database schema, you can choose ONE of the following two approaches to seed your data:
 
 ## 3. Seed Data from Local CSV Files
@@ -45,7 +45,9 @@ Content-Type: application/json
 - Prepare data files in `src/assets/seed` for:
   - `User.csv`
   - `UserSettings.csv`
-- Have league-data prepared based on the type schema to allow creation of leagues and related models
+  - `Season.csv`
+  - `Nation.csv`
+- Before seeding data, tables Season, League, Team, Fixture, Fixture round are deleted for each selected season in request
 
 ### Steps
 1. Call the external API seed endpoint (one season per call):
@@ -54,11 +56,12 @@ POST /seed/seed-from-external-api
 Content-Type: application/json
 
 {
-   "seasons": [2025]
+   "seasons": [2025],
+   "dateFrom" "2024-07-01",
+   "dateTo": "2025-06-30"
 }
 ```
 
 ## Notes
-- The external API seeding process only allows one season per API call
 - Make sure all prerequisite data files are properly formatted and placed in the correct directory
 - Choose either the CSV seeding (Step 2) OR the External API seeding (Step 3) approach - do not use both

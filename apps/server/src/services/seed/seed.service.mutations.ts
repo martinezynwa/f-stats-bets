@@ -2,7 +2,15 @@ import { InsertTeam, LeagueType, Team, User, UserSettings } from '@f-stats-bets/
 import fs from 'fs'
 import { sql } from 'kysely'
 import path from 'path'
+import { getSupportedLeagues } from '../../assets/league-data'
 import { db } from '../../db'
+import { SeedFromExternalApiValidationSchema } from '../../routes/seed.routes'
+import { fetchFixtures } from '../external/external.fixture.service'
+import { fetchLeagueInfo } from '../external/external.league.service'
+import { fetchTeamsInfo } from '../external/external.team.service'
+import { upsertFixtures } from '../fixture/fixture.service.mutations'
+import { insertLeagueToDb } from '../league/league.service.mutations'
+import { insertTeamsToDb } from '../team/team.service.mutations'
 import { getAssetPath, handleCsvSeed, parseCsv } from './seed.service.helpers'
 import { TableWithRelations, TableWithoutRelations } from './seed.service.types'
 
@@ -100,8 +108,37 @@ export const seedRelationDataFromCsv = async (tableNames: TableWithRelations[]) 
   }
 }
 
-export const seedDatabaseFromExternalApi = async (
-  tableNames: TableWithRelations[] | TableWithoutRelations[],
-) => {
-  //TODO implementation
+export const seedDatabaseFromExternalApi = async (input: SeedFromExternalApiValidationSchema) => {
+  const { seasons, dateFrom, dateTo } = input
+
+  await db.deleteFrom('FixtureRound').where('season', 'in', seasons).execute()
+  await db.deleteFrom('Fixture').where('season', 'in', seasons).execute()
+  await db.deleteFrom('Team').where('season', 'in', seasons).execute()
+  await db.deleteFrom('League').where('season', 'in', seasons).execute()
+  await db.deleteFrom('Season').where('seasonId', 'in', seasons).execute()
+
+  for (const season of seasons) {
+    const leagues = getSupportedLeagues(season)
+
+    for (const league of leagues) {
+      const leagueData = await fetchLeagueInfo(league.id, season)
+      const createdLeague = await insertLeagueToDb({ leagueData, season })
+
+      const teamsData = await fetchTeamsInfo(league.id, season)
+      await insertTeamsToDb({
+        leagueId: createdLeague!.id,
+        externalLeagueId: league.id,
+        season,
+        teamsData,
+      })
+
+      const externalFixturesData = await fetchFixtures({
+        externalLeagueIds: [league.id],
+        season,
+        dateFrom,
+        dateTo,
+      })
+      await upsertFixtures(externalFixturesData, season)
+    }
+  }
 }
