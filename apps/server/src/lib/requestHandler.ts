@@ -7,10 +7,10 @@ type TypedRequestHandler<T> = {
   (req: TypedRequestBody<T>, res: Response, next: NextFunction): Promise<void | Response>
 }
 
-type TypedRequestParams<T> = Request & { params: T }
+type TypedRequestQuery<T> = Request & { query: T }
 
-type TypedRequestParamsHandler<T> = {
-  (req: TypedRequestParams<T>, res: Response, next: NextFunction): Promise<void | Response>
+type TypedRequestQueryHandler<T> = {
+  (req: TypedRequestQuery<T>, res: Response, next: NextFunction): Promise<void | Response>
 }
 
 /**
@@ -48,14 +48,14 @@ export const validateRequestWithBody =
  * @template T - The type of the request parameters
  */
 export const validateRequestWithParams =
-  <T extends z.ZodType>(handler: TypedRequestParamsHandler<z.infer<T>>, schema: T) =>
+  <T extends z.ZodType>(handler: TypedRequestQueryHandler<z.infer<T>>, schema: T) =>
   async (req: Request, res: Response, next: NextFunction) => {
     try {
-      const validatedData = schema.parse(req.params)
+      const validatedData = schema.parse(req.query)
 
-      req.params = validatedData
+      req.query = validatedData
 
-      await handler(req as TypedRequestParams<z.infer<T>>, res, next)
+      await handler(req as TypedRequestQuery<z.infer<T>>, res, next)
     } catch (error) {
       const errors = (error as z.ZodError).errors
 

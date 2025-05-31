@@ -1,20 +1,32 @@
 import { z } from 'zod';
-export declare const createBetSchema: z.ZodObject<{
-    name: z.ZodString;
+export declare const userBetsSchema: z.ZodObject<{
+    userId: z.ZodString;
+    dateFrom: z.ZodString;
+    dateTo: z.ZodString;
 }, "strip", z.ZodTypeAny, {
-    name: string;
+    userId: string;
+    dateFrom: string;
+    dateTo: string;
 }, {
-    name: string;
+    userId: string;
+    dateFrom: string;
+    dateTo: string;
 }>;
-export type CreateBetSchema = z.infer<typeof createBetSchema>;
-export declare const updateBetSchema: z.ZodObject<{
-    id: z.ZodString;
-    name: z.ZodString;
+export type UserBetsSchema = z.infer<typeof userBetsSchema>;
+export declare const mockBetsSchema: z.ZodObject<{
+    userId: z.ZodString;
+    dateFrom: z.ZodString;
+    dateTo: z.ZodString;
+    deletePreviousBets: z.ZodOptional<z.ZodBoolean>;
 }, "strip", z.ZodTypeAny, {
-    id: string;
-    name: string;
+    userId: string;
+    dateFrom: string;
+    dateTo: string;
+    deletePreviousBets?: boolean | undefined;
 }, {
-    id: string;
-    name: string;
+    userId: string;
+    dateFrom: string;
+    dateTo: string;
+    deletePreviousBets?: boolean | undefined;
 }>;
-export type UpdateBetSchema = z.infer<typeof updateBetSchema>;
+export type MockBetsSchema = z.infer<typeof mockBetsSchema>;

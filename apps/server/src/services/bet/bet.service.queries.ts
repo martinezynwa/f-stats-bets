@@ -1,40 +1,14 @@
-import { CreateBetSchema, UpdateBetSchema } from '@f-stats-bets/types'
-import { randomUUID } from 'crypto'
-import { db } from 'src/db'
+import { Bet, UserBetsSchema } from '@f-stats-bets/types'
+import { rawQueryArray } from '../../lib'
 
-export const getAllBets = async () => {
-  return await db.selectFrom('Bet').limit(10).selectAll().execute()
-}
+export const getUserBets = async (input: UserBetsSchema) => {
+  const { dateFrom, dateTo, userId } = input
 
-export const getBetById = async (id: string) => {
-  const bet = await db.selectFrom('Bet').selectAll().where('id', '=', id).executeTakeFirst()
+  const bets = await rawQueryArray<Bet>(`
+    SELECT * FROM "Bet"
+    WHERE "userId" = '${userId}' 
+    AND "createdAt"::date BETWEEN '${dateFrom}'::date AND '${dateTo}'::date
+  `)
 
-  return bet?.id
-}
-
-export const createBet = async (data: CreateBetSchema) => {
-  return await db
-    .insertInto('Bet')
-    .values({
-      ...data,
-      id: randomUUID(),
-      name: data.name,
-    })
-    .returningAll()
-    .executeTakeFirst()
-}
-
-export const updateBet = async (input: UpdateBetSchema) => {
-  const { id, ...data } = input
-
-  return await db
-    .updateTable('Bet')
-    .set(data)
-    .where('id', '=', id)
-    .returningAll()
-    .executeTakeFirst()
-}
-
-export const removeBet = async (id: string) => {
-  return await db.deleteFrom('Bet').where('id', '=', id).returningAll().executeTakeFirst()
+  return bets
 }

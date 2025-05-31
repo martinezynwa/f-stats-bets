@@ -5,6 +5,12 @@
 
 import type { ColumnType } from "kysely";
 
+export enum BetResultType {
+  AWAY_WIN = "AWAY_WIN",
+  DRAW = "DRAW",
+  HOME_WIN = "HOME_WIN",
+}
+
 export enum FederationType {
   AFRICA = "AFRICA",
   ASIA = "ASIA",
@@ -76,7 +82,7 @@ export interface Bet {
   createdAt: Generated<Timestamp | null>;
   fixtureGoalsBet: Json | null;
   fixtureId: number;
-  fixtureResultBet: string | null;
+  fixtureResultBet: BetResultType | null;
   fixtureScorersBet: Json | null;
   isEvaluated: Generated<boolean>;
   leagueId: string;

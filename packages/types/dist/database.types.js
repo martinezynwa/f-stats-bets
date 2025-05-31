@@ -4,8 +4,14 @@
  * These types are derived from the generated types.
  */
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.OrganizationType = exports.LogType = exports.LeagueType = exports.FederationType = void 0;
+exports.OrganizationType = exports.LogType = exports.LeagueType = exports.FederationType = exports.BetResultType = void 0;
 // Export enums
+var BetResultType;
+(function (BetResultType) {
+    BetResultType["AWAY_WIN"] = "AWAY_WIN";
+    BetResultType["DRAW"] = "DRAW";
+    BetResultType["HOME_WIN"] = "HOME_WIN";
+})(BetResultType || (exports.BetResultType = BetResultType = {}));
 var FederationType;
 (function (FederationType) {
     FederationType["AFRICA"] = "AFRICA";

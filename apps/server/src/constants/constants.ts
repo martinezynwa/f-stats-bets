@@ -10,6 +10,8 @@ export const PLAYER_NO_TEAM_ID = '0'
 export const PLAYER_NO_TEAM_ID_INT = 0
 export const API_CHUNK_SIZE = 20
 export const PLAYER_TRANSFER_DATE_FROM_DAYS = 15
+export const START_OF_DAY = '00:00:00'
+export const END_OF_DAY = '23:59:59'
 
 export const dummyRecord = {
   league: (season: number) => `${season}-0`,

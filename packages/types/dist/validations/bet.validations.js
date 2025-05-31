@@ -1,11 +1,15 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.updateBetSchema = exports.createBetSchema = void 0;
+exports.mockBetsSchema = exports.userBetsSchema = void 0;
 const zod_1 = require("zod");
-exports.createBetSchema = zod_1.z.object({
-    name: zod_1.z.string().min(1),
+exports.userBetsSchema = zod_1.z.object({
+    userId: zod_1.z.string(),
+    dateFrom: zod_1.z.string(),
+    dateTo: zod_1.z.string(),
 });
-exports.updateBetSchema = zod_1.z.object({
-    id: zod_1.z.string().min(1),
-    name: zod_1.z.string().min(1),
+exports.mockBetsSchema = zod_1.z.object({
+    userId: zod_1.z.string(),
+    dateFrom: zod_1.z.string(),
+    dateTo: zod_1.z.string(),
+    deletePreviousBets: zod_1.z.boolean().optional(),
 });

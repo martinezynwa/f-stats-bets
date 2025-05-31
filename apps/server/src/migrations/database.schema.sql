@@ -12,6 +12,7 @@ DROP TYPE IF EXISTS federation_type;
 DROP TYPE IF EXISTS organization_type;
 DROP TYPE IF EXISTS league_type;
 DROP TYPE IF EXISTS log_type;
+DROP TYPE IF EXISTS bet_result_type;
 
 CREATE TYPE federation_type AS ENUM (
     'AFRICA',
@@ -58,6 +59,12 @@ CREATE TYPE log_type AS ENUM (
     'INFO',
     'ERROR',
     'WARNING'
+);
+
+CREATE TYPE bet_result_type AS ENUM (
+    'HOME_WIN',
+    'AWAY_WIN',
+    'DRAW'
 );
 
 CREATE TABLE IF NOT EXISTS "Log" (
@@ -198,8 +205,8 @@ CREATE TABLE IF NOT EXISTS "Bet" (
     "season" INTEGER NOT NULL,
     "userId" UUID NOT NULL,
     "betCompetitionId" TEXT NOT NULL,
+    "fixtureResultBet" bet_result_type,
     "fixtureGoalsBet" JSONB,
-    "fixtureResultBet" TEXT CHECK ("fixtureResultBet" IN ('0', '1', '2')),
     "fixtureScorersBet" JSONB,
     "isEvaluated" BOOLEAN NOT NULL DEFAULT FALSE,
     "oddValue" JSONB,

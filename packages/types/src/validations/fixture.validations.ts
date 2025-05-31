@@ -8,3 +8,13 @@ export const fixturesBetsSchema = z
   .merge(datePeriodSchema)
 
 export type FixturesBetsSchema = z.infer<typeof fixturesBetsSchema>
+
+export const fixturesSchema = z
+  .object({
+    externalLeagueIds: z.array(z.number()).optional(),
+    season: z.string().optional(),
+    leagueIdSort: z.string().optional(),
+  })
+  .merge(datePeriodSchema)
+
+export type FixturesSchema = z.infer<typeof fixturesSchema>

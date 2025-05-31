@@ -1,14 +1,18 @@
 import { z } from 'zod'
 
-export const createBetSchema = z.object({
-  name: z.string().min(1),
+export const userBetsSchema = z.object({
+  userId: z.string(),
+  dateFrom: z.string(),
+  dateTo: z.string(),
 })
 
-export type CreateBetSchema = z.infer<typeof createBetSchema>
+export type UserBetsSchema = z.infer<typeof userBetsSchema>
 
-export const updateBetSchema = z.object({
-  id: z.string().min(1),
-  name: z.string().min(1),
+export const mockBetsSchema = z.object({
+  userId: z.string(),
+  dateFrom: z.string(),
+  dateTo: z.string(),
+  deletePreviousBets: z.boolean().optional(),
 })
 
-export type UpdateBetSchema = z.infer<typeof updateBetSchema>
+export type MockBetsSchema = z.infer<typeof mockBetsSchema>

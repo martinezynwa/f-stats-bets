@@ -5,6 +5,11 @@
 import type { Selectable, Insertable, Updateable, ColumnType } from 'kysely';
 import type { DB } from './generated.types';
 export type Timestamp = ColumnType<Date, Date | string, Date | string>;
+export declare enum BetResultType {
+    AWAY_WIN = "AWAY_WIN",
+    DRAW = "DRAW",
+    HOME_WIN = "HOME_WIN"
+}
 export declare enum FederationType {
     AFRICA = "AFRICA",
     ASIA = "ASIA",

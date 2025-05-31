@@ -10,6 +10,13 @@ import type { DB } from './generated.types'
 export type Timestamp = ColumnType<Date, Date | string, Date | string>
 
 // Export enums
+export enum BetResultType {
+  AWAY_WIN = "AWAY_WIN",
+  DRAW = "DRAW",
+  HOME_WIN = "HOME_WIN",
+  
+}
+
 export enum FederationType {
   AFRICA = "AFRICA",
   ASIA = "ASIA",

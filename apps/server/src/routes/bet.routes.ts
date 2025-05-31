@@ -1,73 +1,29 @@
-import { createBetSchema, updateBetSchema } from '@f-stats-bets/types'
+import { mockBetsSchema, userBetsSchema } from '@f-stats-bets/types'
 import { Router } from 'express'
-import { sendNotFound, validateRequest, validateRequestWithBody } from 'src/lib'
-import { requireAuth } from 'src/middleware'
-import {
-  createBet,
-  getAllBets,
-  getBetById,
-  removeBet,
-  updateBet,
-} from '../services/bet/bet.service.queries'
+import { validateRequestWithBody, validateRequestWithParams } from '../lib'
+import { mockBets } from '../services/bet/bet.service.mutations'
+import { getUserBets } from '../services/bet/bet.service.queries'
 
 const router = Router()
 
-router.use(requireAuth)
+//router.use(requireAuth)
 
 router.get(
   '/',
-  validateRequest(async (_req, res) => {
-    const bets = await getAllBets()
+  validateRequestWithParams(async (req, res) => {
+    const bets = await getUserBets(req.query)
+
     res.json(bets)
-  }),
-)
-
-router.get(
-  '/:id',
-  validateRequest(async (req, res) => {
-    const bet = await getBetById(req.params.id)
-
-    if (!bet) {
-      return sendNotFound(res, 'Bet not found')
-    }
-
-    res.json(bet)
-  }),
+  }, userBetsSchema),
 )
 
 router.post(
-  '/',
+  '/mock',
   validateRequestWithBody(async (req, res) => {
-    const bet = await createBet(req.body)
+    const bets = await mockBets(req.body)
 
-    res.status(201).json(bet)
-  }, createBetSchema),
-)
-
-router.put(
-  '/:id',
-  validateRequestWithBody(async (req, res) => {
-    const bet = await updateBet(req.body)
-
-    if (!bet) {
-      return sendNotFound(res, 'Bet not found')
-    }
-
-    res.json(bet)
-  }, updateBetSchema),
-)
-
-router.delete(
-  '/:id',
-  validateRequest(async (req, res) => {
-    const bet = await removeBet(req.params.id)
-
-    if (!bet) {
-      return sendNotFound(res, 'Bet not found')
-    }
-
-    res.json(bet)
-  }),
+    res.json(bets)
+  }, mockBetsSchema),
 )
 
 export default router

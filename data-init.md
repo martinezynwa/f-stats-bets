@@ -21,6 +21,7 @@ After initializing the database schema, you can choose ONE of the following two 
 ## 3. Seed Data from Local CSV Files
 
 ### Prerequisites
+- `league-data.ts` must contain League record
 - Prepare data files in `src/assets/seed` for the following models:
   - `User.csv`
   - `UserSettings.csv`
@@ -47,6 +48,7 @@ Content-Type: application/json
   - `UserSettings.csv`
   - `Season.csv`
   - `Nation.csv`
+- `league-data.ts` must contain League record
 - Before seeding data, tables Season, League, Team, Fixture, Fixture round are deleted for each selected season in request
 
 ### Steps
