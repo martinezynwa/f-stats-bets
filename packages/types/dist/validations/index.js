@@ -17,5 +17,6 @@ Object.defineProperty(exports, "__esModule", { value: true });
 __exportStar(require("./bet.validations"), exports);
 __exportStar(require("./external.validations"), exports);
 __exportStar(require("./fixture.validations"), exports);
+__exportStar(require("./mock.validations"), exports);
 __exportStar(require("./shared.validations"), exports);
 __exportStar(require("./user.validations"), exports);

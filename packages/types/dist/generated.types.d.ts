@@ -75,6 +75,36 @@ export interface Bet {
     updatedAt: Timestamp | null;
     userId: string;
 }
+export interface BetCompetition {
+    betCompetitionId: Generated<string>;
+    competition1stTeamPoints: number | null;
+    competition2ndTeamPoints: number | null;
+    competition3rdTeamPoints: number | null;
+    competition4thTeamPoints: number | null;
+    competitionTopAssistPoints: number | null;
+    competitionTopCleanSheetsPoints: number | null;
+    competitionTopScorerPoints: number | null;
+    createdAt: Generated<Timestamp | null>;
+    dateEnd: string | null;
+    dateStart: string | null;
+    fixtureResultPoints: number | null;
+    hasFinished: Generated<boolean>;
+    isGlobal: Generated<boolean>;
+    name: string;
+    playerLimit: number;
+    private: Generated<boolean>;
+    resultGoalsAwayPoints: number | null;
+    resultGoalsHomePoints: number | null;
+    resultGoalsPoints: number | null;
+    resultScorersPoints: number | null;
+    season: number;
+    updatedAt: Timestamp | null;
+    userId: string;
+}
+export interface BetCompetitionToLeague {
+    betCompetitionId: string;
+    leagueId: string;
+}
 export interface Fixture {
     awayTeamExternalId: number;
     awayTeamGoalsExtra: number | null;
@@ -196,6 +226,8 @@ export interface UserSettings {
 }
 export interface DB {
     Bet: Bet;
+    BetCompetition: BetCompetition;
+    BetCompetitionToLeague: BetCompetitionToLeague;
     Fixture: Fixture;
     FixtureRound: FixtureRound;
     League: League;

@@ -6,6 +6,7 @@ import betsRouter from './routes/bet.routes'
 import externalRouter from './routes/external.routes'
 import fixturesRouter from './routes/fixture.routes'
 import leaguesRouter from './routes/league.routes'
+import mockRouter from './routes/mock.routes'
 import nationsRouter from './routes/nation.routes'
 import seasonsRouter from './routes/season.routes'
 import seedRouter from './routes/seed.routes'
@@ -33,6 +34,7 @@ app.use('/nations', nationsRouter)
 app.use('/seasons', seasonsRouter)
 app.use('/users', usersRouter)
 app.use('/seed', seedRouter)
+app.use('/mock', mockRouter)
 
 app.use((err: Error, req: Request, res: Response, next: NextFunction) => {
   errorHandler(err, req, res)

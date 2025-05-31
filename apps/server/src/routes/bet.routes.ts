@@ -1,7 +1,6 @@
-import { mockBetsSchema, userBetsSchema } from '@f-stats-bets/types'
+import { userBetsSchema } from '@f-stats-bets/types'
 import { Router } from 'express'
-import { validateRequestWithBody, validateRequestWithParams } from '../lib'
-import { mockBets } from '../services/bet/bet.service.mutations'
+import { validateRequestWithParams } from '../lib'
 import { getUserBets } from '../services/bet/bet.service.queries'
 
 const router = Router()
@@ -15,15 +14,6 @@ router.get(
 
     res.json(bets)
   }, userBetsSchema),
-)
-
-router.post(
-  '/mock',
-  validateRequestWithBody(async (req, res) => {
-    const bets = await mockBets(req.body)
-
-    res.json(bets)
-  }, mockBetsSchema),
 )
 
 export default router

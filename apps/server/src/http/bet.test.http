@@ -4,13 +4,3 @@
 GET {{baseUrl}}?dateFrom=2025-05-30&dateTo=2025-06-03&userId=26c50363-7fc1-4a7c-86fd-f9df1598884c
 Content-Type: application/json
 
-### Create mock bets
-POST {{baseUrl}}/mock
-Content-Type: application/json
-
-{
-  "userId": "26c50363-7fc1-4a7c-86fd-f9df1598884c",
-  "dateFrom": "2025-05-02",
-  "dateTo": "2025-05-03",
-  "deletePreviousBets": true
-}

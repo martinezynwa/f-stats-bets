@@ -1,0 +1,24 @@
+@baseUrl = http://localhost:3001/mock
+
+### Create bets
+POST {{baseUrl}}/bets
+Content-Type: application/json
+
+{
+  "userId": "16d7a995-dd7a-4ddc-841a-572f4512a802",
+  "dateFrom": "2025-05-02",
+  "dateTo": "2025-05-03",
+  "deletePreviousBets": true
+}
+
+### Create bet competitions
+POST {{baseUrl}}/bet-competitions
+Content-Type: application/json
+
+{
+  "userId": "16d7a995-dd7a-4ddc-841a-572f4512a802",
+  "externalLeagueIds": [39, 140, 78],
+  "season": 2024,
+  "name": "Test Competition",
+  "deletePrevious": true
+}

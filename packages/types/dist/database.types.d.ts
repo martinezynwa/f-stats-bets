@@ -55,6 +55,8 @@ export declare enum OrganizationType {
 }
 export interface DatabaseTypes {
     Bet: Selectable<DB['Bet']>;
+    BetCompetition: Selectable<DB['BetCompetition']>;
+    BetCompetitionToLeague: Selectable<DB['BetCompetitionToLeague']>;
     Fixture: Selectable<DB['Fixture']>;
     FixtureRound: Selectable<DB['FixtureRound']>;
     League: Selectable<DB['League']>;
@@ -68,6 +70,12 @@ export interface DatabaseTypes {
 export type Bet = Selectable<DB['Bet']>;
 export type InsertBet = Insertable<DB['Bet']>;
 export type UpdateBet = Updateable<DB['Bet']>;
+export type BetCompetition = Selectable<DB['BetCompetition']>;
+export type InsertBetCompetition = Insertable<DB['BetCompetition']>;
+export type UpdateBetCompetition = Updateable<DB['BetCompetition']>;
+export type BetCompetitionToLeague = Selectable<DB['BetCompetitionToLeague']>;
+export type InsertBetCompetitionToLeague = Insertable<DB['BetCompetitionToLeague']>;
+export type UpdateBetCompetitionToLeague = Updateable<DB['BetCompetitionToLeague']>;
 export type Fixture = Selectable<DB['Fixture']>;
 export type InsertFixture = Insertable<DB['Fixture']>;
 export type UpdateFixture = Updateable<DB['Fixture']>;

@@ -1,5 +1,6 @@
 export * from './bet.validations';
 export * from './external.validations';
 export * from './fixture.validations';
+export * from './mock.validations';
 export * from './shared.validations';
 export * from './user.validations';
