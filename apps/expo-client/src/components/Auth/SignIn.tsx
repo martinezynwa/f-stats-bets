@@ -1,7 +1,7 @@
 import { Ionicons } from '@expo/vector-icons'
 import { router } from 'expo-router'
 import React, { useState } from 'react'
-import { Image, Keyboard, StyleSheet, Text, TextInput, View } from 'react-native'
+import { Alert, Image, Keyboard, StyleSheet, Text, TextInput, View } from 'react-native'
 
 import { useLoginLogout } from './useLoginLogout'
 
@@ -15,6 +15,14 @@ export const SignInScreenComponent = () => {
   const [password, setPassword] = useState('')
 
   const { handleEmailSignIn } = useLoginLogout()
+
+  const handleSignIn = () => {
+    if (!email || !password) {
+      Alert.alert(t('login.signIn.error'))
+      return
+    }
+    handleEmailSignIn(email, password)
+  }
 
   return (
     <View style={styles.container} onTouchStart={() => Keyboard.dismiss()}>
@@ -46,11 +54,7 @@ export const SignInScreenComponent = () => {
       />
 
       <View style={styles.buttonContainer}>
-        <SubmitButton
-          title={t('login.button.signIn')}
-          onPress={() => handleEmailSignIn(email, password)}
-          align='left'
-        />
+        <SubmitButton title={t('login.button.signIn')} onPress={handleSignIn} align='left' />
         <ActionButton
           text={t('login.button.signUp')}
           onPress={() => router.push('/sign-up')}

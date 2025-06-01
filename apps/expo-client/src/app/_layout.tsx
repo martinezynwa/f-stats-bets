@@ -6,6 +6,7 @@ import { KeyboardAvoidingView, Platform, Text, View } from 'react-native'
 import { GestureHandlerRootView } from 'react-native-gesture-handler'
 import { NotifierWrapper } from 'react-native-notifier'
 
+import { SignUpScreenComponent } from '@/components/Auth/SignUp'
 import { NotVerified } from '@/components/User/NotVerified'
 import { usePreloadAppData } from '@/hooks/usePreloadAppData'
 import { usePreloadUserData } from '@/hooks/usePreloadUserData'
@@ -26,21 +27,29 @@ export default function App() {
 }
 
 function AppContent() {
-  const { session, authLoading } = useAuth()
+  const { session } = useAuth()
   const { user } = useUserDataStore()
 
-  const { error: userDataError, initialLoaded: userDataLoaded } = usePreloadUserData(!!session)
+  const {
+    error: userDataError,
+    initialLoaded: userDataLoaded,
+    userNotFound,
+  } = usePreloadUserData(!!session)
 
-  const { error: appDataError, initialLoaded: appDataLoaded } = usePreloadAppData(
-    userDataLoaded && !userDataError,
-  )
+  const canPreloadAppData = userDataLoaded && !userDataError && !userNotFound
+  const { error: appDataError, initialLoaded: appDataLoaded } = usePreloadAppData(canPreloadAppData)
 
   useEffect(() => {
     if (userDataError) throw userDataError
     if (appDataError) throw appDataError
   }, [appDataError, userDataError])
 
-  const completelyLoaded = session ? appDataLoaded && userDataLoaded : true
+  const checkCompletelyLoaded = () => {
+    if (userNotFound || !session) return true
+    return appDataLoaded && userDataLoaded
+  }
+
+  const completelyLoaded = checkCompletelyLoaded()
 
   useEffect(() => {
     if (completelyLoaded) {
@@ -48,8 +57,9 @@ function AppContent() {
     }
   }, [completelyLoaded])
 
-  if (!completelyLoaded || authLoading) return <Loading />
-  if (session && !!user && !user.isVerified) return <NotVerified />
+  if (!completelyLoaded) return <Loading />
+  if ((session && !!user && !user.isVerified) || (session && userNotFound)) return <NotVerified />
+  if (userNotFound) return <SignUpScreenComponent />
 
   return (
     <GestureHandlerRootView style={{ flex: 1 }}>
@@ -85,6 +95,6 @@ function AppContent() {
 
 const Loading = () => (
   <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-    <Text>Loading...</Text>
+    <Text style={{ color: Colors.text }}>Loading...</Text>
   </View>
 )

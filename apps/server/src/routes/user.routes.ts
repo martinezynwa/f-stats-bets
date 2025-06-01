@@ -1,12 +1,8 @@
 import { registerUserSchema } from '@f-stats-bets/types'
 import { Request, Response, Router } from 'express'
-import { validateRequest, validateRequestWithBody } from 'src/lib'
-import {
-  getAllUsers,
-  getUserById,
-  getUserSettings,
-  registerUser,
-} from '../services/user/user.service.queries'
+import { validateRequest, validateRequestWithBody } from '../lib'
+import { createUserSettings, registerUser } from '../services/user/user.service.mutations'
+import { getAllUsers, getUserById, getUserSettings } from '../services/user/user.service.queries'
 
 const router = Router()
 
@@ -41,9 +37,11 @@ router.get(
 router.post(
   '/register-user',
   validateRequestWithBody(async (req: Request, res: Response) => {
-    await registerUser(req.body)
+    const createdUser = await registerUser(req.body)
 
-    res.json({ text: 'User registered' })
+    await createUserSettings({ userId: createdUser.id, providerId: createdUser.providerId })
+
+    res.json({ text: 'User registered', createdUser })
   }, registerUserSchema),
 )
 

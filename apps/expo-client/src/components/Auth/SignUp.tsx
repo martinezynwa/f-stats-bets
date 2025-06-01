@@ -4,52 +4,45 @@ import React, { useState } from 'react'
 import { Alert, Image, Keyboard, StyleSheet, Text, TextInput, View } from 'react-native'
 
 import { useRegisterUser } from '@/api/user/user.mutations'
-import { useToast } from '@/hooks/useToast'
 import { useTranslation } from '@/i18n/useTranslation'
 import { supabase } from '@/lib/supabase'
 import { useAuth } from '@/providers/AuthProvider'
+import { useUserDataStore } from '@/store/useUserDataStore'
 import { ActionButton, Colors, SubmitButton } from '@/ui'
 
 export const SignUpScreenComponent = () => {
   const { t } = useTranslation()
-  const toast = useToast()
 
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
-  const [username, setUsername] = useState('')
+  const [isSubmitting, setIsSubmitting] = useState(false)
 
   const { mutateAsync: registerUser } = useRegisterUser()
   const { setSession } = useAuth()
+  const { setUserData } = useUserDataStore()
 
   const signUpWithEmail = async () => {
-    if (!email || !password || !username) {
-      Alert.alert(t('login.signUp.error'))
-      return
-    }
-
+    setIsSubmitting(true)
     const { data, error } = await supabase.auth.signUp({
       email: email,
       password: password,
     })
 
     if (error) {
+      setIsSubmitting(false)
       Alert.alert(error.message)
+      return
     }
 
-    if (data.user?.id) {
-      const response = await registerUser({
-        providerId: data.user.id,
-        providerName: email,
-        providerAvatar: data.user.user_metadata.avatar_url || '',
-        name: username,
-      })
+    const { createdUser } = await registerUser({
+      providerId: data?.user?.id!,
+      providerName: email,
+      providerAvatar: data?.user?.user_metadata.avatar_url || '',
+    })
 
-      toast({
-        title: response.text,
-      })
-
-      setSession(data.session)
-    }
+    setSession(data.session)
+    setUserData(createdUser)
+    setIsSubmitting(false)
   }
 
   return (
@@ -79,19 +72,13 @@ export const SignUpScreenComponent = () => {
         secureTextEntry
       />
 
-      <Text style={styles.label}>{t('login.label.username')}</Text>
-      <TextInput
-        value={username}
-        onChangeText={setUsername}
-        placeholder={t('login.label.username.placeholder')}
-        style={styles.input}
-      />
-
       <View style={styles.buttonContainer}>
         <SubmitButton
           title={t('login.button.createAccount')}
           onPress={() => signUpWithEmail()}
           align='left'
+          disabled={!email && !password}
+          loading={isSubmitting}
         />
         <ActionButton
           text={t('login.button.signIn')}

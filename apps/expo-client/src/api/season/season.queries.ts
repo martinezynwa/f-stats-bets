@@ -5,9 +5,10 @@ import { useFetch } from '../fetch'
 
 interface UseSeasonsProps {
   supported?: boolean
+  enabled?: boolean
 }
 
-export const useSeasons = ({ supported }: UseSeasonsProps) => {
+export const useSeasons = ({ supported, enabled }: UseSeasonsProps) => {
   const { handleFetch } = useFetch()
 
   return useQuery<Season[]>({
@@ -17,5 +18,6 @@ export const useSeasons = ({ supported }: UseSeasonsProps) => {
         method: 'GET',
       }),
     throwOnError: true,
+    enabled,
   })
 }

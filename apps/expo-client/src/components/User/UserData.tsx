@@ -4,6 +4,7 @@ import { useLoginLogout } from '../Auth/useLoginLogout'
 
 import { useTranslation } from '@/i18n/useTranslation'
 import { useAuth } from '@/providers/AuthProvider'
+import { useUserDataStore } from '@/store'
 import { ScrollViewWrapper } from '@/ui'
 
 export const UserData = () => {
@@ -11,10 +12,12 @@ export const UserData = () => {
   const { changeLanguage, language, t } = useTranslation()
 
   const { handleSignOut } = useLoginLogout()
+  const { setUserData } = useUserDataStore()
 
   const onSignOut = async () => {
-    handleSignOut()
     setSession(null)
+    setUserData(null)
+    handleSignOut()
   }
 
   return (

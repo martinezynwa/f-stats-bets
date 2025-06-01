@@ -8,9 +8,12 @@ import { getCurrentDate } from '@/lib/util/date-and-time'
 export const usePreloadAppData = (enabled: boolean) => {
   const [initialLoaded, setInitialLoaded] = useState(false)
 
-  const { isFetched: seasonsFetched, error: seasonsError } = useSeasons({ supported: true })
+  const { isFetched: seasonsFetched, error: seasonsError } = useSeasons({
+    supported: true,
+    enabled,
+  })
 
-  const { isFetched: leaguesFetched, error: leaguesError } = useLeagues()
+  const { isFetched: leaguesFetched, error: leaguesError } = useLeagues(enabled)
 
   const { isFetched: betsFetched, error: betsError } = useFixturesWithBets({
     input: { dateFrom: getCurrentDate(), dateTo: getCurrentDate() },

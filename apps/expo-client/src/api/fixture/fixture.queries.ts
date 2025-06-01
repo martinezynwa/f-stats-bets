@@ -1,14 +1,15 @@
-import { FixturesBetsSchema, FixturesWithBets } from '@f-stats-bets/types'
+import { Fixture, FixturesBetsSchema, FixturesSchema, FixturesWithBets } from '@f-stats-bets/types'
 import { useQuery } from '@tanstack/react-query'
 
 import { useFetch } from '../fetch'
 
-interface UseFixturesWithBetsProps {
+export const useFixturesWithBets = ({
+  input,
+  enabled,
+}: {
   input: FixturesBetsSchema
   enabled?: boolean
-}
-
-export const useFixturesWithBets = ({ input, enabled }: UseFixturesWithBetsProps) => {
+}) => {
   const { handleFetch, createQueryString } = useFetch()
 
   const queryString = createQueryString(input)
@@ -21,5 +22,19 @@ export const useFixturesWithBets = ({ input, enabled }: UseFixturesWithBetsProps
       }),
     throwOnError: true,
     enabled,
+  })
+}
+
+export const useFixtures = (input: FixturesSchema) => {
+  const { handleFetch } = useFetch()
+
+  return useQuery<Fixture[]>({
+    queryKey: ['fixtures', input],
+    queryFn: () =>
+      handleFetch(`/fixtures`, {
+        method: 'POST',
+        body: JSON.stringify(input),
+      }),
+    throwOnError: true,
   })
 }

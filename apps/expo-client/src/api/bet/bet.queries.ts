@@ -1,22 +1,15 @@
-import { Bet } from '@f-stats-bets/types'
+import { Bet, UserBetsSchema } from '@f-stats-bets/types'
 import { useQuery } from '@tanstack/react-query'
 
 import { useFetch } from '../fetch'
 
-export const useBets = () => {
-  const { handleFetch } = useFetch()
+export const useBets = (input: UserBetsSchema) => {
+  const { handleFetch, createQueryString } = useFetch()
+
+  const queryString = createQueryString(input)
 
   return useQuery<Bet[]>({
-    queryKey: ['bets'],
-    queryFn: () => handleFetch<Bet[]>('/bets'),
-  })
-}
-
-export const useBet = (id: string) => {
-  const { handleFetch } = useFetch()
-
-  return useQuery<Bet>({
-    queryKey: ['bets', id],
-    queryFn: () => handleFetch<Bet>(`/bets/${id}`),
+    queryKey: ['bets', queryString],
+    queryFn: () => handleFetch<Bet[]>(`/bets?${queryString}`, { method: 'GET' }),
   })
 }

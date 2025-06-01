@@ -39,11 +39,19 @@ export const useFetch = () => {
       ...options,
       headers,
     }).catch(error => {
-      console.error('error', error)
+      console.error('FETCH ERROR', error)
       throw error
     })
 
-    const responseData = await response.json()
+    let responseData
+
+    try {
+      const text = await response.text()
+      responseData = text ? JSON.parse(text) : null
+    } catch (error) {
+      console.error('JSON parse error:', error)
+      throw error
+    }
 
     if (!response.ok) {
       const status = response.status

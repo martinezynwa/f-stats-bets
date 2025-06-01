@@ -3,7 +3,7 @@ import { useQuery } from '@tanstack/react-query'
 
 import { useFetch } from '../fetch'
 
-export const useLeagues = () => {
+export const useLeagues = (enabled?: boolean) => {
   const { handleFetch } = useFetch()
 
   return useQuery<League[]>({
@@ -13,5 +13,6 @@ export const useLeagues = () => {
         method: 'GET',
       }),
     throwOnError: true,
+    enabled,
   })
 }

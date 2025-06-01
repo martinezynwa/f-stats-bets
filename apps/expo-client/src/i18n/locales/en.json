@@ -1,7 +1,9 @@
 {
+  "base.back": "Back",
   "login.button.signIn": "Sign In",
   "login.button.signUp": "Sign Up",
   "login.button.createAccount": "Create account",
+  "login.button.signOut": "Sign Out",
   "login.label.email": "Email",
   "login.label.password": "Password",
   "login.label.email.placeholder": "Enter your email",
@@ -10,7 +12,9 @@
   "login.label.username.placeholder": "Enter your username",
   "login.signUp.success": "User created successfully!",
   "login.signUp.error": "Please fill in all fields",
+  "login.signIn.error": "Please fill in all fields",
   "login.notVerified.title": "User is not verified yet",
+  "login.notVerified.subtitle": "Logged in as {{providerName}}",
   "profile.profile": "Profile",
   "profile.changeLanguage": "Change Language",
   "profile.signOut": "Sign Out"

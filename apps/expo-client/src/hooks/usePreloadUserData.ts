@@ -9,18 +9,24 @@ export const usePreloadUserData = (enabled: boolean) => {
 
   const { setUserData } = useUserDataStore()
   const [initialLoaded, setInitialLoaded] = useState(false)
+  const [userNotFound, setUserNotFound] = useState(false)
 
-  const { data: user, error: userError } = useUser(enabled)
-  const { data: userSettings, error: userSettingsError } = useUserSettings(enabled)
+  const { data: user, error: userError, isFetched: userQueryFetched } = useUser(enabled)
+  const { data: userSettings } = useUserSettings(!!user)
 
   useEffect(() => {
-    if (!initialLoaded && user && userSettings) {
-      setUserData(user)
+    if (!initialLoaded && user) {
       setInitialLoaded(true)
+      setUserData(user)
     }
-  }, [initialLoaded, user, userSettings, setUserData, router])
 
-  const error = userError || userSettingsError
+    if (userQueryFetched && !user) {
+      setInitialLoaded(true)
+      setUserNotFound(true)
+    }
+  }, [initialLoaded, user, userSettings, setUserData, router, userQueryFetched])
 
-  return { error, initialLoaded }
+  const error = userError
+
+  return { error, initialLoaded, userNotFound }
 }
