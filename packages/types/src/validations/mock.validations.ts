@@ -5,6 +5,7 @@ export const mockBetsSchema = z.object({
   dateFrom: z.string(),
   dateTo: z.string(),
   deletePreviousBets: z.boolean().optional(),
+  betCompetitionId: z.string(),
 })
 
 export type MockBetsSchema = z.infer<typeof mockBetsSchema>
