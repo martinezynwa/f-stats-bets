@@ -1,7 +1,7 @@
-import { userBetsSchema } from '@f-stats-bets/types'
+import { userBetsFromFixtureIdsSchema } from '@f-stats-bets/types'
 import { Router } from 'express'
 import { validateRequestWithParams } from '../lib'
-import { getUserBets } from '../services/bet/bet.service.queries'
+import { getUserBetsFromFixtureIds } from '../services/bet/bet.service.queries'
 
 const router = Router()
 
@@ -10,10 +10,10 @@ const router = Router()
 router.get(
   '/',
   validateRequestWithParams(async (req, res) => {
-    const bets = await getUserBets(req.query)
+    const bets = await getUserBetsFromFixtureIds(req.query)
 
     res.json(bets)
-  }, userBetsSchema),
+  }, userBetsFromFixtureIdsSchema),
 )
 
 export default router

@@ -41,4 +41,8 @@ export const Colors = {
 
   toggleThumb: '#F4F3F4',
   toggleTrack: '#767577',
+
+  horizontalDatePicker: '#101112',
+  horizontalDatePickerBottomBorder: '#182024',
+  horizontalDatePickerSelected: '#6F60EF',
 }

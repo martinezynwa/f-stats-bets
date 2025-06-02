@@ -5,18 +5,29 @@ import { useBets, useFixtures } from '@/api'
 import { formatDateToCustom } from '@/lib/util/date-and-time'
 import { useUserDataStore } from '@/store'
 import { ScrollViewWrapper } from '@/ui'
+import { useDatePickerStore } from '@/ui/Components/HorizontalDatePicker'
 
 export const Home = () => {
   const { user } = useUserDataStore()
 
+  const { date } = useDatePickerStore()
+
   const queryParams = {
-    dateFrom: formatDateToCustom(new Date('2024-05-01')),
-    dateTo: formatDateToCustom(new Date('2024-05-08')),
+    dateFrom: date,
+    dateTo: formatDateToCustom(new Date('2025-05-08')),
   }
 
-  const { data: fixturesData, isLoading: fixturesLoading } = useFixtures(queryParams)
+  const {
+    data: fixturesData,
+    isLoading: fixturesLoading,
+    refetch: fixturesRefetch,
+  } = useFixtures(queryParams)
 
-  const { data: betsData, isLoading: betsLoading } = useBets({ userId: user!.id, ...queryParams })
+  const {
+    data: betsData,
+    isLoading: betsLoading,
+    refetch: betsRefetch,
+  } = useBets({ userId: user!.id, ...queryParams })
 
   if (!fixturesData) {
     return <></>
@@ -34,8 +45,13 @@ export const Home = () => {
     {} as Record<string, Fixture[]>,
   )
 
+  const handleRefresh = () => {
+    fixturesRefetch()
+    betsRefetch()
+  }
+
   return (
-    <ScrollViewWrapper>
+    <ScrollViewWrapper refetch={handleRefresh}>
       <View style={styles.container}>
         {Object.entries(fixturesByLeagueId).map(([leagueId, fixtures]) => (
           <View key={leagueId}>

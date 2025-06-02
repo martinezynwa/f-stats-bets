@@ -8,6 +8,8 @@
 - [] |SERVER| Make backend routes type safe
 
 ## Completed (0.0.1)
+- [x] |CLIENT| Horizontal Date Picker
+
 - [x] |SERVER| Create BetCompetition schema
 - [x] |SERVER| Add mock BetCompetition data
 - [x] |SERVER| Return fixtures based on date
