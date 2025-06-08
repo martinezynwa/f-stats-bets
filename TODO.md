@@ -1,8 +1,10 @@
 ## TODO
-- [] |CLIENT| Display fixtures with bets
-- [] |CLIENT| Provide global BetCompetition
-- [] |SERVER| Check user ID from request on server router
+
+- [] |CLIENT| Bet actions
+- [] |CLIENT| All user bets
+- [] |SERVER| mock setting up auth header when testing
 - [] |CLIENT| Fallback component
+- [] |CLIENT| Navbar styling
 - [] |APP| Build Expo project
 - [] |SERVER| Implement job for fixtures
 - [] |SERVER| Implement fixture round logic for various league types
@@ -11,6 +13,9 @@
 - [] |SERVER| Make backend routes type safe
 
 ## Completed (0.0.1)
+- [x] |CLIENT| Display fixtures with bets
+- [x] |CLIENT| Provide global BetCompetition
+
 - [x] |CLIENT| Display fixtures without bets
 
 - [x] |CLIENT| Horizontal Date Picker
@@ -35,3 +40,14 @@
 - [x] |SERVER| Add username initialization
 - [x] |SERVER| Add login/logout
 - [x] |APP| Basic project setup
+
+# Notes
+Fixtures only
+- Fixture, Team
+
+Fixture and Bets
+- Fixture, Team, Bet(must be related to a specific User and to global BetCompetition)
+
+Fixture and Events
+- Fixture, Team
+- later add Player and Event

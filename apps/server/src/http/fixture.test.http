@@ -8,3 +8,7 @@ Content-Type: application/json
   "dateFrom": "2025-05-02",
   "dateTo": "2025-05-03"
 }
+
+### Get fixtures with bets of single user
+GET {{baseUrl}}/fixtures-bets?userId=1308d56d-b0cf-42e9-871b-50d77d9e9e74&dateFrom=2025-06-02&dateTo=2025-06-30&betCompetitionId=4ffcab4e-beee-405d-b23f-5387e259a189
+Content-Type: application/json

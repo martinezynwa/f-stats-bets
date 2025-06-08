@@ -1,0 +1,10 @@
+@baseUrl = http://localhost:3001/teams
+
+### Get teams
+GET {{baseUrl}}
+Content-Type: application/json
+
+{
+  "externalLeagueId": 32,
+  "season": 2024
+}

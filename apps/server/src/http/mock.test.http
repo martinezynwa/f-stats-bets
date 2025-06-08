@@ -6,8 +6,8 @@ POST {{baseUrl}}/bet-competitions
 Content-Type: application/json
 
 {
-  "userId": "3cdab61f-408e-4ffc-b7b6-e3be5e86e997",
-  "externalLeagueIds": [39],
+  "userId": "1308d56d-b0cf-42e9-871b-50d77d9e9e74",
+  "externalLeagueIds": [5,32],
   "season": 2024,
   "name": "Test Competition",
   "deletePrevious": true
@@ -18,10 +18,13 @@ POST {{baseUrl}}/bets
 Content-Type: application/json
 
 {
-  "userId": "3cdab61f-408e-4ffc-b7b6-e3be5e86e997",
-  "dateFrom": "2025-04-02",
-  "dateTo": "2025-05-31",
+  "userId": "1308d56d-b0cf-42e9-871b-50d77d9e9e74",
+  "dateFrom": "2025-06-02",
+  "dateTo": "2025-06-30",
   "deletePreviousBets": true,
-  "betCompetitionId": "dbe668bc-aa18-49ab-92fe-49141579dbbc"
+  "betCompetitionId": "4ffcab4e-beee-405d-b23f-5387e259a189"
 }
 
+### Test
+GET {{baseUrl}}/test
+Content-Type: application/json

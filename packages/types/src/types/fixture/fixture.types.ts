@@ -1,19 +1,18 @@
-import { Bet, Fixture, League, Team } from '../../database.types'
-
-export type FixtureWithBet = {
-  Bet: Bet
-  Fixture: Fixture
-  League: League
-}
-
-export type FixturesWithBets = Record<string, FixtureWithBet[]>
+import { Bet, Fixture, Team } from '../../database.types'
 
 export type TeamDetailSimple = Pick<Team, 'id' | 'name' | 'logo' | 'code' | 'externalTeamId'>
 
-export type FixtureWithTeamDetails = Fixture & {
-  homeTeam: TeamDetailSimple
-  awayTeam: TeamDetailSimple
+type TeamsInfo = {
+  HomeTeam: TeamDetailSimple
+  AwayTeam: TeamDetailSimple
 }
+
+export type FixtureWithTeamDetails = Fixture & TeamsInfo
+
+export type FixtureWithBet = Fixture &
+  TeamsInfo & {
+    Bet: Bet | undefined
+  }
 
 export enum FixtureStatus {
   TBD = 'TBD',

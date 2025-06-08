@@ -35,7 +35,11 @@ export const initUsersWithSettings = async () => {
   }
 
   const parsedUserData = parseCsv(userData) as User[]
-  const createdUsers = await db.insertInto('User').values(parsedUserData).returningAll().execute()
+  const userWithUserIds = parsedUserData.map(user => ({
+    ...user,
+    id: user.providerId,
+  }))
+  const createdUsers = await db.insertInto('User').values(userWithUserIds).returningAll().execute()
 
   if (userSettingsData) {
     const parsedUserSettingsData = parseCsv(userSettingsData) as UserSettings[]

@@ -3,4 +3,5 @@ export * from './external.validations';
 export * from './fixture.validations';
 export * from './mock.validations';
 export * from './shared.validations';
+export * from './team.validations';
 export * from './user.validations';

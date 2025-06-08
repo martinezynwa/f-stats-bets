@@ -1,7 +1,7 @@
 import { FixtureWithTeamDetails } from '@f-stats-bets/types'
 import { StyleSheet, View } from 'react-native'
 
-import { FixtureItem } from '../fixture-item'
+import { FixtureItem } from './fixture-item'
 
 import { useFixtures } from '@/api'
 import { useCatalogStore } from '@/store'

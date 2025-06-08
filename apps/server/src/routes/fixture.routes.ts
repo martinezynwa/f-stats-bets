@@ -19,7 +19,10 @@ router.post(
 router.get(
   '/fixtures-bets',
   validateRequestWithParams(async (req, res) => {
-    const fixturesWithBets = await getFixturesWithBets(req.query)
+    const fixturesWithBets = await getFixturesWithBets({
+      ...req.query,
+      userId: '1308d56d-b0cf-42e9-871b-50d77d9e9e74', //req.user?.id!, TODO
+    })
 
     res.json(fixturesWithBets)
   }, fixturesBetsSchema),

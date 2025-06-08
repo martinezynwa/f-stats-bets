@@ -1,12 +1,11 @@
 import { InsertUserSettings, RegisterUserInput } from '@f-stats-bets/types'
-import { randomUUID } from 'crypto'
 import { db } from 'src/db'
 import { CreateUserSettingsInput } from './user.service.types'
 
 export const registerUser = async (data: RegisterUserInput) => {
   const user = await db
     .insertInto('User')
-    .values({ ...data, id: randomUUID(), name: data.providerName }) //TODO fix once old data in db is deleted
+    .values({ ...data, id: data.providerId, name: data.providerName })
     .returningAll()
     .executeTakeFirstOrThrow()
 

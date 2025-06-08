@@ -1,4 +1,5 @@
 import { Bet, UserBetsFromFixtureIdsSchema, UserBetsSchema } from '@f-stats-bets/types'
+import { db } from 'src/db'
 import { rawQueryArray } from '../../lib'
 
 export const getUserBets = async (input: UserBetsSchema) => {
@@ -26,4 +27,14 @@ export const getUserBetsFromFixtureIds = async (input: UserBetsFromFixtureIdsSch
   `)
 
   return bets
+}
+
+export const getGlobalBetCompetitionId = async () => {
+  const betCompetitionId = await db
+    .selectFrom('BetCompetition')
+    .where('isGlobal', '=', true)
+    .select('betCompetitionId')
+    .executeTakeFirst()
+
+  return betCompetitionId?.betCompetitionId
 }

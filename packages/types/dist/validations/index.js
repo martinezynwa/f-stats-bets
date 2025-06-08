@@ -19,4 +19,5 @@ __exportStar(require("./external.validations"), exports);
 __exportStar(require("./fixture.validations"), exports);
 __exportStar(require("./mock.validations"), exports);
 __exportStar(require("./shared.validations"), exports);
+__exportStar(require("./team.validations"), exports);
 __exportStar(require("./user.validations"), exports);

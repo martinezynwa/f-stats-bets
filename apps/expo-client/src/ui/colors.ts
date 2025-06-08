@@ -23,6 +23,7 @@ export const Colors = {
   disabledButton: '#4B5563',
   deleteButton: '#FF7973',
   actionButton: '#191919',
+  inactiveButton: '#727AAE',
 
   indicatorIcon: '#CDCDCD',
 

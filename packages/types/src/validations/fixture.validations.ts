@@ -4,6 +4,10 @@ import { datePeriodSchema } from './shared.validations'
 export const fixturesBetsSchema = z
   .object({
     leagueIds: z.array(z.string()).optional(),
+    externalLeagueIds: z.array(z.number()).optional(),
+    season: z.string().optional(),
+    userId: z.string().optional(),
+    betCompetitionId: z.string(),
   })
   .merge(datePeriodSchema)
 

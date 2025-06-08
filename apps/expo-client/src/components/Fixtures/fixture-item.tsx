@@ -1,5 +1,11 @@
 import { Feather } from '@expo/vector-icons'
-import { Fixture, FIXTURE_STATUS, FixtureStatus, FixtureWithTeamDetails } from '@f-stats-bets/types'
+import {
+  Fixture,
+  FIXTURE_STATUS,
+  FixtureStatus,
+  FixtureWithBet,
+  FixtureWithTeamDetails,
+} from '@f-stats-bets/types'
 import { ReactNode } from 'react'
 import { Dimensions, StyleSheet, TouchableOpacity, View } from 'react-native'
 
@@ -8,14 +14,14 @@ import { formatDateStringToShortTime } from '@/lib/util'
 import { Colors, LinkWrapper, Text } from '@/ui'
 
 interface Props {
-  fixture: FixtureWithTeamDetails
+  fixture: FixtureWithTeamDetails | FixtureWithBet
   customRightComponent?: ReactNode
-  betComponent?: ReactNode
+  customBottomComponent?: ReactNode
 }
 
-export const FixtureItem = ({ fixture, customRightComponent }: Props) => {
+export const FixtureItem = ({ fixture, customRightComponent, customBottomComponent }: Props) => {
   const { t } = useTranslation()
-  const { date, homeTeam, awayTeam } = fixture
+  const { date, HomeTeam, AwayTeam } = fixture
 
   const {
     gameFinished,
@@ -31,38 +37,39 @@ export const FixtureItem = ({ fixture, customRightComponent }: Props) => {
   const fontColorAway = gameFinished && (isHomeWinner || isDraw) ? 'gray' : 'white'
 
   return (
-    <LinkWrapper href='TODO' disabled>
-      <View style={styles.container}>
-        <View style={styles.segment1}>
-          <View style={styles.dateSegment}>
-            <View style={styles.time}>
-              <Text color='silver'>{formatDateStringToShortTime(date)}</Text>
+    <View>
+      <LinkWrapper href='TODO' disabled>
+        <View style={styles.container}>
+          <View style={styles.segment1}>
+            <View style={styles.dateSegment}>
+              <View style={styles.time}>
+                <Text color='silver'>{formatDateStringToShortTime(date)}</Text>
+              </View>
+            </View>
+
+            <View style={styles.border} />
+
+            <View style={styles.teams}>
+              <Text
+                variant={getTeamFontVariant(HomeTeam.name)}
+                numberOfLines={1}
+                color={fontColorHome}
+              >
+                {HomeTeam.name}
+              </Text>
+
+              <Text
+                variant={getTeamFontVariant(AwayTeam.name)}
+                numberOfLines={1}
+                color={fontColorAway}
+              >
+                {AwayTeam.name}
+              </Text>
             </View>
           </View>
 
-          <View style={styles.border} />
-
-          <View style={styles.teams}>
-            <Text
-              variant={getTeamFontVariant(homeTeam.name)}
-              numberOfLines={1}
-              color={fontColorHome}
-            >
-              {homeTeam.name}
-            </Text>
-
-            <Text
-              variant={getTeamFontVariant(awayTeam.name)}
-              numberOfLines={1}
-              color={fontColorAway}
-            >
-              {awayTeam.name}
-            </Text>
-          </View>
-        </View>
-
-        <View style={styles.segment2}>
-          {/*    {isLive && (
+          <View style={styles.segment2}>
+            {/*    {isLive && (
             <View style={styles.liveResult}>
               <Text color='red' variant='xs' fontWeight='500'>
                 {status === FixtureStatus.HALF_TIME ? 'HT' : `${liveResult?.elapsed}'`}
@@ -70,47 +77,50 @@ export const FixtureItem = ({ fixture, customRightComponent }: Props) => {
             </View>
           )} */}
 
-          {isPostponed && (
-            <View style={styles.status}>
-              <Text color='gray' variant='xs' fontWeight='500'>
-                {t('fixture.postponed')}
-              </Text>
-            </View>
-          )}
-
-          {gameFinished && (
-            <View style={styles.result}>
-              <Text color={fontColorHome} variant='md'>
-                {homeTeamGoalsIndicator}
-              </Text>
-              <Text color={fontColorAway} variant='md'>
-                {awayTeamGoalsIndicator}
-              </Text>
-            </View>
-          )}
-
-          {customRightComponent && (
-            <>
-              {gameFinished && <View style={styles.border} />}
-
-              {customRightComponent}
-            </>
-          )}
-
-          {!customRightComponent && (
-            <>
-              {gameFinished && <View style={styles.border} />}
-
-              <View style={styles.icon}>
-                <TouchableOpacity>
-                  <Feather name='info' size={24} color={Colors.infoButton} />
-                </TouchableOpacity>
+            {isPostponed && (
+              <View style={styles.status}>
+                <Text color='gray' variant='xs' fontWeight='500'>
+                  {t('fixture.postponed')}
+                </Text>
               </View>
-            </>
-          )}
+            )}
+
+            {gameFinished && (
+              <View style={styles.result}>
+                <Text color={fontColorHome} variant='md'>
+                  {homeTeamGoalsIndicator}
+                </Text>
+                <Text color={fontColorAway} variant='md'>
+                  {awayTeamGoalsIndicator}
+                </Text>
+              </View>
+            )}
+
+            {customRightComponent && (
+              <>
+                {gameFinished && <View style={styles.border} />}
+
+                {customRightComponent}
+              </>
+            )}
+
+            {!customRightComponent && (
+              <>
+                {gameFinished && <View style={styles.border} />}
+
+                <View style={styles.icon}>
+                  <TouchableOpacity>
+                    <Feather name='info' size={24} color={Colors.infoButton} />
+                  </TouchableOpacity>
+                </View>
+              </>
+            )}
+          </View>
         </View>
-      </View>
-    </LinkWrapper>
+      </LinkWrapper>
+
+      <View style={styles.customBottomComponent}>{customBottomComponent}</View>
+    </View>
   )
 }
 
@@ -197,4 +207,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   icon: { justifyContent: 'center' },
+  customBottomComponent: {
+    marginTop: 10,
+  },
 })

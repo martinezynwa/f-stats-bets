@@ -25,4 +25,15 @@ router.post(
   }, mockBetCompetitionsSchema),
 )
 
+/* router.get(
+  '/test',
+  validateRequest(async (req, res) => {
+    const order =
+      'externalTeamId,season,externalLeagueId,name,code,country,logo,national,venue,createdAt,updatedAt,isForUnassigned'
+    const csv = jsonToCsv(teamTemp, order)
+
+    res.json(csv)
+  }),
+) */
+
 export default router

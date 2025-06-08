@@ -1,5 +1,4 @@
 import {
-  FixtureWithBet,
   FixtureWithTeamDetails,
   FixturesBetsSchema,
   FixturesSchema,
@@ -7,27 +6,55 @@ import {
 } from '@f-stats-bets/types'
 import { rawQueryArray } from '../../lib'
 
-export const getFixturesWithBets = async (input: FixturesBetsSchema): Promise<FixturesWithBets> => {
-  const fixturesWithBets = await rawQueryArray<FixtureWithBet>(`
-    SELECT json_build_object(
-      'Bet', row_to_json(b.*),
-      'Fixture', row_to_json(f.*),
-      'League', row_to_json(l.*)
-    ) as result
-    FROM "Fixture" f
-    LEFT JOIN "Bet" b ON f."fixtureId" = b."fixtureId"
-    LEFT JOIN "League" l ON f."leagueId" = l."id"
-    WHERE f."date"::date BETWEEN '${input.dateFrom}'::date AND '${input.dateTo}'::date
-    ORDER BY l."name" ASC
+export const getFixturesWithBets = async (
+  input: FixturesBetsSchema,
+): Promise<FixturesWithBets[]> => {
+  const { dateFrom, dateTo, externalLeagueIds, season, userId, betCompetitionId } = input
+
+  const fixtures = await rawQueryArray<FixturesWithBets>(`
+    SELECT
+      f.*,
+      JSON_BUILD_OBJECT(
+        'id', ht.id,
+        'name', ht.name,
+        'logo', ht.logo,
+        'code', ht.code,
+        'externalTeamId', ht."externalTeamId"
+      ) AS "HomeTeam",
+      JSON_BUILD_OBJECT(
+        'id', at.id,
+        'name', at.name,
+        'logo', at.logo,
+        'code', at.code,
+        'externalTeamId', at."externalTeamId"
+      ) AS "AwayTeam",
+      CASE 
+        WHEN b."betId" IS NOT NULL THEN
+          JSON_BUILD_OBJECT(
+            'betId', b."betId",
+            'fixtureResultBet', b."fixtureResultBet",
+            'fixtureGoalsBet', b."fixtureGoalsBet",
+            'fixtureScorersBet', b."fixtureScorersBet",
+            'isEvaluated', b."isEvaluated",
+            'oddValue', b."oddValue",
+            'createdAt', b."createdAt",
+            'updatedAt', b."updatedAt"
+          )
+        ELSE NULL
+      END AS "Bet"
+    FROM "Fixture" AS f
+    LEFT JOIN "Team" AS ht ON f."homeTeamId" = ht.id
+    LEFT JOIN "Team" AS at ON f."awayTeamId" = at.id
+    LEFT JOIN "Bet" AS b ON f."fixtureId" = b."fixtureId" 
+      AND b."userId" = '${userId}'
+      AND b."betCompetitionId" = '${betCompetitionId}'
+    WHERE f."date"::date BETWEEN '${dateFrom}'::date AND '${dateTo}'::date
+    ${season ? `AND f."season" = ${Number(season)}` : ''}
+    ${externalLeagueIds?.length ? `AND f."externalLeagueId" IN (${externalLeagueIds.map(Number).join(',')})` : ''}
+    ORDER BY f."date" ASC
   `)
 
-  const data = fixturesWithBets.reduce((acc, curr) => {
-    if (!acc[curr.League.id]) acc[curr.League.id] = []
-    acc[curr.League.id].push(curr)
-    return acc
-  }, {} as FixturesWithBets)
-
-  return data
+  return fixtures
 }
 
 export const getFixtures = async (input: FixturesSchema) => {
