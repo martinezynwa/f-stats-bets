@@ -10,9 +10,9 @@ import { useTranslation } from '@/i18n/useTranslation'
 
 export const HorizontalDatePicker = () => {
   const { locale } = useTranslation()
-  const { date: selectedDate, setDate: setSelectedDate } = useDatePickerStore()
+  const { datePickerDate, setDatePickerDate } = useDatePickerStore()
 
-  const initialSelectedDate = useRef(new Date(selectedDate))
+  const initialSelectedDate = useRef(new Date(datePickerDate))
   const startDate = subDays(initialSelectedDate.current, MAX_DAYS_PAST)
   const endDate = addDays(initialSelectedDate.current, MAX_DAYS_FUTURE)
 
@@ -40,7 +40,7 @@ export const HorizontalDatePicker = () => {
         contentOffset={{ x: initialOffset, y: 0 }}
       >
         {availableDays.map(date => {
-          const isSelected = isSameDay(date, new Date(selectedDate))
+          const isSelected = isSameDay(date, new Date(datePickerDate))
           const isCurrent = isToday(date)
           const dayName = format(date, 'EEE', { locale }).toUpperCase()
           const shouldHighlight = isSelected
@@ -49,7 +49,7 @@ export const HorizontalDatePicker = () => {
             <TouchableOpacity
               key={date.toISOString()}
               style={styles.dayContainer}
-              onPress={() => setSelectedDate(format(date, 'yyyy-MM-dd'))}
+              onPress={() => setDatePickerDate(format(date, 'yyyy-MM-dd'))}
               disabled={isSelected}
               activeOpacity={0.7}
             >
@@ -87,11 +87,11 @@ export const HorizontalDatePicker = () => {
 }
 
 export const useDatePickerStore = create<{
-  date: string
-  setDate: (newDate: string) => void
+  datePickerDate: string
+  setDatePickerDate: (newDate: string) => void
 }>(set => ({
-  date: format(new Date(), 'yyyy-MM-dd'),
-  setDate: (newDate: string) => set({ date: newDate }),
+  datePickerDate: format(new Date(), 'yyyy-MM-dd'),
+  setDatePickerDate: (newDate: string) => set({ datePickerDate: newDate }),
 }))
 
 const MAX_DAYS_PAST = 14

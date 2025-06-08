@@ -1,4 +1,5 @@
 DROP TABLE IF EXISTS "BetCompetition" CASCADE;
+DROP TABLE IF EXISTS "BetCompetitionToLeague" CASCADE;
 DROP TABLE IF EXISTS "Bet" CASCADE;
 DROP TABLE IF EXISTS "Fixture" CASCADE;
 DROP TABLE IF EXISTS "FixtureRound" CASCADE;
@@ -163,7 +164,7 @@ CREATE TABLE IF NOT EXISTS "Fixture" (
     "awayTeamGoalsFinish" INTEGER,
     "awayTeamGoalsHalf" INTEGER,
     "awayTeamGoalsPenalty" INTEGER,
-    "awayTeamId" TEXT NOT NULL,
+    "awayTeamId" UUID NOT NULL,
     "date" TEXT NOT NULL,
     "elapsed" INTEGER,
     "fixtureRoundId" TEXT,
@@ -172,7 +173,7 @@ CREATE TABLE IF NOT EXISTS "Fixture" (
     "homeTeamGoalsFinish" INTEGER,
     "homeTeamGoalsHalf" INTEGER,
     "homeTeamGoalsPenalty" INTEGER,
-    "homeTeamId" TEXT NOT NULL,
+    "homeTeamId" UUID NOT NULL,
     "referee" TEXT,
     "round" INTEGER NOT NULL,
     "status" TEXT NOT NULL,
@@ -184,6 +185,12 @@ CREATE TABLE IF NOT EXISTS "Fixture" (
 
 ALTER TABLE "Fixture" ADD CONSTRAINT "Fixture_leagueId_fkey" 
     FOREIGN KEY ("leagueId") REFERENCES "League"("id") ON DELETE CASCADE;
+
+ALTER TABLE "Fixture" ADD CONSTRAINT "Fixture_homeTeamId_fkey"
+    FOREIGN KEY ("homeTeamId") REFERENCES "Team"("id") ON DELETE CASCADE;
+
+ALTER TABLE "Fixture" ADD CONSTRAINT "Fixture_awayTeamId_fkey"
+    FOREIGN KEY ("awayTeamId") REFERENCES "Team"("id") ON DELETE CASCADE;
 
 CREATE TABLE IF NOT EXISTS "FixtureRound" (
     "id" UUID PRIMARY KEY DEFAULT gen_random_uuid(),

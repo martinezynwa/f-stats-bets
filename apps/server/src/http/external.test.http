@@ -1,15 +1,57 @@
 @baseUrl = http://localhost:3001/external
 
+### Fetch leagues
+## params - externalLeagueId, season
+GET {{baseUrl}}/leagues
+Content-Type: application/json
+
+{
+  "externalLeagueId": 32,
+  "season": 2024
+}
+
+### Fetch and insert leagues
+## params - externalLeagueId, season
+POST {{baseUrl}}/insert-leagues
+Content-Type: application/json
+
+{
+  "externalLeagueId": 32,
+  "season": 2024
+}
+
+### Fetch teams
+## params - externalLeagueId, season
+GET {{baseUrl}}/teams
+Content-Type: application/json
+
+{
+  "externalLeagueId": 32,
+  "season": 2024,
+  "leagueId": "dfa327c4-c847-4420-bfdb-3921d11d7b5c"
+}
+
+### Fetch and insert teams
+## params - externalLeagueId, season, leagueId
+POST {{baseUrl}}/insert-teams
+Content-Type: application/json
+
+{
+  "externalLeagueId": 32,
+  "season": 2024,
+  "leagueId": "dfa327c4-c847-4420-bfdb-3921d11d7b5c"
+}
+
 ### Fetch fixtures
 ## params - externalLeagueIds, ?season, ?dateFrom, ?dateTo
 GET {{baseUrl}}/fixtures
 Content-Type: application/json
 
 {
-  "externalLeagueIds": [78,345],
+  "externalLeagueIds": [32],
   "season": 2024,
-  "dateFrom": "2025-05-17",
-  "dateTo": "2025-05-17"
+  "dateFrom": "2025-06-07",
+  "dateTo": "2025-06-07"
 }
 
 ### Fetch and insert fixtures
@@ -18,8 +60,10 @@ POST {{baseUrl}}/insert-fixtures
 Content-Type: application/json
 
 {
-  "externalLeagueIds": [39],
+  "externalLeagueIds": [5,32],
   "season": 2024,
-  "dateFrom": "2024-08-01",
-  "dateTo": "2025-08-18"
+  "dateFrom": "2025-06-01",
+  "dateTo": "2025-06-12"
 }
+
+

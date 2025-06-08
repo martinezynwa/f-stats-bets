@@ -14,5 +14,6 @@ export const useLeagues = (enabled?: boolean) => {
       }),
     throwOnError: true,
     enabled,
+    staleTime: Infinity,
   })
 }

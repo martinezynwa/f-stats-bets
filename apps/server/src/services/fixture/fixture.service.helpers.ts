@@ -1,7 +1,7 @@
-import { InsertFixture, League, LeagueType } from '@f-stats-bets/types'
+import { FixtureStatus, InsertFixture, League, LeagueType } from '@f-stats-bets/types'
 import { CUP_ROUNDS, MATCH_LAST_TWO_NUMBERS } from '../../constants/constants'
 import { db } from '../../db'
-import { ExternalFixtureResponse, FixtureStatus } from '../../types/external/external-fixture.types'
+import { ExternalFixtureResponse } from '../../types/external/external-fixture.types'
 import { getLeagues } from '../league/league.service.queries'
 
 export const prepareFixturesForInsertion = async (

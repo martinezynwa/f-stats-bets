@@ -1,5 +1,6 @@
 {
   "base.back": "Back",
+
   "login.button.signIn": "Sign In",
   "login.button.signUp": "Sign Up",
   "login.button.createAccount": "Create account",
@@ -15,7 +16,10 @@
   "login.signIn.error": "Please fill in all fields",
   "login.notVerified.title": "User is not verified yet",
   "login.notVerified.subtitle": "Logged in as {{providerName}}",
+
   "profile.profile": "Profile",
   "profile.changeLanguage": "Change Language",
-  "profile.signOut": "Sign Out"
+  "profile.signOut": "Sign Out",
+
+  "fixture.postponed": "PST"
 }

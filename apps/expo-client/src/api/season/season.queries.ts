@@ -19,5 +19,6 @@ export const useSeasons = ({ supported, enabled }: UseSeasonsProps) => {
       }),
     throwOnError: true,
     enabled,
+    staleTime: Infinity,
   })
 }

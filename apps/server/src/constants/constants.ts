@@ -1,5 +1,3 @@
-import { FixtureStatus } from '../types/external/external-fixture.types'
-
 export const TAKE_LIMIT = 10
 export const TOTAL_STATS_ID = '999999999'
 export const TOTAL_STATS_ID_INT = 999999999
@@ -27,61 +25,6 @@ export enum ORDERBY {
 export enum ORDER {
   DESC = 'desc',
   ASC = 'asc',
-}
-
-export const FIXTURE_STATUS = {
-  noInfo: [FixtureStatus.TBD],
-  planned: [FixtureStatus.NOT_STARTED],
-  inProgress: [
-    FixtureStatus.FIRST_HALF,
-    FixtureStatus.HALF_TIME,
-    FixtureStatus.SECOND_HALF,
-    FixtureStatus.EXTRA_TIME,
-    FixtureStatus.BREAK_TIME,
-    FixtureStatus.PENALTY_IN_PROGRESS,
-    FixtureStatus.LIVE,
-  ],
-  cancelled: [
-    FixtureStatus.SUSPENDED,
-    FixtureStatus.POSTPONED,
-    FixtureStatus.CANCELLED,
-    FixtureStatus.ABANDONED,
-  ],
-  suspended: [FixtureStatus.SUSPENDED_INT],
-  finished: [FixtureStatus.FINISHED, FixtureStatus.AFTER_EXTRA_TIME, FixtureStatus.PENALTY],
-  notPlayed: [FixtureStatus.TECHNICAL_LOSS, FixtureStatus.WALKOVER],
-}
-
-export const FIXTURE_OVERTIME_STATUS = [FixtureStatus.AFTER_EXTRA_TIME, FixtureStatus.PENALTY]
-
-export const inProgressFixtureStatuses = [...FIXTURE_STATUS.inProgress]
-
-export const unplayedFixtureStatuses = [
-  ...FIXTURE_STATUS.noInfo,
-  ...FIXTURE_STATUS.planned,
-  ...FIXTURE_STATUS.cancelled,
-  ...FIXTURE_STATUS.suspended,
-  ...FIXTURE_STATUS.notPlayed,
-]
-
-export const incompletedFixtureStatuses = [
-  ...FIXTURE_STATUS.noInfo,
-  ...FIXTURE_STATUS.planned,
-  ...FIXTURE_STATUS.inProgress,
-  ...FIXTURE_STATUS.suspended,
-]
-
-export const completedFixtureStatuses = [
-  ...FIXTURE_STATUS.cancelled,
-  ...FIXTURE_STATUS.finished,
-  ...FIXTURE_STATUS.notPlayed,
-]
-
-export enum FIXTURE_STATUS_CODE {
-  'FIN' = 'Finished',
-  'PRG' = 'In progress',
-  'CAN' = 'Cancelled',
-  'CHE' = 'Check again later',
 }
 
 export enum LEAGUE_TYPE {

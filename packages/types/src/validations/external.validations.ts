@@ -1,18 +1,14 @@
 import { z } from 'zod'
-import { FederationType } from '../generated.types'
 
 export const insertLeagueValidationSchema = z.object({
-  externalLeagueId: z.string(),
+  externalLeagueId: z.number(),
   season: z.number(),
-  isNational: z.boolean(),
-  isSupported: z.boolean(),
-  federation: z.nativeEnum(FederationType),
 })
 export type InsertLeagueValidationSchema = z.infer<typeof insertLeagueValidationSchema>
 
 export const insertTeamValidationSchema = z.object({
   leagueId: z.string(),
-  externalLeagueId: z.string(),
+  externalLeagueId: z.number(),
   season: z.number(),
 })
 export type InsertTeamValidationSchema = z.infer<typeof insertTeamValidationSchema>

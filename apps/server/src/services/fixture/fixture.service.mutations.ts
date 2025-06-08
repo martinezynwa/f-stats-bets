@@ -1,5 +1,4 @@
-import { Fixture, FixtureRound, InsertFixture } from '@f-stats-bets/types'
-import { completedFixtureStatuses } from '../../constants/constants'
+import { Fixture, FixtureRound, InsertFixture, completedFixtureStatuses } from '@f-stats-bets/types'
 import { db } from '../../db'
 import { ExternalFixtureResponse } from '../../types/external/external-fixture.types'
 import { prepareFixturesForInsertion } from './fixture.service.helpers'
@@ -88,9 +87,9 @@ export const upsertFixtures = async (
     const newFixtures = await createFixtures(fixturesToInsert)
 
     const fixtureIds = newFixtures.map(fixture => fixture.fixtureId)
-    const newFixtureRounds = await createFixtureRounds(fixtureIds)
+    /*     const newFixtureRounds = await createFixtureRounds(fixtureIds)
 
-    await updateFixturesWithFixtureRound(newFixtureRounds, newFixtures)
+    await updateFixturesWithFixtureRound(newFixtureRounds, newFixtures) */
 
     response.newFixtures.push(...newFixtures)
   }

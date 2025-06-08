@@ -1,3 +1,5 @@
+import { leaguesMock } from 'src/mock/league.mock'
+import { teamsMock } from 'src/mock/team.mock'
 import { ENDPOINTS } from '../constants/enums'
 import { fixturesMock } from '../mock/fixture.mock'
 import { isDateInRange } from './date-and-time'
@@ -24,6 +26,10 @@ export const mockHandler = (input: MockHandlerProps) => {
           (!season || fixture.league.season === season) &&
           isDateInRange(fixture.fixture.date, from, to),
       )
+    case ENDPOINTS.LEAGUES:
+      return leaguesMock
+    case ENDPOINTS.TEAMS:
+      return teamsMock[league as keyof typeof teamsMock]
     default:
       return []
   }

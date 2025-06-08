@@ -1,5 +1,8 @@
 ## TODO
 - [] |CLIENT| Display fixtures with bets
+- [] |CLIENT| Provide global BetCompetition
+- [] |SERVER| Check user ID from request on server router
+- [] |CLIENT| Fallback component
 - [] |APP| Build Expo project
 - [] |SERVER| Implement job for fixtures
 - [] |SERVER| Implement fixture round logic for various league types
@@ -8,6 +11,8 @@
 - [] |SERVER| Make backend routes type safe
 
 ## Completed (0.0.1)
+- [x] |CLIENT| Display fixtures without bets
+
 - [x] |CLIENT| Horizontal Date Picker
 
 - [x] |SERVER| Create BetCompetition schema

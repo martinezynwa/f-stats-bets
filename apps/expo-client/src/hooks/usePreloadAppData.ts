@@ -1,33 +1,40 @@
 import { useEffect, useState } from 'react'
 
-import { useFixturesWithBets } from '@/api'
 import { useLeagues } from '@/api/league/league.queries'
 import { useSeasons } from '@/api/season/season.queries'
-import { getCurrentDate } from '@/lib/util/date-and-time'
+import { useCatalogStore } from '@/store'
 
 export const usePreloadAppData = (enabled: boolean) => {
   const [initialLoaded, setInitialLoaded] = useState(false)
+  const { setCatalogData } = useCatalogStore()
 
-  const { isFetched: seasonsFetched, error: seasonsError } = useSeasons({
+  const {
+    data: seasonData,
+    isFetched: seasonsFetched,
+    error: seasonsError,
+  } = useSeasons({
     supported: true,
     enabled,
   })
 
-  const { isFetched: leaguesFetched, error: leaguesError } = useLeagues(enabled)
+  const { data: leagueData, isFetched: leaguesFetched, error: leaguesError } = useLeagues(enabled)
 
-  const { isFetched: betsFetched, error: betsError } = useFixturesWithBets({
-    input: { dateFrom: getCurrentDate(), dateTo: getCurrentDate() },
-    enabled,
-  })
-
-  const isFetched = leaguesFetched && betsFetched && seasonsFetched
-  const error = leaguesError || betsError || seasonsError
+  const isFetched = leaguesFetched && seasonsFetched
+  const error = leaguesError || seasonsError
 
   useEffect(() => {
     if (isFetched && !initialLoaded) {
+      setCatalogData({
+        seasons: seasonData
+          ? Object.fromEntries(seasonData.map(season => [season.seasonId, season]))
+          : {},
+        leagues: leagueData
+          ? Object.fromEntries(leagueData.map(league => [league.id, league]))
+          : {},
+      })
       setInitialLoaded(true)
     }
-  }, [isFetched, initialLoaded])
+  }, [isFetched, initialLoaded, setCatalogData, seasonData, leagueData])
 
   return { error, initialLoaded }
 }

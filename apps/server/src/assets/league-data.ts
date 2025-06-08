@@ -105,6 +105,15 @@ export const supportedLeagues: SupportedLeague = {
       organization: OrganizationType.UEFA,
       seasons: [2024],
     },
+    {
+      id: 32,
+      name: 'World Cup Qualification - Europe',
+      type: LeagueType.NATIONAL_TOURNAMENT,
+      variant: 'nation',
+      federation: FederationType.EUROPE,
+      organization: OrganizationType.UEFA,
+      seasons: [2024],
+    },
   ],
   World: [
     {

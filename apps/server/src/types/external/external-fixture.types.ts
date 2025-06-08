@@ -1,24 +1,4 @@
-export enum FixtureStatus {
-  TBD = 'TBD',
-  NOT_STARTED = 'NS',
-  FIRST_HALF = '1H',
-  HALF_TIME = 'HT',
-  SECOND_HALF = '2H',
-  EXTRA_TIME = 'ET',
-  BREAK_TIME = 'BT',
-  PENALTY_IN_PROGRESS = 'P',
-  LIVE = 'LIVE',
-  CANCELLED = 'CANC',
-  POSTPONED = 'PST',
-  SUSPENDED = 'SUSP',
-  ABANDONED = 'ABD',
-  SUSPENDED_INT = 'INT',
-  FINISHED = 'FT',
-  AFTER_EXTRA_TIME = 'AET',
-  PENALTY = 'PEN',
-  TECHNICAL_LOSS = 'AWD',
-  WALKOVER = 'WO',
-}
+import { FixtureStatus } from '@f-stats-bets/types'
 
 type Fixture = {
   id: number

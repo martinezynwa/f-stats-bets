@@ -17,6 +17,17 @@ const router = Router()
 
 //router.use(requireAuth)
 
+router.get(
+  '/leagues',
+  validateRequestWithBody(async (req, res) => {
+    const { externalLeagueId, season } = req.body
+
+    const leagueData = await fetchLeagueInfo(externalLeagueId, season)
+
+    res.json(leagueData)
+  }, insertLeagueValidationSchema),
+)
+
 router.post(
   '/insert-leagues',
   validateRequestWithBody(async (req, res) => {
@@ -28,6 +39,17 @@ router.post(
 
     res.json(added)
   }, insertLeagueValidationSchema),
+)
+
+router.get(
+  '/teams',
+  validateRequestWithBody(async (req, res) => {
+    const { externalLeagueId, season } = req.body
+
+    const teamsData = await fetchTeamsInfo(externalLeagueId, season)
+
+    res.json(teamsData)
+  }, insertTeamValidationSchema),
 )
 
 router.post(

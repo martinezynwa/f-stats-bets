@@ -45,4 +45,13 @@ export const Colors = {
   horizontalDatePicker: '#101112',
   horizontalDatePickerBottomBorder: '#182024',
   horizontalDatePickerSelected: '#6F60EF',
+
+  iconBackground: '#EDEDED',
+
+  listContainer: '#121212',
+  listHeader: '#1A1A1A',
+  listItem: '#1A1A1A',
+  listTextHeader: '#FFFFFF',
+
+  infoButton: '#5F67D1',
 }

@@ -1,4 +1,9 @@
-import { Fixture, FixturesBetsSchema, FixturesSchema, FixturesWithBets } from '@f-stats-bets/types'
+import {
+  FixtureWithTeamDetails,
+  FixturesBetsSchema,
+  FixturesSchema,
+  FixturesWithBets,
+} from '@f-stats-bets/types'
 import { useQuery } from '@tanstack/react-query'
 
 import { useFetch } from '../fetch'
@@ -28,7 +33,7 @@ export const useFixturesWithBets = ({
 export const useFixtures = (input: FixturesSchema) => {
   const { handleFetch } = useFetch()
 
-  return useQuery<Fixture[]>({
+  return useQuery<FixtureWithTeamDetails[]>({
     queryKey: ['fixtures', input],
     queryFn: () =>
       handleFetch(`/fixtures`, {

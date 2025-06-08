@@ -10,3 +10,4 @@ export const formatStringDateToDate = (date: string) => new Date(parseISO(date))
 export const adjustCurrentDateByDays = (days: number) =>
   format(addDays(new Date(), days), 'yyyy-MM-dd')
 export const getDateWithTimeShort = (date: string) => format(parseISO(date), 'd.M · HH:mm')
+export const formatDateStringToShortTime = (date: string) => format(date, 'HH:mm')

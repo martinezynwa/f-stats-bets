@@ -30,12 +30,7 @@ export const insertLeagueToDb = async ({ leagueData, season }: InsertLeagueToDbP
     groupStage: false, //TODO
   }
 
-  const added = await db
-    .insertInto('League')
-    .values(data)
-    .onConflict(oc => oc.columns(['season', 'externalLeagueId']).doUpdateSet(data))
-    .returningAll()
-    .executeTakeFirst()
+  const added = await db.insertInto('League').values(data).returningAll().executeTakeFirst()
 
   return added
 }

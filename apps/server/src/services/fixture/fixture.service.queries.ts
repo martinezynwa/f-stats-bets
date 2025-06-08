@@ -1,6 +1,6 @@
 import {
-  Fixture,
   FixtureWithBet,
+  FixtureWithTeamDetails,
   FixturesBetsSchema,
   FixturesSchema,
   FixturesWithBets,
@@ -33,12 +33,30 @@ export const getFixturesWithBets = async (input: FixturesBetsSchema): Promise<Fi
 export const getFixtures = async (input: FixturesSchema) => {
   const { dateFrom, dateTo, externalLeagueIds, season } = input
 
-  const fixtures = await rawQueryArray<Fixture>(`
-    SELECT * FROM "Fixture"
-    WHERE "date"::date BETWEEN '${dateFrom}'::date AND '${dateTo}'::date
-    ${season ? `AND "season" = ${Number(season)}` : ''}
-    ${externalLeagueIds?.length ? `AND "externalLeagueId" IN (${externalLeagueIds.map(Number).join(',')})` : ''}
-    ORDER BY "date" ASC
+  const fixtures = await rawQueryArray<FixtureWithTeamDetails>(`
+    SELECT
+      f.*,
+      JSON_BUILD_OBJECT(
+        'id', ht.id,
+        'name', ht.name,
+        'logo', ht.logo,
+        'code', ht.code,
+        'externalTeamId', ht."externalTeamId"
+      ) AS "homeTeam",
+      JSON_BUILD_OBJECT(
+        'id', at.id,
+        'name', at.name,
+        'logo', at.logo,
+        'code', at.code,
+        'externalTeamId', at."externalTeamId"
+      ) AS "awayTeam"
+    FROM "Fixture" AS f
+    LEFT JOIN "Team" AS ht ON f."homeTeamId" = ht.id
+    LEFT JOIN "Team" AS at ON f."awayTeamId" = at.id
+    WHERE f."date"::date BETWEEN '${dateFrom}'::date AND '${dateTo}'::date
+    ${season ? `AND f."season" = ${Number(season)}` : ''}
+    ${externalLeagueIds?.length ? `AND f."externalLeagueId" IN (${externalLeagueIds.map(Number).join(',')})` : ''}
+    ORDER BY f."date" ASC
   `)
 
   return fixtures
