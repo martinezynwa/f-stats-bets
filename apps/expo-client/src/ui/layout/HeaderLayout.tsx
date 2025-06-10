@@ -1,5 +1,4 @@
 import { Stack } from 'expo-router'
-import { SafeAreaView } from 'react-native-safe-area-context'
 
 import { Colors } from '@/ui/colors'
 
@@ -26,13 +25,7 @@ export const HeaderLayout = ({
           headerTitle,
           headerTransparent,
           headerBlurEffect: 'dark',
-          header: headerComponent
-            ? () => (
-                <SafeAreaView edges={['top']} style={{ backgroundColor: Colors.headerBackground }}>
-                  {headerComponent}
-                </SafeAreaView>
-              )
-            : undefined,
+          header: headerComponent ? () => headerComponent : undefined,
           headerLargeTitle: largeHeader,
           headerLargeTitleStyle: {
             color: Colors.text,

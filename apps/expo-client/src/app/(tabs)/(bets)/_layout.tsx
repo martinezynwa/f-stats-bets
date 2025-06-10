@@ -1,10 +1,24 @@
+import BetCompetitionsScreen from './bet-competitions'
+import UserBetsScreen from './user-bets'
+
 import { useTranslation } from '@/i18n/useTranslation'
-import { HeaderLayout } from '@/ui'
+import { TabProps, TopTabs } from '@/ui/Components'
 
 const BetsLayout = () => {
   const { t } = useTranslation()
 
-  return <HeaderLayout name='bets' headerTitle={t('bets.bets')} largeHeader headerTransparent />
+  const tabs: TabProps[] = [
+    {
+      name: t('bets.tab.userBets'),
+      component: UserBetsScreen,
+    },
+    {
+      name: t('bets.tab.betCompetitions'),
+      component: BetCompetitionsScreen,
+    },
+  ]
+
+  return <TopTabs tabs={tabs} />
 }
 
 export default BetsLayout

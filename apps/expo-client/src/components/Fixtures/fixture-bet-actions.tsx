@@ -1,7 +1,7 @@
 import { BetResultType, FixtureWithBet } from '@f-stats-bets/types'
 
 import { BetResultActionButtons } from '../Bets'
-import { useBetActions } from '../Bets/useBetActions'
+import { useBetActions } from '../Bets/hooks/useBetActions'
 
 import { useGlobalBetCompetitionId } from '@/api'
 import { useDebounce } from '@/hooks/useDebounce'

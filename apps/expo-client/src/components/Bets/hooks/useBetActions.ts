@@ -1,9 +1,8 @@
 import { Bet, BetResultType, Fixture, InsertBet, UpdateBet } from '@f-stats-bets/types'
 import { useMutation, useQueryClient } from '@tanstack/react-query'
 
-import { hasGameStarted } from '../Fixtures/fixture.helpers'
-
 import { useFetch } from '@/api/fetch'
+import { hasGameStarted } from '@/components/Fixtures/fixture.helpers'
 import { useToast } from '@/hooks/useToast'
 import { useTranslation } from '@/i18n/useTranslation'
 import { useUserDataStore } from '@/store'

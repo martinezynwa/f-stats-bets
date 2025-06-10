@@ -12,6 +12,8 @@ export const Colors = {
   background: '#0D0D0D',
   loginBackground: '#000000',
 
+  headerBack: '#FFFFFF',
+
   headerBackground: '#101112',
 
   text: '#CDCDCD',
@@ -30,11 +32,19 @@ export const Colors = {
   tabIconDefault: '#ccc',
   tabIconSelected: '#fff',
 
+  bottomNav: '#1A1A1A',
+  bottomNavActive: '#FFFFFF',
+  bottomNavInactive: '#808080',
+
   bottomSheetBlurred: 'rgba(0, 0, 0, 1)',
   bottomSheetBackground: '#1C1C1E',
   bottomSheetItemsSelected: '#282A31',
   bottomSheetItemsContainer: '#242426',
   bottomSheetIndicatorColor: '#CDCDCD',
+
+  topTabBarBackground: '#1A1A1A',
+  topTabBarIndicator: '#A0A0A0',
+  topTabBarText: '#FFFFFF',
 
   toastBackground: '#1D1F30',
   toastTitle: '#CDCDCD',

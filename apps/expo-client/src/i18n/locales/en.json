@@ -25,5 +25,7 @@
 
   "bet.action.gameStarted": "Game has started already",
 
-  "bets.bets": "Bets"
+  "bets.bets": "Bets",
+  "bets.tab.userBets": "My Bets",
+  "bets.tab.betCompetitions": "Bet Competitions"
 }

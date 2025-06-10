@@ -1,9 +1,9 @@
 import { ScrollViewWrapper, Text } from '@/ui'
 
-export const Bets = () => {
+export const BetCompetitions = () => {
   return (
     <ScrollViewWrapper>
-      <Text>Bets</Text>
+      <Text>Bet Competitions</Text>
     </ScrollViewWrapper>
   )
 }

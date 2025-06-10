@@ -2,9 +2,10 @@ import { BottomSheetModalProvider } from '@gorhom/bottom-sheet'
 import { Stack } from 'expo-router'
 import * as SplashScreen from 'expo-splash-screen'
 import React, { useEffect } from 'react'
-import { KeyboardAvoidingView, Platform, Text, View } from 'react-native'
+import { Text, View } from 'react-native'
 import { GestureHandlerRootView } from 'react-native-gesture-handler'
 import { NotifierWrapper } from 'react-native-notifier'
+import { SafeAreaView } from 'react-native-safe-area-context'
 
 import { SignUpScreenComponent } from '@/components/Auth/SignUp'
 import { NotVerified } from '@/components/User/NotVerified'
@@ -62,34 +63,27 @@ function AppContent() {
   if (userNotFound) return <SignUpScreenComponent />
 
   return (
-    <GestureHandlerRootView style={{ flex: 1 }}>
-      <NotifierWrapper>
-        <KeyboardAvoidingView
-          style={{ flex: 1 }}
-          behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
-        >
-          <NotifierWrapper>
-            <BottomSheetModalProvider>
-              <Stack
-                screenOptions={{
-                  headerShown: true,
-                  headerLeft: ({ canGoBack }) => canGoBack && <HeaderBack />,
-                  headerTitle: () => <></>,
-                  headerStyle: {
-                    backgroundColor: Colors.background,
-                  },
-                  headerShadowVisible: false,
-                }}
-              >
-                <Stack.Screen name='(auth)' options={{ headerShown: false }} />
-                <Stack.Screen name='(tabs)' options={{ headerShown: false }} />
-                <Stack.Screen name='modal' options={{ presentation: 'modal' }} />
-              </Stack>
-            </BottomSheetModalProvider>
-          </NotifierWrapper>
-        </KeyboardAvoidingView>
-      </NotifierWrapper>
-    </GestureHandlerRootView>
+    <SafeAreaView edges={['top']} style={{ flex: 1, backgroundColor: Colors.background }}>
+      <GestureHandlerRootView>
+        <NotifierWrapper>
+          <BottomSheetModalProvider>
+            <Stack
+              screenOptions={{
+                headerShown: true,
+                headerLeft: ({ canGoBack }) => canGoBack && <HeaderBack />,
+                headerTitle: () => <></>,
+                headerStyle: { backgroundColor: Colors.background },
+                headerShadowVisible: false,
+              }}
+            >
+              <Stack.Screen name='(auth)' options={{ headerShown: false }} />
+              <Stack.Screen name='(tabs)' options={{ headerShown: false }} />
+              <Stack.Screen name='modal' options={{ presentation: 'modal' }} />
+            </Stack>
+          </BottomSheetModalProvider>
+        </NotifierWrapper>
+      </GestureHandlerRootView>
+    </SafeAreaView>
   )
 }
 

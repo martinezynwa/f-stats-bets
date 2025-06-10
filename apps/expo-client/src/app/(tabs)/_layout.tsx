@@ -1,10 +1,9 @@
 import FontAwesome6 from '@expo/vector-icons/FontAwesome6'
-import { BlurView } from 'expo-blur'
 import { Redirect, Tabs } from 'expo-router'
 import React from 'react'
-import { StyleSheet } from 'react-native'
 
 import { useAuth } from '@/providers/AuthProvider'
+import { Colors } from '@/ui/colors'
 
 type IconProps = {
   name: React.ComponentProps<typeof FontAwesome6>['name']
@@ -57,21 +56,11 @@ export default function TabLayout() {
         tabBarStyle: {
           borderTopWidth: 0,
           position: 'absolute',
+          backgroundColor: Colors.bottomNav,
         },
-        tabBarBackground: () => (
-          <BlurView
-            intensity={60}
-            style={{
-              ...StyleSheet.absoluteFillObject,
-            }}
-          />
-        ),
-        tabBarActiveTintColor: 'gray',
-        tabBarInactiveTintColor: 'gray',
-        tabBarLabelStyle: {
-          fontSize: 12,
-          paddingTop: 6,
-        },
+        tabBarActiveTintColor: Colors.bottomNavActive,
+        tabBarInactiveTintColor: Colors.bottomNavInactive,
+        tabBarLabelStyle: { fontSize: 12 },
       }}
     >
       {tabs.map(({ name, label, iconName }) => (
@@ -81,7 +70,10 @@ export default function TabLayout() {
           options={{
             title: label,
             tabBarIcon: ({ focused }) => (
-              <TabBarIcon name={iconName} color={focused ? 'white' : 'gray'} />
+              <TabBarIcon
+                name={iconName}
+                color={focused ? Colors.bottomNavActive : Colors.bottomNavInactive}
+              />
             ),
           }}
         />
