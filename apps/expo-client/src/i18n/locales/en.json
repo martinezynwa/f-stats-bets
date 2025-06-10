@@ -21,5 +21,7 @@
   "profile.changeLanguage": "Change Language",
   "profile.signOut": "Sign Out",
 
-  "fixture.postponed": "PST"
+  "fixture.postponed": "PST",
+
+  "bet.action.gameStarted": "Game has started already"
 }

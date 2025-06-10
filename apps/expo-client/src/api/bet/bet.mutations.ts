@@ -1,15 +1,17 @@
-import { Bet, CreateBetSchema, UpdateBetSchema } from '@f-stats-bets/types'
+import { Bet, InsertBet, UpdateBet } from '@f-stats-bets/types'
 import { useMutation, useQueryClient } from '@tanstack/react-query'
 
 import { useFetch } from '../fetch'
+
+const baseUrl = '/bets'
 
 export const useCreateBet = () => {
   const { handleFetch } = useFetch()
   const queryClient = useQueryClient()
 
   return useMutation({
-    mutationFn: (data: CreateBetSchema) =>
-      handleFetch<Bet>('/bets', {
+    mutationFn: (data: InsertBet) =>
+      handleFetch<Bet>(`${baseUrl}`, {
         method: 'POST',
         body: JSON.stringify(data),
       }),
@@ -24,14 +26,14 @@ export const useUpdateBet = () => {
   const queryClient = useQueryClient()
 
   return useMutation({
-    mutationFn: (data: UpdateBetSchema) =>
-      handleFetch<Bet>(`/bets/${data.id}`, {
+    mutationFn: (data: UpdateBet) =>
+      handleFetch<Bet>(`${baseUrl}/${data.betId}`, {
         method: 'PUT',
         body: JSON.stringify(data),
       }),
-    onSuccess: (_, { id }) => {
+    onSuccess: (_, { betId }) => {
       queryClient.invalidateQueries({ queryKey: ['bets'] })
-      queryClient.invalidateQueries({ queryKey: ['bets', id] })
+      queryClient.invalidateQueries({ queryKey: ['bets', betId] })
     },
   })
 }
@@ -41,8 +43,8 @@ export const useDeleteBet = () => {
   const queryClient = useQueryClient()
 
   return useMutation({
-    mutationFn: (id: string) =>
-      handleFetch<Bet>(`/bets/${id}`, {
+    mutationFn: (betId: string) =>
+      handleFetch<Bet>(`${baseUrl}/${betId}`, {
         method: 'DELETE',
       }),
     onSuccess: (_, id) => {

@@ -1,11 +1,12 @@
 ## TODO
 
-- [] |CLIENT| Bet actions
+- [x] |CLIENT| Bet actions
 - [] |CLIENT| All user bets
 - [] |SERVER| mock setting up auth header when testing
 - [] |CLIENT| Fallback component
 - [] |CLIENT| Navbar styling
 - [] |APP| Build Expo project
+- [] |CLIENT| optimistic response for bet actions
 - [] |SERVER| Implement job for fixtures
 - [] |SERVER| Implement fixture round logic for various league types
 - [] |SERVER| Highlight eslint warnings

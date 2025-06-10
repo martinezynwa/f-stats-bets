@@ -20,10 +20,10 @@ export const Colors = {
   box: '#191919',
 
   submitButton: '#6F60EF',
-  disabledButton: '#4B5563',
+  disabledButton: '#3B4553',
   deleteButton: '#FF7973',
   actionButton: '#191919',
-  inactiveButton: '#727AAE',
+  inactiveButton: '#4B5563',
 
   indicatorIcon: '#CDCDCD',
 

@@ -1,3 +1,4 @@
+export * from './bet-competition/bet-competition.queries'
 export * from './bet/bet.mutations'
 export * from './bet/bet.queries'
 export * from './fixture/fixture.queries'

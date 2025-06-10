@@ -67,7 +67,9 @@ export const FixturesBetsContainer = () => {
                     key={fixture.fixtureId}
                     fixture={fixture}
                     customBottomComponent={
-                      shouldDisplayBetButtons ? <FixtureBetActions fixture={fixture} /> : undefined
+                      shouldDisplayBetButtons ? (
+                        <FixtureBetActions fixture={fixture} queryKey={['fixtures-with-bets']} />
+                      ) : undefined
                     }
                   />
                 )

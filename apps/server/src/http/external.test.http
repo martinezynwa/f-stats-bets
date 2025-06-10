@@ -62,7 +62,7 @@ Content-Type: application/json
 {
   "externalLeagueIds": [5,32],
   "season": 2024,
-  "dateFrom": "2025-06-01",
+  "dateFrom": "2025-06-06",
   "dateTo": "2025-06-12"
 }
 

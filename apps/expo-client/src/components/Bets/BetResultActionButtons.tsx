@@ -1,4 +1,5 @@
 import { BetResultType } from '@f-stats-bets/types'
+import { useEffect, useState } from 'react'
 import { StyleSheet, TouchableOpacity, View } from 'react-native'
 
 import { Colors, Text } from '@/ui'
@@ -7,6 +8,7 @@ interface BetActionButtonsProps {
   onAction: (value: BetResultType) => void
   checkIsButtonActive: (value: BetResultType) => boolean
   disabled?: boolean
+  isLoading?: boolean
 }
 
 const buttons = [
@@ -19,23 +21,36 @@ export const BetResultActionButtons = ({
   onAction,
   checkIsButtonActive,
   disabled,
+  isLoading,
 }: BetActionButtonsProps) => {
+  const [buttonPressed, setButtonPressed] = useState<BetResultType | null>(null)
+
+  useEffect(() => {
+    if (buttonPressed && !isLoading) {
+      setButtonPressed(null)
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [isLoading])
+
   const renderButton = (value: string, key: BetResultType) => {
     const isActive = checkIsButtonActive(key)
+    const isPressed = buttonPressed === key
+
+    const getCustomStyle = () => {
+      if (disabled) return styles.betButtonDisabled
+      if (isActive) return styles.betButtonActive
+      return styles.betButtonInactive
+    }
 
     return (
       <TouchableOpacity
         key={key}
-        style={[
-          styles.betButton,
-          disabled
-            ? styles.betButtonDisabled
-            : isActive
-              ? styles.betButtonActive
-              : styles.betButtonDisabled,
-        ]}
-        onPress={() => onAction(key)}
-        disabled={disabled}
+        style={[styles.betButton, getCustomStyle(), isPressed && isLoading && styles.buttonBlurred]}
+        onPress={() => {
+          setButtonPressed(key)
+          onAction(key)
+        }}
+        disabled={isLoading || disabled}
       >
         <View style={styles.buttonContainer}>
           <Text>{value}</Text>
@@ -71,4 +86,5 @@ const styles = StyleSheet.create({
   betButtonActive: { backgroundColor: Colors.submitButton },
   betButtonInactive: { backgroundColor: Colors.inactiveButton },
   betButtonDisabled: { backgroundColor: Colors.disabledButton },
+  buttonBlurred: { opacity: 0.5 },
 })
