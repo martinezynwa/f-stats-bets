@@ -39,6 +39,11 @@ export default function TabLayout() {
       iconName: 'house',
     },
     {
+      name: '(bets)',
+      label: 'Bets',
+      iconName: 'list',
+    },
+    {
       name: '(profile)',
       label: 'Profile',
       iconName: 'user',

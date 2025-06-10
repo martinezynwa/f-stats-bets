@@ -23,5 +23,7 @@
 
   "fixture.postponed": "PST",
 
-  "bet.action.gameStarted": "Game has started already"
+  "bet.action.gameStarted": "Game has started already",
+
+  "bets.bets": "Bets"
 }
