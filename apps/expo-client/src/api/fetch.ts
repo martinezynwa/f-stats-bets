@@ -35,7 +35,9 @@ export const useFetch = () => {
       ...options.headers,
     }
 
-    const response = await fetch(`${process.env.EXPO_PUBLIC_API_URL}${endpoint}`, {
+    const url = `${process.env.EXPO_PUBLIC_API_URL}${endpoint}`
+
+    const response = await fetch(url, {
       ...options,
       headers,
     }).catch(error => {

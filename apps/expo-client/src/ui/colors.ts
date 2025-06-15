@@ -63,6 +63,7 @@ export const Colors = {
   listHeader: '#1A1A1A',
   listItem: '#1A1A1A',
   listTextHeader: '#FFFFFF',
+  listBottomBorder: '#666',
 
   infoButton: '#5F67D1',
 }

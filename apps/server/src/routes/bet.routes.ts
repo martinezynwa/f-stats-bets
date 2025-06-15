@@ -1,9 +1,9 @@
-import { createBetSchema, updateBetSchema, userBetsFromFixtureIdsSchema } from '@f-stats-bets/types'
+import { createBetSchema, getBetsSchema, updateBetSchema } from '@f-stats-bets/types'
 import { Router } from 'express'
 import { requireAuth } from 'src/middleware'
 import { validateRequest, validateRequestWithBody, validateRequestWithParams } from '../lib'
 import { createBet, deleteBet, updateBet } from '../services/bet/bet.service.mutations'
-import { getUserBetsFromFixtureIds } from '../services/bet/bet.service.queries'
+import { getBets } from '../services/bet/bet.service.queries'
 
 const router = Router()
 
@@ -12,10 +12,10 @@ router.use(requireAuth)
 router.get(
   '/',
   validateRequestWithParams(async (req, res) => {
-    const bets = await getUserBetsFromFixtureIds(req.query)
+    const bets = await getBets(req.query)
 
     res.json(bets)
-  }, userBetsFromFixtureIdsSchema),
+  }, getBetsSchema),
 )
 
 router.post(

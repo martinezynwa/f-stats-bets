@@ -7,8 +7,8 @@ Content-Type: application/json
 
 {
   "userId": "1308d56d-b0cf-42e9-871b-50d77d9e9e74",
-  "externalLeagueIds": [5,32],
-  "season": 2024,
+  "externalLeagueIds": [15],
+  "season": 2025,
   "name": "Test Competition",
   "deletePrevious": true
 }
@@ -22,7 +22,7 @@ Content-Type: application/json
   "dateFrom": "2025-06-02",
   "dateTo": "2025-06-30",
   "deletePreviousBets": true,
-  "betCompetitionId": "4ffcab4e-beee-405d-b23f-5387e259a189"
+  "betCompetitionId": "a1eea478-2d5f-461a-a363-cb5132cbb52e"
 }
 
 ### Test

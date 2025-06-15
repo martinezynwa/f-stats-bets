@@ -1,15 +1,32 @@
-import { Bet, UserBetsSchema } from '@f-stats-bets/types'
-import { useQuery } from '@tanstack/react-query'
+import { BetWithFixture, GetBetsResponse } from '@f-stats-bets/types'
+import { useInfiniteQuery } from '@tanstack/react-query'
 
 import { useFetch } from '../fetch'
+import { PaginatedResponse } from '../types'
 
-export const useBets = (input: UserBetsSchema) => {
+export const useBets = (input: { userId: string; enabled?: boolean }) => {
   const { handleFetch, createQueryString } = useFetch()
 
-  const queryString = createQueryString(input)
+  return useInfiniteQuery<
+    GetBetsResponse,
+    Error,
+    PaginatedResponse<BetWithFixture>,
+    string[],
+    string | undefined
+  >({
+    queryKey: ['bets', input.userId],
+    queryFn: async ({ pageParam }) => {
+      const queryString = createQueryString({
+        cursor: pageParam,
+        userId: input.userId,
+      })
 
-  return useQuery<Bet[]>({
-    queryKey: ['bets', queryString],
-    queryFn: () => handleFetch<Bet[]>(`/bets?${queryString}`, { method: 'GET' }),
+      const response = await handleFetch<GetBetsResponse>(`/bets?${queryString}`)
+
+      return response
+    },
+    initialPageParam: undefined,
+    getNextPageParam: lastPage => lastPage.nextCursor,
+    enabled: input.enabled,
   })
 }

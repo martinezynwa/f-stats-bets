@@ -1,17 +1,15 @@
 import {
-  FixtureWithTeamDetails,
   FixturesBetsSchema,
   FixturesSchema,
-  FixturesWithBets,
+  FixtureWithBet,
+  FixtureWithTeamDetails,
 } from '@f-stats-bets/types'
 import { rawQueryArray } from '../../lib'
 
-export const getFixturesWithBets = async (
-  input: FixturesBetsSchema,
-): Promise<FixturesWithBets[]> => {
+export const getFixturesWithBets = async (input: FixturesBetsSchema): Promise<FixtureWithBet[]> => {
   const { dateFrom, dateTo, externalLeagueIds, season, userId, betCompetitionId } = input
 
-  const fixtures = await rawQueryArray<FixturesWithBets>(`
+  const fixtures = await rawQueryArray<FixtureWithBet>(`
     SELECT
       f.*,
       JSON_BUILD_OBJECT(

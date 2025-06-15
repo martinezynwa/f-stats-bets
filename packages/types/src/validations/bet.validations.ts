@@ -1,12 +1,13 @@
 import { z } from 'zod'
 import { BetResultType } from '../database.types'
+import { paginationProps } from './shared.validations'
 
-export const userBetsSchema = z.object({
-  userId: z.string(),
-  dateFrom: z.string(),
-  dateTo: z.string(),
-})
-export type UserBetsSchema = z.infer<typeof userBetsSchema>
+export const getBetsSchema = z
+  .object({
+    userId: z.string(),
+  })
+  .merge(paginationProps)
+export type GetBetsSchema = z.infer<typeof getBetsSchema>
 
 export const userBetsFromFixtureIdsSchema = z.object({
   userId: z.string(),

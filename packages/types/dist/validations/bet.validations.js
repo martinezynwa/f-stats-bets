@@ -1,13 +1,14 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.deleteBetSchema = exports.updateBetSchema = exports.createBetSchema = exports.userBetsFromFixtureIdsSchema = exports.userBetsSchema = void 0;
+exports.deleteBetSchema = exports.updateBetSchema = exports.createBetSchema = exports.userBetsFromFixtureIdsSchema = exports.getBetsSchema = void 0;
 const zod_1 = require("zod");
 const database_types_1 = require("../database.types");
-exports.userBetsSchema = zod_1.z.object({
+const shared_validations_1 = require("./shared.validations");
+exports.getBetsSchema = zod_1.z
+    .object({
     userId: zod_1.z.string(),
-    dateFrom: zod_1.z.string(),
-    dateTo: zod_1.z.string(),
-});
+})
+    .merge(shared_validations_1.paginationProps);
 exports.userBetsFromFixtureIdsSchema = zod_1.z.object({
     userId: zod_1.z.string(),
     dateFrom: zod_1.z.string(),

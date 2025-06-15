@@ -123,7 +123,7 @@ export const supportedLeagues: SupportedLeague = {
       variant: 'club',
       federation: FederationType.WORLD,
       organization: OrganizationType.FIFA,
-      seasons: [2023],
+      seasons: [2023, 2025],
     },
     {
       id: 10,

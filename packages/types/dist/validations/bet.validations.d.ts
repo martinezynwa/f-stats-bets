@@ -1,19 +1,20 @@
 import { z } from 'zod';
 import { BetResultType } from '../database.types';
-export declare const userBetsSchema: z.ZodObject<{
+export declare const getBetsSchema: z.ZodObject<z.objectUtil.extendShape<{
     userId: z.ZodString;
-    dateFrom: z.ZodString;
-    dateTo: z.ZodString;
-}, "strip", z.ZodTypeAny, {
+}, {
+    cursor: z.ZodOptional<z.ZodString>;
+    take: z.ZodOptional<z.ZodString>;
+}>, "strip", z.ZodTypeAny, {
     userId: string;
-    dateFrom: string;
-    dateTo: string;
+    cursor?: string | undefined;
+    take?: string | undefined;
 }, {
     userId: string;
-    dateFrom: string;
-    dateTo: string;
+    cursor?: string | undefined;
+    take?: string | undefined;
 }>;
-export type UserBetsSchema = z.infer<typeof userBetsSchema>;
+export type GetBetsSchema = z.infer<typeof getBetsSchema>;
 export declare const userBetsFromFixtureIdsSchema: z.ZodObject<{
     userId: z.ZodString;
     dateFrom: z.ZodString;

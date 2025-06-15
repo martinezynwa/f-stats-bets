@@ -37,9 +37,9 @@ POST {{baseUrl}}/insert-teams
 Content-Type: application/json
 
 {
-  "externalLeagueId": 32,
-  "season": 2024,
-  "leagueId": "bd1315b3-7cf3-44b1-84b9-28c4714b9bdb"
+  "externalLeagueId": 15,
+  "season": 2025,
+  "leagueId": "76a08ec0-cb96-41e2-84ec-079b3fd894aa"
 }
 
 ### Fetch fixtures
@@ -60,10 +60,10 @@ POST {{baseUrl}}/insert-fixtures
 Content-Type: application/json
 
 {
-  "externalLeagueIds": [5,32],
-  "season": 2024,
+  "externalLeagueIds": [15],
+  "season": 2025,
   "dateFrom": "2025-06-06",
-  "dateTo": "2025-06-12"
+  "dateTo": "2025-06-30"
 }
 
 

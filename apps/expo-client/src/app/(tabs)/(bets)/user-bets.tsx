@@ -1,7 +1,7 @@
-import { UserBets } from '@/components/Bets'
+import { UserBetsContainer } from '@/components/Bets'
 
 const UserBetsScreen = () => {
-  return <UserBets />
+  return <UserBetsContainer />
 }
 
 export default UserBetsScreen

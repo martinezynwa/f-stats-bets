@@ -1,13 +1,15 @@
 import { useEffect, useState } from 'react'
 
 import { useGlobalBetCompetitionId } from '@/api/bet-competition/bet-competition.queries'
+import { useBets } from '@/api/bet/bet.queries'
 import { useLeagues } from '@/api/league/league.queries'
 import { useSeasons } from '@/api/season/season.queries'
-import { useCatalogStore } from '@/store'
+import { useCatalogStore, useUserDataStore } from '@/store'
 
 export const usePreloadAppData = (enabled: boolean) => {
   const [initialLoaded, setInitialLoaded] = useState(false)
   const { setCatalogData } = useCatalogStore()
+  const { user } = useUserDataStore()
 
   const { isFetched: globalBetCompetitionIdFetched, error: globalBetCompetitionIdError } =
     useGlobalBetCompetitionId()
@@ -23,8 +25,13 @@ export const usePreloadAppData = (enabled: boolean) => {
 
   const { data: leagueData, isFetched: leaguesFetched, error: leaguesError } = useLeagues(enabled)
 
-  const isFetched = leaguesFetched && seasonsFetched && globalBetCompetitionIdFetched
-  const error = leaguesError || seasonsError || globalBetCompetitionIdError
+  const { isFetched: betsFetched, error: betsError } = useBets({
+    userId: user?.id!,
+    enabled,
+  })
+
+  const isFetched = leaguesFetched && seasonsFetched && globalBetCompetitionIdFetched && betsFetched
+  const error = leaguesError || seasonsError || globalBetCompetitionIdError || betsError
 
   useEffect(() => {
     if (isFetched && !initialLoaded) {

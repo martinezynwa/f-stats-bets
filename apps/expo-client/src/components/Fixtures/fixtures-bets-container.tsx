@@ -3,7 +3,7 @@ import { StyleSheet, View } from 'react-native'
 
 import { FixtureBetActions } from './fixture-bet-actions'
 import { FixtureItem } from './fixture-item'
-import { hasGameStarted } from './fixture.helpers'
+import { hasGameStarted } from './helpers'
 
 import { useFixturesWithBets } from '@/api'
 import { useGlobalBetCompetitionId } from '@/api/bet-competition/bet-competition.queries'

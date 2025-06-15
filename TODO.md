@@ -1,7 +1,6 @@
 ## TODO
 
-- [x] |CLIENT| Bet actions
-- [] |CLIENT| All user bets
+- [] |CLIENT| Bet result detail
 - [] |SERVER| mock setting up auth header when testing
 - [] |CLIENT| Fallback component
 - [] |CLIENT| Navbar styling
@@ -14,6 +13,10 @@
 - [] |SERVER| Make backend routes type safe
 
 ## Completed (0.0.1)
+- [x] |CLIENT| Bet actions
+
+- [x] |CLIENT| All user bets
+
 - [x] |CLIENT| Display fixtures with bets
 - [x] |CLIENT| Provide global BetCompetition
 
@@ -41,14 +44,3 @@
 - [x] |SERVER| Add username initialization
 - [x] |SERVER| Add login/logout
 - [x] |APP| Basic project setup
-
-# Notes
-Fixtures only
-- Fixture, Team
-
-Fixture and Bets
-- Fixture, Team, Bet(must be related to a specific User and to global BetCompetition)
-
-Fixture and Events
-- Fixture, Team
-- later add Player and Event
