@@ -10,6 +10,7 @@ DROP TABLE IF EXISTS "Season" CASCADE;
 DROP TABLE IF EXISTS "UserSettings" CASCADE;
 DROP TABLE IF EXISTS "User" CASCADE;
 DROP TABLE IF EXISTS "Log" CASCADE;
+DROP TABLE IF EXISTS "BetEvaluated" CASCADE;
 DROP TYPE IF EXISTS federation_type;
 DROP TYPE IF EXISTS organization_type;
 DROP TYPE IF EXISTS league_type;
@@ -271,6 +272,30 @@ ALTER TABLE "Bet" ADD CONSTRAINT "Bet_userId_fkey"
 ALTER TABLE "Bet" ADD CONSTRAINT "Bet_betCompetitionId_fkey" 
     FOREIGN KEY ("betCompetitionId") REFERENCES "BetCompetition"("betCompetitionId") ON DELETE CASCADE;
 
+CREATE TABLE IF NOT EXISTS "BetEvaluated" (
+    "id" UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    "betId" UUID UNIQUE NOT NULL,
+    "season" INTEGER NOT NULL,
+    "betCompetitionId" UUID NOT NULL,
+    "fixtureId" INTEGER NOT NULL,
+    "userId" UUID NOT NULL,
+    "fixtureResultPoints" FLOAT,
+    "fixtureGoalsPoints" FLOAT,
+    "fixtureHomeGoalsPoints" FLOAT,
+    "fixtureAwayGoalsPoints" FLOAT,
+    "fixtureScorersPoints" FLOAT,
+    "fixtureScorers" JSONB,
+    "fixtureScorersIncorrect" INTEGER,
+    "fixtureScorersCorrect" INTEGER,
+    "createdAt" TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
+    "updatedAt" TIMESTAMP WITH TIME ZONE
+);
+
+ALTER TABLE "BetEvaluated" ADD CONSTRAINT "BetEvaluated_betId_fkey" 
+    FOREIGN KEY ("betId") REFERENCES "Bet"("betId") ON DELETE CASCADE;
+ALTER TABLE "BetEvaluated" ADD CONSTRAINT "BetEvaluated_betCompetitionId_fkey" 
+    FOREIGN KEY ("betCompetitionId") REFERENCES "BetCompetition"("betCompetitionId") ON DELETE CASCADE;
+
 CREATE TABLE IF NOT EXISTS "Log" (
     "id" UUID PRIMARY KEY DEFAULT gen_random_uuid(),
     "userId" UUID,
@@ -296,3 +321,4 @@ ALTER TABLE "Bet" ENABLE ROW LEVEL SECURITY;
 ALTER TABLE "BetCompetition" ENABLE ROW LEVEL SECURITY;
 ALTER TABLE "BetCompetitionToLeague" ENABLE ROW LEVEL SECURITY;
 ALTER TABLE "Log" ENABLE ROW LEVEL SECURITY;
+ALTER TABLE "BetEvaluated" ENABLE ROW LEVEL SECURITY;

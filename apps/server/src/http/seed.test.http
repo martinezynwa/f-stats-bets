@@ -8,7 +8,12 @@ Content-Type: application/json
 
 {
    "tablesWithoutRelations": ["Season", "League", "Nation"],
-   "tablesWithRelations": ["Team"]
+   "tablesWithRelations": ["Team"],
+   "seasons": [2024,2025],
+   "fixtureExternalLeagueIds": [32,15,5],
+   "fixtureDateFrom": "2024-07-01",
+   "fixtureDateTo": "2025-06-30",
+   "shouldMockCustomData": true
 }
 
 ### Initialize Database

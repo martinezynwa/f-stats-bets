@@ -116,8 +116,11 @@ export const InfiniteList = ({
 
 const styles = StyleSheet.create({
   outerHeader: {
-    paddingBottom: 16,
-    paddingLeft: 4,
+    paddingLeft: 6,
+    backgroundColor: Colors.listHeader,
+    borderTopStartRadius: 8,
+    borderTopEndRadius: 8,
+    paddingVertical: 8,
   },
   innerHeader: {
     flexDirection: 'row',
@@ -132,7 +135,7 @@ const styles = StyleSheet.create({
   itemContainer: {
     paddingVertical: 8,
     paddingHorizontal: 12,
-    backgroundColor: Colors.box,
+    backgroundColor: Colors.listContainer,
   },
   deleteButton: {
     position: 'absolute',

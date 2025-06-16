@@ -105,6 +105,24 @@ export interface BetCompetitionToLeague {
     betCompetitionId: string;
     leagueId: string;
 }
+export interface BetEvaluated {
+    betCompetitionId: string;
+    betId: string;
+    createdAt: Generated<Timestamp | null>;
+    fixtureAwayGoalsPoints: number | null;
+    fixtureGoalsPoints: number | null;
+    fixtureHomeGoalsPoints: number | null;
+    fixtureId: number;
+    fixtureResultPoints: number | null;
+    fixtureScorers: Json | null;
+    fixtureScorersCorrect: number | null;
+    fixtureScorersIncorrect: number | null;
+    fixtureScorersPoints: number | null;
+    id: Generated<string>;
+    season: number;
+    updatedAt: Timestamp | null;
+    userId: string;
+}
 export interface Fixture {
     awayTeamExternalId: number;
     awayTeamGoalsExtra: number | null;
@@ -228,6 +246,7 @@ export interface DB {
     Bet: Bet;
     BetCompetition: BetCompetition;
     BetCompetitionToLeague: BetCompetitionToLeague;
+    BetEvaluated: BetEvaluated;
     Fixture: Fixture;
     FixtureRound: FixtureRound;
     League: League;

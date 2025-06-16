@@ -1,5 +1,11 @@
+import {
+  seedBaseDataValidationSchema,
+  seedFromExternalApiValidationSchema,
+} from '@f-stats-bets/types'
 import { Request, Response, Router } from 'express'
-import { z } from 'zod'
+import { fetchFixtures } from 'src/services/external/external.fixture.service'
+import { upsertFixtures } from 'src/services/fixture/fixture.service.mutations'
+import { mockCustomData } from 'src/services/mock/mock.service.mutations'
 import { validateRequest, validateRequestWithBody } from '../lib'
 import {
   initDatabase,
@@ -8,29 +14,6 @@ import {
   seedDatabaseFromExternalApi,
   seedRelationDataFromCsv,
 } from '../services/seed/seed.service.mutations'
-
-export const seedValidationSchema = z.object({
-  leagueIds: z.array(z.string()).optional(),
-  season: z.number().optional(),
-})
-export type SeedValidationSchema = z.infer<typeof seedValidationSchema>
-
-export const seedBaseDataValidationSchema = z.object({
-  tablesWithRelations: z.array(z.string()).optional(),
-  tablesWithoutRelations: z.array(z.string()).optional(),
-})
-export type SeedBaseDataValidationSchema = z.infer<typeof seedBaseDataValidationSchema>
-
-export const seedFromExternalApiValidationSchema = z.object({
-  seasons: z.array(z.number()),
-  dateFrom: z.string(),
-  dateTo: z.string(),
-})
-
-export type SeedFromExternalApiValidationSchema = z.infer<
-  typeof seedFromExternalApiValidationSchema
->
-
 const router = Router()
 
 //router.use(requireAuth)
@@ -38,10 +21,21 @@ const router = Router()
 router.post(
   '/init-all',
   validateRequestWithBody(async (req: Request, res: Response) => {
-    const { tablesWithoutRelations, tablesWithRelations } = req.body
+    const {
+      tablesWithoutRelations,
+      tablesWithRelations,
+      shouldMockCustomData,
+      seasons,
+      fixtureExternalLeagueIds,
+      fixtureDateFrom,
+      fixtureDateTo,
+    } = req.body
+
+    const shouldAddFixtures =
+      seasons && fixtureExternalLeagueIds && fixtureDateFrom && fixtureDateTo
 
     await initDatabase()
-    await initUsersWithSettings()
+    const userData = await initUsersWithSettings()
 
     if (tablesWithoutRelations && tablesWithoutRelations.length > 0) {
       await seedDatabaseFromCsv(tablesWithoutRelations)
@@ -51,7 +45,28 @@ router.post(
       await seedRelationDataFromCsv(tablesWithRelations)
     }
 
-    res.json({ text: 'Database initialized' })
+    if (shouldAddFixtures) {
+      for (const season of seasons) {
+        const externalFixturesData = await fetchFixtures({
+          externalLeagueIds: fixtureExternalLeagueIds,
+          season,
+          dateFrom: fixtureDateFrom,
+          dateTo: fixtureDateTo,
+        })
+
+        await upsertFixtures(externalFixturesData, season)
+      }
+    }
+
+    if (shouldAddFixtures && shouldMockCustomData) {
+      await mockCustomData({ ...req.body, userId: userData.parsedUserData[0].providerId })
+    }
+
+    const responseText = `Database initialized ${shouldAddFixtures ? '| Fixtures added' : ''} ${
+      shouldMockCustomData ? '| Custom data mocked' : ''
+    }`.trim()
+
+    res.json({ responseText })
   }, seedBaseDataValidationSchema),
 )
 

@@ -72,6 +72,7 @@ export interface DatabaseTypes {
   Bet: Selectable<DB['Bet']>
   BetCompetition: Selectable<DB['BetCompetition']>
   BetCompetitionToLeague: Selectable<DB['BetCompetitionToLeague']>
+  BetEvaluated: Selectable<DB['BetEvaluated']>
   Fixture: Selectable<DB['Fixture']>
   FixtureRound: Selectable<DB['FixtureRound']>
   League: Selectable<DB['League']>
@@ -94,6 +95,10 @@ export type UpdateBetCompetition = Updateable<DB['BetCompetition']>
 export type BetCompetitionToLeague = Selectable<DB['BetCompetitionToLeague']>
 export type InsertBetCompetitionToLeague = Insertable<DB['BetCompetitionToLeague']>
 export type UpdateBetCompetitionToLeague = Updateable<DB['BetCompetitionToLeague']>
+
+export type BetEvaluated = Selectable<DB['BetEvaluated']>
+export type InsertBetEvaluated = Insertable<DB['BetEvaluated']>
+export type UpdateBetEvaluated = Updateable<DB['BetEvaluated']>
 
 export type Fixture = Selectable<DB['Fixture']>
 export type InsertFixture = Insertable<DB['Fixture']>
