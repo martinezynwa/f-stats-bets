@@ -1,0 +1,15 @@
+@baseUrl = http://localhost:3001/bet-evaluate
+
+### Get evaluated bets
+GET {{baseUrl}}?dateFrom=2025-06-17&dateTo=2025-06-18
+Content-Type: application/json
+
+
+### Evaluate bets
+POST {{baseUrl}}/evaluate
+Content-Type: application/json
+
+{
+  "dateFrom": "2025-06-17",
+  "dateTo": "2025-06-18"
+}

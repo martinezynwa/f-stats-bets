@@ -1,4 +1,4 @@
-import { Bet, Fixture } from '../../database.types'
+import { Bet, BetCompetition, Fixture } from '../../database.types'
 import { TeamDetailSimple } from '../fixture/fixture.types'
 
 export interface GetBetsResponse {
@@ -10,5 +10,11 @@ export interface GetBetsResponse {
 export type BetWithFixture = Bet & {
   HomeTeam: TeamDetailSimple
   AwayTeam: TeamDetailSimple
+  Fixture: Fixture
+}
+
+export type BetForEvaluation = {
+  Bet: Bet
+  BetCompetition: BetCompetition
   Fixture: Fixture
 }

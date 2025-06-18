@@ -4,3 +4,11 @@
 GET {{baseUrl}}?dateFrom=2025-05-01&dateTo=2025-05-08&userId=16d7a995-dd7a-4ddc-841a-572f4512a802
 Content-Type: application/json
 
+### Get bets for finished fixtures
+POST {{baseUrl}}/for-evaluation
+Content-Type: application/json
+
+{
+  "dateFrom": "2025-06-15",
+  "dateTo": "2025-06-15"
+}

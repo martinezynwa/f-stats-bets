@@ -1,13 +1,17 @@
-import { createBetSchema, getBetsSchema, updateBetSchema } from '@f-stats-bets/types'
+import {
+  createBetSchema,
+  getBetsForEvaluationSchema,
+  getBetsSchema,
+  updateBetSchema,
+} from '@f-stats-bets/types'
 import { Router } from 'express'
-import { requireAuth } from 'src/middleware'
 import { validateRequest, validateRequestWithBody, validateRequestWithParams } from '../lib'
 import { createBet, deleteBet, updateBet } from '../services/bet/bet.service.mutations'
-import { getBets } from '../services/bet/bet.service.queries'
+import { getBets, getBetsForEvaluation } from '../services/bet/bet.service.queries'
 
 const router = Router()
 
-router.use(requireAuth)
+//router.use(requireAuth)
 
 router.get(
   '/',
@@ -16,6 +20,15 @@ router.get(
 
     res.json(bets)
   }, getBetsSchema),
+)
+
+router.post(
+  '/for-evaluation',
+  validateRequestWithBody(async (req, res) => {
+    const bets = await getBetsForEvaluation(req.body)
+
+    res.json(bets)
+  }, getBetsForEvaluationSchema),
 )
 
 router.post(

@@ -1,13 +1,15 @@
 import {
   Bet,
+  BetForEvaluation,
   BetWithFixture,
+  FIXTURE_STATUS,
+  GetBetsForEvaluationSchema,
   GetBetsResponse,
   GetBetsSchema,
   UserBetsFromFixtureIdsSchema,
 } from '@f-stats-bets/types'
 import { TAKE_LIMIT } from 'src/constants/constants'
-import { db } from 'src/db'
-import { rawQueryArray } from '../../lib'
+import { rawQueryArray, rawQuerySingle } from '../../lib'
 
 export const getBets = async (input: GetBetsSchema): Promise<GetBetsResponse> => {
   const { userId, cursor, take } = input
@@ -67,11 +69,39 @@ export const getUserBetsFromFixtureIds = async (input: UserBetsFromFixtureIdsSch
 }
 
 export const getGlobalBetCompetitionId = async () => {
-  const betCompetitionId = await db
-    .selectFrom('BetCompetition')
-    .where('isGlobal', '=', true)
-    .select('betCompetitionId')
-    .executeTakeFirst()
+  const betCompetitionId = await rawQuerySingle<{ betCompetitionId: string }>(`
+    SELECT "betCompetitionId" 
+    FROM "BetCompetition"
+    WHERE "isGlobal" = true
+    LIMIT 1
+  `)
 
   return betCompetitionId?.betCompetitionId
+}
+
+/**
+ * Gets bets for evaluation based on either date range or specific fixture IDs
+ * @param input.dateFrom - Start date (required if fixtureIds not provided)
+ * @param input.dateTo - End date (required if fixtureIds not provided)
+ * @param input.fixtureIds - Array of fixture IDs in finished status to filter bets (required if dateFrom/dateTo not provided)
+ */
+export const getBetsForEvaluation = async (input: GetBetsForEvaluationSchema) => {
+  const { dateFrom, dateTo, fixtureIds } = input
+
+  const finishedFixtureStatuses = FIXTURE_STATUS.finished
+
+  const bets = await rawQueryArray<BetForEvaluation>(`
+    SELECT 
+      row_to_json(b.*) AS "Bet",
+      row_to_json(bc.*) AS "BetCompetition",
+      row_to_json(f.*) AS "Fixture"
+    FROM "Bet" b
+    INNER JOIN "Fixture" f ON b."fixtureId" = f."fixtureId"
+    INNER JOIN "BetCompetition" bc ON b."betCompetitionId" = bc."betCompetitionId"
+    WHERE f."status" IN (${finishedFixtureStatuses.map(status => `'${status}'`).join(',')})
+    ${dateFrom && dateTo ? `AND f."date"::date BETWEEN '${dateFrom}'::date AND '${dateTo}'::date` : ''}
+    ${fixtureIds && fixtureIds.length > 0 ? `AND f."fixtureId" IN (${fixtureIds.map(id => `'${id}'`).join(',')})` : ''}
+  `)
+
+  return bets
 }

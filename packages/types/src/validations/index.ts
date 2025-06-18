@@ -1,3 +1,4 @@
+export * from './bet-evaluate.validations'
 export * from './bet.validations'
 export * from './external.validations'
 export * from './fixture.validations'

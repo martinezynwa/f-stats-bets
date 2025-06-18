@@ -8,6 +8,7 @@ import {
 } from '@f-stats-bets/types'
 import { db } from 'src/db'
 import { END_OF_DAY, START_OF_DAY } from '../../constants/constants'
+import { evaluateBets } from '../bet-evaluate/bet-evalute.service.mutations'
 
 export const mockBets = async (input: MockBetsSchema) => {
   const { userId, dateFrom, dateTo, deletePreviousBets, betCompetitionId } = input
@@ -67,6 +68,7 @@ export const mockBetCompetitions = async (input: MockBetCompetitionsSchema) => {
     dateEnd: `${season + 1}-12-31`,
     playerLimit: 99,
     isGlobal: true,
+    fixtureResultPoints: 1,
   }
 
   const addedBetCompetition = await db
@@ -124,4 +126,9 @@ export const mockCustomData = async (input: SeedCustomDataSchema) => {
       betCompetitionId: addedBetCompetition.betCompetitionId,
     })
   }
+
+  await evaluateBets({
+    dateFrom: fixtureDateFrom!,
+    dateTo: fixtureDateTo!,
+  })
 }

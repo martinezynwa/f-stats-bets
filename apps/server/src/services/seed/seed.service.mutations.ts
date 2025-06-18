@@ -1,10 +1,16 @@
-import { InsertTeam, LeagueType, Team, User, UserSettings } from '@f-stats-bets/types'
+import {
+  InsertTeam,
+  LeagueType,
+  SeedFromExternalApiValidationSchema,
+  Team,
+  User,
+  UserSettings,
+} from '@f-stats-bets/types'
 import fs from 'fs'
 import { sql } from 'kysely'
 import path from 'path'
 import { getSupportedLeagues } from '../../assets/league-data'
 import { db } from '../../db'
-import { SeedFromExternalApiValidationSchema } from '../../routes/seed.routes'
 import { fetchFixtures } from '../external/external.fixture.service'
 import { fetchLeagueInfo } from '../external/external.league.service'
 import { fetchTeamsInfo } from '../external/external.team.service'

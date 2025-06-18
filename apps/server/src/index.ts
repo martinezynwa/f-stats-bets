@@ -2,8 +2,9 @@ import cors from 'cors'
 import dotenv from 'dotenv'
 import express, { NextFunction, Request, Response } from 'express'
 import { errorHandler } from './lib'
+import betCompetitionRouter from './routes/bet-competition.routes'
+import betEvaluateRouter from './routes/bet-evaluate.routes'
 import betsRouter from './routes/bet.routes'
-import betCompetitionRouter from './routes/betCompetition.routes'
 import externalRouter from './routes/external.routes'
 import fixturesRouter from './routes/fixture.routes'
 import leaguesRouter from './routes/league.routes'
@@ -30,6 +31,7 @@ app.use(express.json())
 
 app.use('/bets', betsRouter)
 app.use('/bet-competitions', betCompetitionRouter)
+app.use('/bet-evaluate', betEvaluateRouter)
 app.use('/external', externalRouter)
 app.use('/fixtures', fixturesRouter)
 app.use('/leagues', leaguesRouter)
