@@ -15,10 +15,13 @@ export const getBets = async (input: GetBetsSchema): Promise<GetBetsResponse> =>
   const { userId, cursor, take } = input
   const takeInput = Number(take) || TAKE_LIMIT
 
+  console.log('callawalla')
+
   const bets = await rawQueryArray<BetWithFixture>(`
     SELECT 
       b.*,
       row_to_json(f.*) AS "Fixture",
+      row_to_json(be.*) AS "BetEvaluated",
       JSON_BUILD_OBJECT(
         'id', ht.id,
         'name', ht.name,
@@ -34,6 +37,7 @@ export const getBets = async (input: GetBetsSchema): Promise<GetBetsResponse> =>
         'externalTeamId', at."externalTeamId"
       ) AS "AwayTeam"
     FROM "Bet" b
+    INNER JOIN "BetEvaluated" be ON b."betId" = be."betId"
     INNER JOIN "Fixture" f ON b."fixtureId" = f."fixtureId"
     INNER JOIN "Team" ht ON f."homeTeamId" = ht."id"
     INNER JOIN "Team" at ON f."awayTeamId" = at."id"

@@ -28,5 +28,6 @@
   "bets.bets": "Bets",
   "bets.tab.userBets": "My Bets",
   "bets.tab.betCompetitions": "Bet Competitions",
-  "bets.betResult.draw": "Draw"
+  "bets.betResult.draw": "Draw",
+  "bets.betDetail.fixtureResultBet": "Result"
 }

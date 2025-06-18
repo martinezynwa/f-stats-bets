@@ -1,7 +1,6 @@
 ## TODO
 
-
-- [] |CLIENT| Bet result detail
+- [] |CLIENT| Bet result detail UX improvements
 - [] |SERVER| mock setting up auth header when testing
 - [] |SERVER| Highlight eslint warnings | migrate to Biome?
 - [] |CLIENT| Fallback component
@@ -14,6 +13,8 @@
 - [] |SERVER| Make backend routes type safe
 
 ## Completed (0.0.1)
+- [x] |CLIENT| Bet result detail with evaluations
+
 - [x] |SERVER| evaluate Bets logic
 - [x] |SERVER| Mock bet results
 
