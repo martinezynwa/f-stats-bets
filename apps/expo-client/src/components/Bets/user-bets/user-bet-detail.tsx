@@ -38,7 +38,6 @@ export const UserBetDetail = ({ bet }: Props) => {
 
 const UserBetResult = ({ bet }: { bet: BetWithFixture }) => {
   const { t } = useTranslation()
-
   const result =
     bet.fixtureResultBet === 'HOME_WIN'
       ? bet.HomeTeam.name
@@ -51,11 +50,10 @@ const UserBetResult = ({ bet }: { bet: BetWithFixture }) => {
 
 const BetStatusIcon = ({ status }: { status: BetStatus }) => {
   const icons = {
-    success: <FontAwesome5 name='check-circle' size={24} color='green' />,
-    incorrect: <FontAwesome5 name='times-circle' size={24} color='red' />,
-    pending: <FontAwesome5 name='question-circle' size={24} color='gray' />,
+    success: <FontAwesome5 name='check-circle' size={18} color='#2ECC71' />,
+    incorrect: <FontAwesome5 name='times-circle' size={18} color='#FF5A5F' />,
+    pending: <FontAwesome5 name='question-circle' size={18} color='#A0A0A0' />,
   }
-
   return icons[status]
 }
 
@@ -71,7 +69,9 @@ const BetTypeText = ({ betType }: { betType: (typeof betKeys)[number] }) => {
 
 const styles = StyleSheet.create({
   container: {
-    paddingTop: 8,
+    paddingTop: 12,
+    paddingBottom: 8,
+    paddingLeft: 4,
   },
   row: {
     flexDirection: 'row',

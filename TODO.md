@@ -1,18 +1,22 @@
-## TODO
+## TODO FEATURE
 
-- [] |CLIENT| Bet result detail UX improvements
-- [] |SERVER| mock setting up auth header when testing
-- [] |SERVER| Highlight eslint warnings | migrate to Biome?
 - [] |CLIENT| Fallback component
-- [] |CLIENT| Navbar styling
-- [] |APP| Build Expo project
 - [] |SERVER| Implement job for fixtures
 - [] |SERVER| Implement fixture round logic for various league types
-- [] |CLIENT| optimistic response for bet actions
+
+## TODO APP
+
+- [] |SERVER| mock setting up auth header when testing
+- [] |APP| Build Expo project
+- [] |SERVER| Fix highlight eslint warnings | migrate to Biome?
 - [] |SERVER| Improve import intellisense
 - [] |SERVER| Make backend routes type safe
+- [] |CLIENT| optimistic response for bet actions
 
 ## Completed (0.0.1)
+- [x] |CLIENT| Bet result detail UX improvements
+- [x] |CLIENT| Navbar styling
+
 - [x] |CLIENT| Bet result detail with evaluations
 
 - [x] |SERVER| evaluate Bets logic

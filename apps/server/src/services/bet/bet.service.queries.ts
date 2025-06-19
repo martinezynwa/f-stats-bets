@@ -15,8 +15,6 @@ export const getBets = async (input: GetBetsSchema): Promise<GetBetsResponse> =>
   const { userId, cursor, take } = input
   const takeInput = Number(take) || TAKE_LIMIT
 
-  console.log('callawalla')
-
   const bets = await rawQueryArray<BetWithFixture>(`
     SELECT 
       b.*,

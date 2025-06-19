@@ -19,7 +19,7 @@ export const Colors = {
   text: '#CDCDCD',
   textFaded: '#666',
 
-  box: '#191919',
+  box: '#181818',
 
   submitButton: '#6F60EF',
   disabledButton: '#3B4553',

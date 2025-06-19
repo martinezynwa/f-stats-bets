@@ -60,7 +60,7 @@ export const InfiniteList = ({
         <View>
           {outerHeader && (
             <TouchableOpacity style={styles.outerHeader} onPress={onOuterHeaderPress}>
-              <Text fontWeight={600} variant='lg'>
+              <Text fontWeight={600} variant='xl'>
                 {outerHeader}
               </Text>
             </TouchableOpacity>
@@ -117,7 +117,6 @@ export const InfiniteList = ({
 const styles = StyleSheet.create({
   outerHeader: {
     paddingLeft: 6,
-    backgroundColor: Colors.listHeader,
     borderTopStartRadius: 8,
     borderTopEndRadius: 8,
     paddingVertical: 8,
@@ -134,16 +133,7 @@ const styles = StyleSheet.create({
   },
   itemContainer: {
     paddingVertical: 8,
-    paddingHorizontal: 12,
     backgroundColor: Colors.listContainer,
-  },
-  deleteButton: {
-    position: 'absolute',
-    right: -44,
-    width: 30,
-    height: '100%',
-    alignItems: 'center',
-    justifyContent: 'center',
   },
   loadingMore: {
     paddingVertical: 16,

@@ -31,7 +31,6 @@ export const UserBetsContainer = () => {
       <InfiniteList
         verticalSpace
         items={items}
-        outerHeader='User Bets'
         onItemPress={onItemPress}
         onEndReached={() => {
           if (hasNextPage && !isFetchingNextPage) {

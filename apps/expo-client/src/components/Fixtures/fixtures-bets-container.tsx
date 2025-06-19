@@ -58,7 +58,7 @@ export const FixturesBetsContainer = () => {
             headerText={league?.name}
             subText={league?.country}
           >
-            <View style={styles.fixtures}>
+            <View style={styles.fixturesContainer}>
               {fixtures?.map(fixture => {
                 const shouldDisplayBetButtons = !hasGameStarted(fixture.date)
 
@@ -83,7 +83,7 @@ export const FixturesBetsContainer = () => {
 }
 
 const styles = StyleSheet.create({
-  fixtures: {
+  fixturesContainer: {
     paddingHorizontal: 8,
     gap: 10,
   },

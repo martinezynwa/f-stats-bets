@@ -21,8 +21,8 @@ export const UserBetItem = ({ bet }: Props) => {
 
 const styles = StyleSheet.create({
   container: {
-    borderBottomWidth: 1,
-    borderBottomColor: Colors.listBottomBorder,
-    paddingBottom: 10,
+    backgroundColor: Colors.box,
+    borderRadius: 12,
+    padding: 6,
   },
 })
