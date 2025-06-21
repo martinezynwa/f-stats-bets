@@ -1,7 +1,7 @@
-import { BetCompetitions } from '@/components/Bets'
+import { BetCompetitionsContainer } from '@/components/Bets'
 
 const BetCompetitionsScreen = () => {
-  return <BetCompetitions />
+  return <BetCompetitionsContainer />
 }
 
 export default BetCompetitionsScreen

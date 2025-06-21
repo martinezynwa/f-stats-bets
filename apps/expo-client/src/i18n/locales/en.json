@@ -29,5 +29,12 @@
   "bets.tab.userBets": "My Bets",
   "bets.tab.betCompetitions": "Bet Competitions",
   "bets.betResult.draw": "Draw",
-  "bets.betDetail.fixtureResultBet": "Result"
+  "bets.betDetail.fixtureResultBet": "Result",
+
+  "bets.betCompetitions.global.title": "Global Competitions",
+  "bets.betCompetitions.global.description": "See your progress in global competitions",
+  "bets.betCompetitions.userCompetitions.title": "My Competitions",
+  "bets.betCompetitions.userCompetitions.description": "Competitions you have joined",
+  "bets.betCompetitions.createCompetition.title": "Create Competition",
+  "bets.betCompetitions.createCompetition.description": "Start a new competition"
 }
