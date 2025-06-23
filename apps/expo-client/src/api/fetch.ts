@@ -5,7 +5,7 @@ export const useFetch = () => {
   const toast = useToast()
 
   const createQueryString = (
-    params: Record<string, string | string[] | number | number[] | undefined>,
+    params: Record<string, string | string[] | number | number[] | boolean | undefined>,
   ) => {
     const parts: string[] = []
 

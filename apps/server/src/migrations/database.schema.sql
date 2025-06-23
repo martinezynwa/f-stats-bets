@@ -11,6 +11,7 @@ DROP TABLE IF EXISTS "UserSettings" CASCADE;
 DROP TABLE IF EXISTS "User" CASCADE;
 DROP TABLE IF EXISTS "Log" CASCADE;
 DROP TABLE IF EXISTS "BetEvaluated" CASCADE;
+DROP TABLE IF EXISTS "UserToBetCompetition" CASCADE;
 DROP TYPE IF EXISTS federation_type;
 DROP TYPE IF EXISTS organization_type;
 DROP TYPE IF EXISTS league_type;
@@ -211,8 +212,8 @@ CREATE TABLE IF NOT EXISTS "BetCompetition" (
     "season" INTEGER NOT NULL,
     "userId" UUID NOT NULL,
     "name" TEXT NOT NULL,
-    "dateStart" TEXT,
-    "dateEnd" TEXT,
+    "dateStart" TEXT NOT NULL,
+    "dateEnd" TEXT NOT NULL,
     "playerLimit" INTEGER NOT NULL,
     "private" BOOLEAN NOT NULL DEFAULT FALSE,
     "hasFinished" BOOLEAN NOT NULL DEFAULT FALSE,
@@ -235,6 +236,17 @@ CREATE TABLE IF NOT EXISTS "BetCompetition" (
 
 ALTER TABLE "BetCompetition" ADD CONSTRAINT "BetCompetition_userId_fkey" 
     FOREIGN KEY ("userId") REFERENCES "User"("id") ON DELETE CASCADE;
+
+CREATE TABLE IF NOT EXISTS "UserToBetCompetition" (
+    "userId" UUID NOT NULL,
+    "betCompetitionId" UUID NOT NULL,
+    PRIMARY KEY ("userId", "betCompetitionId")
+);
+
+ALTER TABLE "UserToBetCompetition" ADD CONSTRAINT "UserToBetCompetition_userId_fkey" 
+    FOREIGN KEY ("userId") REFERENCES "User"("id") ON DELETE CASCADE;
+ALTER TABLE "UserToBetCompetition" ADD CONSTRAINT "UserToBetCompetition_betCompetitionId_fkey" 
+    FOREIGN KEY ("betCompetitionId") REFERENCES "BetCompetition"("betCompetitionId") ON DELETE CASCADE;
 
 CREATE TABLE IF NOT EXISTS "BetCompetitionToLeague" (
     "betCompetitionId" UUID NOT NULL,
@@ -322,3 +334,4 @@ ALTER TABLE "BetCompetition" ENABLE ROW LEVEL SECURITY;
 ALTER TABLE "BetCompetitionToLeague" ENABLE ROW LEVEL SECURITY;
 ALTER TABLE "Log" ENABLE ROW LEVEL SECURITY;
 ALTER TABLE "BetEvaluated" ENABLE ROW LEVEL SECURITY;
+ALTER TABLE "UserToBetCompetition" ENABLE ROW LEVEL SECURITY;

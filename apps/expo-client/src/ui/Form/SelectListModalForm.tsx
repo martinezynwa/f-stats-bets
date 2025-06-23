@@ -7,8 +7,16 @@ import {
 } from '@gorhom/bottom-sheet'
 import React, { useRef } from 'react'
 import { Controller, useFormContext } from 'react-hook-form'
-import { ActivityIndicator, StyleSheet, TextInput, TouchableOpacity, View } from 'react-native'
+import {
+  ActivityIndicator,
+  ScrollView,
+  StyleSheet,
+  TextInput,
+  TouchableOpacity,
+  View,
+} from 'react-native'
 
+import { SubmitButton } from '../Components'
 import { Text } from '../Typography/Text'
 import { Colors } from '../colors'
 import { commonInputContainerStyle, commonInputLabelStyle, commonInputStyle } from '../styles'
@@ -16,10 +24,12 @@ import { commonInputContainerStyle, commonInputLabelStyle, commonInputStyle } fr
 import { FormText } from './FormText'
 
 export type SelectListItem = {
-  key: string
+  key: string | number
   value: string
   icon?: React.ReactNode
 }
+
+type SelectValue = string | number | (string | number)[] | undefined
 
 interface Props {
   name: string
@@ -29,9 +39,10 @@ interface Props {
   data: SelectListItem[]
   customSnapPoints?: string[]
   required?: boolean
-  customOnChange?: (value: string) => void
+  customOnChange?: (value: SelectValue) => void
   disabled?: boolean
   isLoading?: boolean
+  multiSelect?: boolean
 }
 
 export const SelectListModalForm = ({
@@ -45,19 +56,10 @@ export const SelectListModalForm = ({
   customOnChange,
   disabled,
   isLoading,
+  multiSelect = false,
 }: Props) => {
   const { control } = useFormContext()
   const bottomSheetRef = useRef<BottomSheetModal>(null)
-
-  const CustomBackdrop = (props: BottomSheetBackdropProps) => (
-    <BottomSheetBackdrop
-      {...props}
-      appearsOnIndex={0}
-      disappearsOnIndex={-1}
-      opacity={0.5}
-      style={[props.style, { backgroundColor: Colors.bottomSheetBlurred }]}
-    />
-  )
 
   const manipulateBottomSheet = (action: 'open' | 'close') => {
     if (action === 'open') {
@@ -67,15 +69,45 @@ export const SelectListModalForm = ({
     }
   }
 
-  const optionsMap = new Map(data.map(item => [item.key, item]))
+  const optionsMap = new Map(data.map(item => [item.key.toString(), item]))
+
+  const formatSelectedValue = (value: SelectValue) => {
+    if (!value) return placeholder
+    if (typeof value === 'string' || typeof value === 'number') {
+      return optionsMap.get(value.toString())?.value || placeholder
+    }
+    if (value.length > 1) return 'Multiple values selected'
+    return value.length === 1
+      ? optionsMap.get(value[0].toString())?.value || placeholder
+      : placeholder
+  }
 
   return (
     <Controller
       name={name}
       control={control}
       render={({ field: { onChange, value }, formState }) => {
-        const selectedItem = optionsMap.get(value)
-        const selectedValue = selectedItem ? selectedItem.value : placeholder
+        const handleItemPress = (key: string | number) => {
+          if (multiSelect) {
+            const currentValue = Array.isArray(value) ? value : []
+            const newValue = currentValue.includes(key)
+              ? currentValue.filter(k => k !== key)
+              : [...currentValue, key]
+            onChange(newValue)
+            customOnChange?.(newValue)
+          } else {
+            onChange(key)
+            customOnChange?.(key)
+            manipulateBottomSheet('close')
+          }
+        }
+
+        const handleConfirm = () => {
+          manipulateBottomSheet('close')
+        }
+
+        const displayValue = formatSelectedValue(value)
+        const selectedValues = Array.isArray(value) ? value : []
 
         return (
           <>
@@ -94,7 +126,7 @@ export const SelectListModalForm = ({
                 <View style={styles.inputRow}>
                   <TextInput
                     style={styles.input}
-                    value={selectedValue}
+                    value={displayValue}
                     placeholderTextColor={Colors.text}
                     editable={false}
                     pointerEvents='none'
@@ -104,7 +136,11 @@ export const SelectListModalForm = ({
                     {isLoading ? (
                       <ActivityIndicator size='small' color={Colors.indicatorIcon} />
                     ) : (
-                      <FontAwesome5 name='chevron-down' size={16} color={Colors.indicatorIcon} />
+                      <FontAwesome5
+                        name='chevron-down'
+                        size={16}
+                        color={disabled ? Colors.textFaded : Colors.indicatorIcon}
+                      />
                     )}
                   </View>
                 </View>
@@ -116,7 +152,15 @@ export const SelectListModalForm = ({
               index={1}
               snapPoints={customSnapPoints || ['80%']}
               enablePanDownToClose
-              backdropComponent={CustomBackdrop}
+              backdropComponent={(props: BottomSheetBackdropProps) => (
+                <BottomSheetBackdrop
+                  {...props}
+                  appearsOnIndex={0}
+                  disappearsOnIndex={-1}
+                  opacity={0.5}
+                  style={[props.style, { backgroundColor: Colors.bottomSheetBlurred }]}
+                />
+              )}
               backgroundStyle={{
                 backgroundColor: Colors.bottomSheetBackground,
               }}
@@ -129,26 +173,48 @@ export const SelectListModalForm = ({
                   {selectTitle}
                 </Text>
 
-                <View style={styles.listContainer}>
-                  {data.map(item => {
-                    const isItemSelected = item.key === value
+                <ScrollView style={styles.scrollContainer} showsVerticalScrollIndicator={false}>
+                  <View style={styles.listContainer}>
+                    {data.map(item => {
+                      const isItemSelected = multiSelect
+                        ? selectedValues.includes(item.key)
+                        : item.key === value
 
-                    return (
-                      <View
-                        key={item.key}
-                        style={[styles.listItem, isItemSelected && styles.listItemSelected]}
-                        onTouchStart={() => {
-                          customOnChange?.(item.key)
-                          onChange(item.key)
-                          manipulateBottomSheet('close')
-                        }}
-                      >
-                        {item.icon}
-                        <Text variant='md'>{item.value}</Text>
-                      </View>
-                    )
-                  })}
-                </View>
+                      return (
+                        <TouchableOpacity
+                          key={item.key}
+                          style={[
+                            styles.listItem,
+                            isItemSelected && !multiSelect && styles.listItemSelected,
+                          ]}
+                          onPress={() => handleItemPress(item.key)}
+                        >
+                          {multiSelect && (
+                            <View style={[styles.checkbox]}>
+                              {isItemSelected && (
+                                <FontAwesome5 name='check' size={12} color='#FFFFFF' />
+                              )}
+                            </View>
+                          )}
+                          {item.icon}
+                          <Text variant='md' fontWeight={isItemSelected ? 700 : 400}>
+                            {item.value}
+                          </Text>
+                        </TouchableOpacity>
+                      )
+                    })}
+                  </View>
+                </ScrollView>
+
+                {multiSelect && (
+                  <View style={{ width: '100%', marginBottom: 64 }}>
+                    <SubmitButton
+                      fullWidth
+                      title={`${selectedValues.length} items selected`}
+                      onPress={handleConfirm}
+                    />
+                  </View>
+                )}
               </BottomSheetView>
             </BottomSheetModal>
           </>
@@ -165,6 +231,11 @@ const styles = StyleSheet.create({
     alignItems: 'flex-start',
     justifyContent: 'flex-start',
     gap: 20,
+    width: '100%',
+  },
+  scrollContainer: {
+    width: '100%',
+    flex: 1,
   },
   inputContainer: commonInputContainerStyle,
   container: {
@@ -195,5 +266,14 @@ const styles = StyleSheet.create({
   listItemSelected: {
     backgroundColor: Colors.bottomSheetItemsSelected,
     borderRadius: 8,
+  },
+  checkbox: {
+    width: 22,
+    height: 22,
+    borderRadius: 4,
+    borderWidth: 2,
+    borderColor: Colors.bottomSheetItemsSelected,
+    alignItems: 'center',
+    justifyContent: 'center',
   },
 })

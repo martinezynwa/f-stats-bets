@@ -8,6 +8,7 @@ import {
 } from '@f-stats-bets/types'
 import { db } from 'src/db'
 import { END_OF_DAY, START_OF_DAY } from '../../constants/constants'
+import { createUserToBetCompetition } from '../bet-competition/bet-competition.service.mutations'
 import { evaluateBets } from '../bet-evaluate/bet-evalute.service.mutations'
 
 export const mockBets = async (input: MockBetsSchema) => {
@@ -87,6 +88,8 @@ export const mockBetCompetitions = async (input: MockBetCompetitionsSchema) => {
     .values(betCompetitionToLeague)
     .returningAll()
     .execute()
+
+  await createUserToBetCompetition(addedBetCompetition!.betCompetitionId, [userId])
 
   if (!addedBetCompetition) {
     throw new Error('Failed to create bet competition')

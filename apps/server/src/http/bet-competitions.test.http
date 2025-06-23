@@ -1,0 +1,9 @@
+@baseUrl = http://localhost:3001/bet-competitions
+
+### Get bet competitions
+GET {{baseUrl}}
+Content-Type: application/json
+
+### Get bet competition
+GET {{baseUrl}}/2c0c88ef-6066-4838-bcdf-5c2ab91d8494
+Content-Type: application/json

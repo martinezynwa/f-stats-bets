@@ -1,5 +1,7 @@
 import { z } from 'zod'
 
+export const COMMON_ERROR_TEXT = 'Value is required'
+
 export const datePeriodSchema = z.object({
   dateFrom: z.string().optional(),
   dateTo: z.string().optional(),

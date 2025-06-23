@@ -67,6 +67,7 @@ export interface DatabaseTypes {
     Team: Selectable<DB['Team']>;
     User: Selectable<DB['User']>;
     UserSettings: Selectable<DB['UserSettings']>;
+    UserToBetCompetition: Selectable<DB['UserToBetCompetition']>;
 }
 export type Bet = Selectable<DB['Bet']>;
 export type InsertBet = Insertable<DB['Bet']>;
@@ -107,3 +108,6 @@ export type UpdateUser = Updateable<DB['User']>;
 export type UserSettings = Selectable<DB['UserSettings']>;
 export type InsertUserSettings = Insertable<DB['UserSettings']>;
 export type UpdateUserSettings = Updateable<DB['UserSettings']>;
+export type UserToBetCompetition = Selectable<DB['UserToBetCompetition']>;
+export type InsertUserToBetCompetition = Insertable<DB['UserToBetCompetition']>;
+export type UpdateUserToBetCompetition = Updateable<DB['UserToBetCompetition']>;

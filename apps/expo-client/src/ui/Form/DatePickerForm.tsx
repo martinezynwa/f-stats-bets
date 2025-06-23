@@ -62,10 +62,10 @@ export const DatePickerForm = ({ name, label, mode, required }: Props) => {
             onChange={date => onChange(date.toISOString())}
             onConfirm={() => setShowPicker(false)}
             onCancel={() => setShowPicker(false)}
-            textColor={baseColors.white}
-            accentColor={baseColors.white}
-            buttonTextColorIOS={baseColors.white}
-            backdropStyleIOS={{ backgroundColor: '#18181A' }}
+            textColor={baseColors.black}
+            accentColor={baseColors.black}
+            buttonTextColorIOS={baseColors.black}
+            backdropStyleIOS={{ backgroundColor: Colors.background }}
           />
         </>
       )}

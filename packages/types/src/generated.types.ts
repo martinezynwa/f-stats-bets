@@ -102,8 +102,8 @@ export interface BetCompetition {
   competitionTopCleanSheetsPoints: number | null;
   competitionTopScorerPoints: number | null;
   createdAt: Generated<Timestamp | null>;
-  dateEnd: string | null;
-  dateStart: string | null;
+  dateEnd: string;
+  dateStart: string;
   fixtureResultPoints: number | null;
   hasFinished: Generated<boolean>;
   isGlobal: Generated<boolean>;
@@ -271,6 +271,11 @@ export interface UserSettings {
   userId: string;
 }
 
+export interface UserToBetCompetition {
+  betCompetitionId: string;
+  userId: string;
+}
+
 export interface DB {
   Bet: Bet;
   BetCompetition: BetCompetition;
@@ -285,4 +290,5 @@ export interface DB {
   Team: Team;
   User: User;
   UserSettings: UserSettings;
+  UserToBetCompetition: UserToBetCompetition;
 }

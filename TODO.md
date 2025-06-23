@@ -1,12 +1,9 @@
 ## TODO FEATURE
 
-
-- [] |CLIENT| Create Bet competition
-- [] |CLIENT| Bet competition detail
-- [] |CLIENT| Delete Bet competition
-- [] |CLIENT| Global competitions page
-- [] |CLIENT| My competitions page
+- [] |CLIENT| Bet competition standings
+- [] |CLIENT| type safe navigation
 - [] |CLIENT| Fallback component
+- [] |CLIENT| Header component
 - [] |SERVER| Implement job for fixtures
 - [] |SERVER| Implement fixture round logic for various league types
 
@@ -24,6 +21,12 @@
 
 
 ## Completed (0.0.1)
+
+- [x] |CLIENT| Create Bet competition
+- [x] |CLIENT| Global competitions page
+- [x] |CLIENT| My competitions page
+- [x] |CLIENT| Bet competition detail
+
 - [x] |CLIENT| Bet competitions initial page
 
 - [x] |CLIENT| Bet result detail UX improvements

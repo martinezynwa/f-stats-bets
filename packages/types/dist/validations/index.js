@@ -14,10 +14,12 @@ var __exportStar = (this && this.__exportStar) || function(m, exports) {
     for (var p in m) if (p !== "default" && !Object.prototype.hasOwnProperty.call(exports, p)) __createBinding(exports, m, p);
 };
 Object.defineProperty(exports, "__esModule", { value: true });
+__exportStar(require("./bet-competition.validations"), exports);
 __exportStar(require("./bet-evaluate.validations"), exports);
 __exportStar(require("./bet.validations"), exports);
 __exportStar(require("./external.validations"), exports);
 __exportStar(require("./fixture.validations"), exports);
+__exportStar(require("./league.validations"), exports);
 __exportStar(require("./mock.validations"), exports);
 __exportStar(require("./seed.validations"), exports);
 __exportStar(require("./shared.validations"), exports);

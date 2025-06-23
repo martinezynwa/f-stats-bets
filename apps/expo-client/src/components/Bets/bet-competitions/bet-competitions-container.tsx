@@ -1,42 +1,13 @@
 import Entypo from '@expo/vector-icons/Entypo'
 import { Pressable, StyleSheet, View } from 'react-native'
 
+import { useNavigate } from '@/hooks/useNavigate'
 import { useTranslation } from '@/i18n/useTranslation'
 import { APP_PADDING_TOP, Colors, ScrollViewWrapper, Text } from '@/ui'
 
 export const BetCompetitionsContainer = () => {
   const { t } = useTranslation()
-
-  const renderBox = (
-    title: string,
-    description: string,
-    iconName: keyof typeof Entypo.glyphMap,
-  ) => {
-    return (
-      <Pressable style={({ pressed }) => [styles.box, pressed && styles.boxPressed]}>
-        <View style={styles.boxContent}>
-          <View style={styles.textContainer}>
-            <View style={styles.titleContainer}>
-              <Entypo name={iconName} size={24} color={Colors.text} style={styles.titleIcon} />
-              <Text variant='xl' fontWeight={600}>
-                {title}
-              </Text>
-            </View>
-
-            <View style={styles.descriptionContainer}>
-              <Text style={styles.description} variant='md'>
-                {description}
-              </Text>
-            </View>
-          </View>
-        </View>
-
-        <View style={styles.arrowContainer}>
-          <Entypo name='chevron-right' size={32} color={Colors.text} style={styles.arrow} />
-        </View>
-      </Pressable>
-    )
-  }
+  const navigate = useNavigate()
 
   const items = [
     {
@@ -44,28 +15,62 @@ export const BetCompetitionsContainer = () => {
       title: t('bets.betCompetitions.global.title'),
       description: t('bets.betCompetitions.global.description'),
       icon: 'globe' as const,
-      link: '',
+      link: '/bet-competition/global',
     },
     {
       id: 2,
       title: t('bets.betCompetitions.userCompetitions.title'),
       description: t('bets.betCompetitions.userCompetitions.description'),
       icon: 'trophy' as const,
-      link: '',
+      link: '/bet-competition/joined',
     },
     {
       id: 3,
+      title: t('bets.betCompetitions.userCreatedCompetitions.title'),
+      description: t('bets.betCompetitions.userCreatedCompetitions.description'),
+      icon: 'user' as const,
+      link: '/bet-competition/user-created',
+    },
+    {
+      id: 4,
       title: t('bets.betCompetitions.createCompetition.title'),
       description: t('bets.betCompetitions.createCompetition.description'),
       icon: 'circle-with-plus' as const,
-      link: '',
+      link: '/bet-competition/create',
     },
   ]
 
   return (
     <ScrollViewWrapper>
       <View style={styles.container}>
-        {items.map(item => renderBox(item.title, item.description, item.icon))}
+        {items.map(item => (
+          <Pressable
+            key={item.id}
+            style={({ pressed }) => [styles.box, pressed && styles.boxPressed]}
+            onPress={() => navigate(item.link)}
+          >
+            <View style={styles.boxContent}>
+              <View style={styles.textContainer}>
+                <View style={styles.titleContainer}>
+                  <Entypo name={item.icon} size={24} color={Colors.text} style={styles.titleIcon} />
+                  <Text variant='lg' fontWeight={600}>
+                    {item.title}
+                  </Text>
+                </View>
+
+                <View style={styles.descriptionContainer}>
+                  <Text style={styles.description} variant='md'>
+                    {item.description}
+                  </Text>
+                </View>
+              </View>
+            </View>
+
+            <View style={styles.arrowContainer}>
+              <Entypo name='chevron-right' size={32} color={Colors.text} style={styles.arrow} />
+            </View>
+          </Pressable>
+        ))}
       </View>
     </ScrollViewWrapper>
   )
