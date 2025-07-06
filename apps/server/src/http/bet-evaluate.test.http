@@ -10,6 +10,6 @@ POST {{baseUrl}}/evaluate
 Content-Type: application/json
 
 {
-  "dateFrom": "2025-06-17",
-  "dateTo": "2025-06-18"
+  "dateFrom": "2025-06-01",
+  "dateTo": "2025-07-18"
 }

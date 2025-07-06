@@ -1,7 +1,7 @@
 import { z } from 'zod'
 
 export const mockBetsSchema = z.object({
-  userId: z.string(),
+  userIds: z.array(z.string()).optional(),
   dateFrom: z.string(),
   dateTo: z.string(),
   deletePreviousBets: z.boolean().optional(),
@@ -11,7 +11,7 @@ export const mockBetsSchema = z.object({
 export type MockBetsSchema = z.infer<typeof mockBetsSchema>
 
 export const mockBetCompetitionsSchema = z.object({
-  userId: z.string(),
+  userIds: z.array(z.string()).optional(),
   externalLeagueIds: z.array(z.number()),
   season: z.number(),
   name: z.string(),

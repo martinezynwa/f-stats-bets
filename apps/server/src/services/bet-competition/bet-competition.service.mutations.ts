@@ -37,7 +37,11 @@ export const createBetCompetitionToLeague = async (
 export const createUserToBetCompetition = async (betCompetitionId: string, userIds: string[]) => {
   const values = userIds.map(userId => ({ betCompetitionId, userId }))
 
-  const userToBetCompetition = await db.insertInto('UserToBetCompetition').values(values).execute()
+  const addedUserToBetCompetitionRelations = await db
+    .insertInto('UserToBetCompetition')
+    .values(values)
+    .returningAll()
+    .execute()
 
-  return userToBetCompetition
+  return addedUserToBetCompetitionRelations
 }

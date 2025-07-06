@@ -59,7 +59,10 @@ router.post(
     }
 
     if (shouldAddFixtures && shouldMockCustomData) {
-      await mockCustomData({ ...req.body, userId: userData.parsedUserData[0].providerId })
+      await mockCustomData({
+        ...req.body,
+        userIds: userData.parsedUserData.map(user => user.providerId),
+      })
     }
 
     const responseText = `Database initialized ${shouldAddFixtures ? '| Fixtures added' : ''} ${

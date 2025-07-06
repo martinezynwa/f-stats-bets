@@ -6,7 +6,6 @@ POST {{baseUrl}}/bet-competitions
 Content-Type: application/json
 
 {
-  "userId": "1308d56d-b0cf-42e9-871b-50d77d9e9e74",
   "externalLeagueIds": [15],
   "season": 2025,
   "name": "Test Competition",
@@ -18,11 +17,10 @@ POST {{baseUrl}}/bets
 Content-Type: application/json
 
 {
-  "userId": "1308d56d-b0cf-42e9-871b-50d77d9e9e74",
   "dateFrom": "2025-06-02",
-  "dateTo": "2025-06-30",
+  "dateTo": "2025-07-30",
   "deletePreviousBets": true,
-  "betCompetitionId": "a1eea478-2d5f-461a-a363-cb5132cbb52e"
+  "betCompetitionId": "430c0490-2f3d-4c43-81de-f5582affd1c5"
 }
 
 ### Test

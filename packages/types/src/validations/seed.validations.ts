@@ -21,7 +21,7 @@ export const seedCustomDataSchema = z.object({
   fixtureExternalLeagueIds: z.array(z.number()).optional(),
   fixtureDateFrom: z.string().optional(),
   fixtureDateTo: z.string().optional(),
-  userId: z.string().optional(),
+  userIds: z.array(z.string()).optional(),
   deletePrevious: z.boolean().optional(),
   betCompetitionName: z.string().optional(),
 })

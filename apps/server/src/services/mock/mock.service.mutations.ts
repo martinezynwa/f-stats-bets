@@ -12,7 +12,7 @@ import { createUserToBetCompetition } from '../bet-competition/bet-competition.s
 import { evaluateBets } from '../bet-evaluate/bet-evalute.service.mutations'
 
 export const mockBets = async (input: MockBetsSchema) => {
-  const { userId, dateFrom, dateTo, deletePreviousBets, betCompetitionId } = input
+  const { userIds: userIdsInput, dateFrom, dateTo, deletePreviousBets, betCompetitionId } = input
 
   const fixtures = await db
     .selectFrom('Fixture')
@@ -23,23 +23,30 @@ export const mockBets = async (input: MockBetsSchema) => {
 
   const fixtureIds = fixtures.map(fixture => fixture.fixtureId)
 
+  const userIds =
+    userIdsInput ?? (await db.selectFrom('User').select('id').execute()).map(user => user.id)
+
   if (deletePreviousBets) {
     await db
       .deleteFrom('Bet')
-      .where('userId', '=', userId)
+      .where('userId', 'in', userIds)
       .where('fixtureId', 'in', fixtureIds)
       .execute()
   }
 
-  const betsToInsert: InsertBet[] = fixtures.map(fixture => ({
-    fixtureId: fixture.fixtureId,
-    leagueId: fixture.leagueId,
-    season: fixture.season,
-    userId,
-    betCompetitionId,
-    fixtureResultBet:
-      Object.values(BetResultType)[Math.floor(Math.random() * Object.values(BetResultType).length)],
-  }))
+  const betsToInsert: InsertBet[] = userIds.flatMap(userId =>
+    fixtures.map(fixture => ({
+      fixtureId: fixture.fixtureId,
+      leagueId: fixture.leagueId,
+      season: fixture.season,
+      userId,
+      betCompetitionId,
+      fixtureResultBet:
+        Object.values(BetResultType)[
+          Math.floor(Math.random() * Object.values(BetResultType).length)
+        ],
+    })),
+  )
 
   const addedBets = await db.insertInto('Bet').values(betsToInsert).returningAll().execute()
 
@@ -47,12 +54,15 @@ export const mockBets = async (input: MockBetsSchema) => {
 }
 
 export const mockBetCompetitions = async (input: MockBetCompetitionsSchema) => {
-  const { userId, externalLeagueIds, season, name, deletePrevious } = input
+  const { userIds: userIdsInput, externalLeagueIds, season, name, deletePrevious } = input
 
   if (deletePrevious) {
     await db.deleteFrom('BetCompetitionToLeague').execute()
     await db.deleteFrom('BetCompetition').execute()
   }
+
+  const userIds =
+    userIdsInput ?? (await db.selectFrom('User').select('id').execute()).map(user => user.id)
 
   const leagues = await db
     .selectFrom('League')
@@ -61,7 +71,7 @@ export const mockBetCompetitions = async (input: MockBetCompetitionsSchema) => {
     .where('season', '=', season)
     .execute()
 
-  const betCompetitionToInsert: InsertBetCompetition = {
+  const betCompetitionsToInsert: InsertBetCompetition[] = userIds.map(userId => ({
     userId,
     season,
     name,
@@ -70,11 +80,11 @@ export const mockBetCompetitions = async (input: MockBetCompetitionsSchema) => {
     playerLimit: 99,
     isGlobal: true,
     fixtureResultPoints: 1,
-  }
+  }))
 
   const addedBetCompetition = await db
     .insertInto('BetCompetition')
-    .values(betCompetitionToInsert)
+    .values(betCompetitionsToInsert)
     .returningAll()
     .executeTakeFirst()
 
@@ -89,7 +99,10 @@ export const mockBetCompetitions = async (input: MockBetCompetitionsSchema) => {
     .returningAll()
     .execute()
 
-  await createUserToBetCompetition(addedBetCompetition!.betCompetitionId, [userId])
+  const addedUserToBetCompetitionRelations = await createUserToBetCompetition(
+    addedBetCompetition!.betCompetitionId,
+    userIds,
+  )
 
   if (!addedBetCompetition) {
     throw new Error('Failed to create bet competition')
@@ -98,12 +111,13 @@ export const mockBetCompetitions = async (input: MockBetCompetitionsSchema) => {
   return {
     addedBetCompetition,
     addedBetCompetitionToLeague,
+    addedUserToBetCompetitionRelations,
   }
 }
 
 export const mockCustomData = async (input: SeedCustomDataSchema) => {
   const {
-    userId,
+    userIds,
     fixtureExternalLeagueIds,
     seasons,
     fixtureDateFrom,
@@ -114,7 +128,7 @@ export const mockCustomData = async (input: SeedCustomDataSchema) => {
 
   for (const season of seasons) {
     const { addedBetCompetition } = await mockBetCompetitions({
-      userId: userId!,
+      userIds,
       externalLeagueIds: fixtureExternalLeagueIds!,
       season,
       name: betCompetitionName || `Test Bet Competition ${season}`,
@@ -122,7 +136,7 @@ export const mockCustomData = async (input: SeedCustomDataSchema) => {
     })
 
     await mockBets({
-      userId: userId!,
+      userIds,
       dateFrom: fixtureDateFrom!,
       dateTo: fixtureDateTo!,
       deletePreviousBets: deletePrevious,

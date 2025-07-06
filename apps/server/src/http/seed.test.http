@@ -2,16 +2,16 @@
 
 ### Initialize database fully
 # csv files are required for tables below
-# User, UserSettings, League, Nation, Season
+# User, UserSettings, League, Nation, Season, Team
 POST {{baseUrl}}/init-all
 Content-Type: application/json
 
 {
    "tablesWithoutRelations": ["Season", "League", "Nation"],
    "tablesWithRelations": ["Team"],
-   "seasons": [2024,2025],
-   "fixtureExternalLeagueIds": [15,345],
-   "fixtureDateFrom": "2024-07-01",
+   "seasons": [2025],
+   "fixtureExternalLeagueIds": [15],
+   "fixtureDateFrom": "2025-06-01",
    "fixtureDateTo": "2025-07-31",
    "shouldMockCustomData": true
 }

@@ -1,2 +1,6 @@
 name,avatar,providerId,providerName,providerAvatar,createdAt,updatedAt,isVerified
 TestUser,,1308d56d-b0cf-42e9-871b-50d77d9e9e74,test@email.com,,2025-04-05 21:08:12.132,,true
+RMFan,,1118d56d-b0cf-42e9-871b-50d77d9e9e75,rmfan@email.com,,2025-04-05 21:08:12.132,,true
+LFCFan,,2228d56d-b0cf-42e9-871b-50d77d9e9e76,lfc@email.com,,2025-04-05 21:08:12.132,,true
+Gunner,,3338d56d-b0cf-42e9-871b-50d77d9e9e77,gunner@email.com,,2025-04-05 21:08:12.132,,true
+Catalonian,,4448d56d-b0cf-42e9-871b-50d77d9e9e78,catalonian@email.com,,2025-04-05 21:08:12.132,,true
