@@ -20,6 +20,6 @@ seasonId,isActual,seasonStartDate,seasonEndDate,supportedLeagues,isSupported
 2020,false,2020,2021,{},
 2021,false,2021,2022,{},
 2022,false,2022,2023,{},
-2023,false,2023-06-27,2024-07-15,{},true
-2024,true,2024-07-08,2025-06-30,{},true
-2025,true,2025-07-10,2026-06-30,{},true
+2023,false,2023,2024,{},
+2024,false,2024,2025,{},
+2025,true,2025-07-01,2026-06-30,{},true

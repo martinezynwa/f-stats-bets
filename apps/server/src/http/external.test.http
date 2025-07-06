@@ -1,5 +1,27 @@
 @baseUrl = http://localhost:3001/external
 
+
+### Fetch and insert Leagues, Team, Fixtures for single season
+## params - externalLeagueId, season
+POST {{baseUrl}}/init-leagues
+Content-Type: application/json
+
+{
+  "externalLeagueIds": [15],
+  "season": 2025
+}
+
+### Fetch and insert Leagues, Team, Fixtures for single season
+## need to have the league-data.ts file set
+## params - season
+POST {{baseUrl}}/init-supported-leagues
+Content-Type: application/json
+
+{
+  "season": 2025
+}
+
+
 ### Fetch leagues
 ## params - externalLeagueId, season
 GET {{baseUrl}}/leagues
@@ -10,9 +32,9 @@ Content-Type: application/json
   "season": 2024
 }
 
-### Fetch and insert leagues
+### Fetch and insert league
 ## params - externalLeagueId, season
-POST {{baseUrl}}/insert-leagues
+POST {{baseUrl}}/insert-league
 Content-Type: application/json
 
 {

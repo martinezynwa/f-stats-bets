@@ -20,3 +20,16 @@ export const insertFixturesValidationSchema = z.object({
   dateTo: z.string(),
 })
 export type InsertFixturesValidationSchema = z.infer<typeof insertFixturesValidationSchema>
+
+export const initLeaguesValidationSchema = z.object({
+  externalLeagueIds: z.array(z.number()),
+  season: z.number(),
+})
+export type InitLeaguesValidationSchema = z.infer<typeof initLeaguesValidationSchema>
+
+export const initSupportedLeaguesValidationSchema = z.object({
+  season: z.number(),
+})
+export type InitSupportedLeaguesValidationSchema = z.infer<
+  typeof initSupportedLeaguesValidationSchema
+>

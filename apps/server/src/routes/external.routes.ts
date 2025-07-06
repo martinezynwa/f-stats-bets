@@ -2,6 +2,8 @@ import {
   insertFixturesValidationSchema,
   insertLeagueValidationSchema,
   insertTeamValidationSchema,
+  initSupportedLeaguesValidationSchema,
+  initLeaguesValidationSchema,
 } from '@f-stats-bets/types'
 import { Router } from 'express'
 import { db } from '../db'
@@ -13,9 +15,32 @@ import { upsertFixtures } from '../services/fixture/fixture.service.mutations'
 import { insertLeagueToDb } from '../services/league/league.service.mutations'
 import { insertTeamsToDb } from '../services/team/team.service.mutations'
 import { fetchFixturesValidationSchema } from './types'
+import { initLeagues } from '../services/external/external.service'
+import { getSupportedLeagues } from '../assets/league-data'
 const router = Router()
 
 //router.use(requireAuth)
+
+router.post(
+  '/init-leagues',
+  validateRequestWithBody(async (req, res) => {
+    const added = await initLeagues(req.body)
+
+    res.json(added)
+  }, initLeaguesValidationSchema),
+)
+
+router.post(
+  '/init-supported-leagues',
+  validateRequestWithBody(async (req, res) => {
+    const { season } = req.body
+
+    const leagues = getSupportedLeagues(season)
+    const added = await initLeagues({ externalLeagueIds: leagues.map(league => league.id), season })
+
+    res.json(added)
+  }, initSupportedLeaguesValidationSchema),
+)
 
 router.get(
   '/leagues',
@@ -29,7 +54,7 @@ router.get(
 )
 
 router.post(
-  '/insert-leagues',
+  '/insert-league',
   validateRequestWithBody(async (req, res) => {
     const { externalLeagueId, season } = req.body
 

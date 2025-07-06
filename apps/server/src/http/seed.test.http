@@ -10,9 +10,9 @@ Content-Type: application/json
    "tablesWithoutRelations": ["Season", "League", "Nation"],
    "tablesWithRelations": ["Team"],
    "seasons": [2024,2025],
-   "fixtureExternalLeagueIds": [32,15,5],
+   "fixtureExternalLeagueIds": [15,345],
    "fixtureDateFrom": "2024-07-01",
-   "fixtureDateTo": "2025-06-30",
+   "fixtureDateTo": "2025-07-31",
    "shouldMockCustomData": true
 }
 
@@ -34,7 +34,8 @@ POST {{baseUrl}}/seed-from-csv
 Content-Type: application/json
 
 {
-   "tablesWithRelations": ["Team"]
+   "tablesWithoutRelations": ["Season"],
+   "seasons": [2025]
 }
 
 ### Seed initial data for specific tables from external API

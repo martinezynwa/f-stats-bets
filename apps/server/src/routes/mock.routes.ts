@@ -1,7 +1,9 @@
 import { mockBetCompetitionsSchema, mockBetsSchema } from '@f-stats-bets/types'
 import { Router } from 'express'
-import { validateRequestWithBody } from '../lib'
+import { validateRequest, validateRequestWithBody } from '../lib'
 import { mockBetCompetitions, mockBets } from '../services/mock/mock.service.mutations'
+import { jsonToCsv } from '../lib/json-to-csv'
+import { db } from '../db'
 
 const router = Router()
 
@@ -25,15 +27,17 @@ router.post(
   }, mockBetCompetitionsSchema),
 )
 
-/* router.get(
+router.get(
   '/test',
   validateRequest(async (req, res) => {
+    const teamTemp = await db.selectFrom('Team').selectAll().execute()
+
     const order =
       'externalTeamId,season,externalLeagueId,name,code,country,logo,national,venue,createdAt,updatedAt,isForUnassigned'
     const csv = jsonToCsv(teamTemp, order)
 
     res.json(csv)
   }),
-) */
+)
 
 export default router
