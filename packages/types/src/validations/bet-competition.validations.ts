@@ -1,5 +1,5 @@
 import { z } from 'zod'
-import { COMMON_ERROR_TEXT } from './shared.validations'
+import { COMMON_ERROR_TEXT, paginationProps } from './shared.validations'
 
 export const createBetCompetitionSchema = z.object({
   season: z.number({ required_error: COMMON_ERROR_TEXT }),
@@ -30,3 +30,11 @@ export const getBetCompetitionSchema = z.object({
   id: z.string({ required_error: COMMON_ERROR_TEXT }),
 })
 export type GetBetCompetitionSchema = z.infer<typeof getBetCompetitionSchema>
+
+export const getBetCompetitionStandingsSchema = z.object({
+  betCompetitionId: z.string(),
+  page: z.string().optional(),
+  pageSize: z.string().optional(),
+})
+
+export type GetBetCompetitionStandingsSchema = z.infer<typeof getBetCompetitionStandingsSchema>

@@ -29,7 +29,8 @@ export const getBetsForEvaluationSchema = z
 export type GetBetsForEvaluationSchema = z.infer<typeof getBetsForEvaluationSchema>
 
 export const getBetEvaluatedSchema = z.object({
-  dateFrom: z.string(),
-  dateTo: z.string(),
+  dateFrom: z.string().optional(),
+  dateTo: z.string().optional(),
+  betCompetitionId: z.string().optional(),
 })
 export type GetBetEvaluatedSchema = z.infer<typeof getBetEvaluatedSchema>

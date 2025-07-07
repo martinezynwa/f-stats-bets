@@ -1,7 +1,7 @@
 @baseUrl = http://localhost:3001/bet-evaluate
 
 ### Get evaluated bets
-GET {{baseUrl}}?dateFrom=2025-06-17&dateTo=2025-06-18
+GET {{baseUrl}}?betCompetitionId=b07d38c5-6b72-4acd-8433-e872ea1882f6&dateFrom=2025-07-05&dateTo=2025-07-07
 Content-Type: application/json
 
 

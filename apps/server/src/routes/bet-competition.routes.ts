@@ -1,4 +1,9 @@
-import { createBetCompetitionSchema, getBetCompetitionsSchema } from '@f-stats-bets/types'
+import {
+  createBetCompetitionSchema,
+  getBetCompetitionsSchema,
+  getBetCompetitionStandingsSchema,
+  getUserNamesOfBetCompetitionSchema,
+} from '@f-stats-bets/types'
 import { Router } from 'express'
 import { requireAuth } from 'src/middleware'
 import { validateRequest, validateRequestWithBody, validateRequestWithParams } from '../lib'
@@ -10,13 +15,15 @@ import {
 import {
   getBetCompetition,
   getBetCompetitions,
+  getBetCompetitionStandings,
   getJoinedBetCompetitions,
+  getUserNamesOfBetCompetition,
 } from '../services/bet-competition/bet-competition.service.queries'
 import { getGlobalBetCompetitionId } from '../services/bet/bet.service.queries'
 
 const router = Router()
 
-router.use(requireAuth)
+//router.use(requireAuth)
 
 router.get(
   '/global',
@@ -50,11 +57,29 @@ router.get(
 )
 
 router.get(
+  '/standings',
+  validateRequestWithParams(async (req, res) => {
+    const data = await getBetCompetitionStandings(req.query)
+
+    res.json(data)
+  }, getBetCompetitionStandingsSchema),
+)
+
+router.get(
   '/:id',
   validateRequest(async (req, res) => {
     const betCompetition = await getBetCompetition(req.params.id)
 
     res.json(betCompetition)
+  }),
+)
+
+router.get(
+  '/:id/users',
+  validateRequest(async (req, res) => {
+    const users = await getUserNamesOfBetCompetition(req.params.id)
+
+    res.json(users)
   }),
 )
 

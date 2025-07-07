@@ -22,6 +22,8 @@
 
 ## Completed (0.0.1)
 
+- [x] |CLIENT| Mock data with many users
+
 - [x] |CLIENT| Create Bet competition
 - [x] |CLIENT| Global competitions page
 - [x] |CLIENT| My competitions page

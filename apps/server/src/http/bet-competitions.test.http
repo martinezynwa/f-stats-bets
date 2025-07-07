@@ -7,3 +7,11 @@ Content-Type: application/json
 ### Get bet competition
 GET {{baseUrl}}/2c0c88ef-6066-4838-bcdf-5c2ab91d8494
 Content-Type: application/json
+
+### Get bet competition standings
+GET {{baseUrl}}/standings?betCompetitionId=b07d38c5-6b72-4acd-8433-e872ea1882f6
+Content-Type: application/json
+
+### Get bet competition users
+GET {{baseUrl}}/b07d38c5-6b72-4acd-8433-e872ea1882f6/users
+Content-Type: application/json

@@ -1,5 +1,15 @@
-import { BetCompetitionWithLeagues, GetBetCompetitionsSchema } from '@f-stats-bets/types'
+import {
+  BetCompetitionWithLeagues,
+  GetBetCompetitionsSchema,
+  GetBetCompetitionStandingsSchema,
+  GetUserNamesOfBetCompetitionSchema,
+  User,
+  UserWithName,
+} from '@f-stats-bets/types'
 import { rawQueryArray, rawQuerySingle } from '../../lib'
+import { getPaginationInfo } from '../../lib/pagination'
+import { getBetsEvaluated } from '../bet-evaluate/bet-evaluate.service.queries'
+import { countPointsForStandings } from './bet-competition.service.helpers'
 
 export const getBetCompetitions = async (input: GetBetCompetitionsSchema) => {
   const { userId, isGlobal, isPrivate } = input
@@ -49,4 +59,44 @@ export const getBetCompetition = async (id: string) => {
   `)
 
   return betCompetition
+}
+
+export const getUserNamesOfBetCompetition = async (betCompetitionId: string) => {
+  const users = await rawQueryArray<UserWithName>(`
+    SELECT 
+      u."providerId" as "userId",
+      u."name"
+    FROM "User" u
+    INNER JOIN "UserToBetCompetition" ubc ON u."id" = ubc."userId"
+    WHERE ubc."betCompetitionId" = '${betCompetitionId}'
+  `)
+
+  return users
+}
+
+export const getBetCompetitionStandings = async (input: GetBetCompetitionStandingsSchema) => {
+  const { betCompetitionId } = input
+
+  const betsEvaluated = await getBetsEvaluated({ betCompetitionId })
+
+  const countedAndSorted = countPointsForStandings(betsEvaluated)
+
+  const users = await getUserNamesOfBetCompetition(betCompetitionId)
+  const usersMap = new Map(users.map(user => [user.userId, user.name]))
+
+  const updatedArray = countedAndSorted.map(({ userId, fixtureResultPoints }, index) => ({
+    userId,
+    userName: usersMap.get(userId),
+    position: index + 1,
+    points: fixtureResultPoints || 0,
+  }))
+
+  const { startIndex, endIndex, totalPages, totalItems } = getPaginationInfo({
+    totalItems: updatedArray.length,
+    ...input,
+  })
+
+  const items = updatedArray.slice(startIndex, endIndex)
+
+  return { items, totalPages, totalItems, users }
 }

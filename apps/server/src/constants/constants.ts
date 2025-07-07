@@ -1,4 +1,5 @@
 export const TAKE_LIMIT = 10
+export const TABLE_PAGE_SIZE = 10
 export const TOTAL_STATS_ID = '999999999'
 export const TOTAL_STATS_ID_INT = 999999999
 export const RANKING_ELIGIBILITY_THRESHOLD = 0.5

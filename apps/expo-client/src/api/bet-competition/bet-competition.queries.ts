@@ -1,4 +1,8 @@
-import { BetCompetitionWithLeagues, GetBetCompetitionsSchema } from '@f-stats-bets/types'
+import {
+  BetCompetitionStandingsResponse,
+  BetCompetitionWithLeagues,
+  GetBetCompetitionsSchema,
+} from '@f-stats-bets/types'
 import { useQuery } from '@tanstack/react-query'
 
 import { useFetch } from '../fetch'
@@ -20,7 +24,7 @@ export const useBetCompetitions = (input: GetBetCompetitionsSchema) => {
   const queryString = createQueryString(input)
 
   return useQuery<BetCompetitionWithLeagues[]>({
-    queryKey: ['bet-competitions', queryString],
+    queryKey: [baseUrl, queryString],
     queryFn: () =>
       handleFetch<BetCompetitionWithLeagues[]>(`${baseUrl}?${queryString}`, { method: 'GET' }),
   })
@@ -30,7 +34,7 @@ export const useJoinedBetCompetitions = () => {
   const { handleFetch } = useFetch()
 
   return useQuery<BetCompetitionWithLeagues[]>({
-    queryKey: ['bet-competitions', 'joined'],
+    queryKey: [baseUrl, 'joined'],
     queryFn: () => handleFetch<BetCompetitionWithLeagues[]>(`${baseUrl}/joined`, { method: 'GET' }),
   })
 }
@@ -39,7 +43,20 @@ export const useBetCompetition = (id: string) => {
   const { handleFetch } = useFetch()
 
   return useQuery<BetCompetitionWithLeagues>({
-    queryKey: ['bet-competition', id],
+    queryKey: [baseUrl, 'bet-competition', id],
     queryFn: () => handleFetch<BetCompetitionWithLeagues>(`${baseUrl}/${id}`, { method: 'GET' }),
+  })
+}
+
+export const useBetCompetitionStandings = (betCompetitionId: string, page: number) => {
+  const { handleFetch, createQueryString } = useFetch()
+
+  return useQuery<BetCompetitionStandingsResponse>({
+    queryKey: [baseUrl, 'standings', betCompetitionId, page],
+    queryFn: async () => {
+      const queryString = createQueryString({ betCompetitionId, page })
+
+      return handleFetch<BetCompetitionStandingsResponse>(`${baseUrl}/standings?${queryString}`)
+    },
   })
 }
