@@ -20,9 +20,9 @@ import { insertTeamsToDb } from '../team/team.service.mutations'
 import { getAssetPath, handleCsvSeed, parseCsv } from './seed.service.helpers'
 import { TableWithRelations, TableWithoutRelations } from './seed.service.types'
 
-export const initDatabase = async () => {
+export const initDatabase = async (dbSchemaPath?: string) => {
   try {
-    const schemaPath = path.join(__dirname, '../../migrations/database.schema.sql')
+    const schemaPath = path.join(__dirname, dbSchemaPath ?? '../../migrations/database.schema.sql')
     const schema = fs.readFileSync(schemaPath, 'utf8')
     await sql.raw(schema).execute(db)
     return { success: true }
@@ -125,10 +125,14 @@ export const seedDatabaseFromExternalApi = async (input: SeedFromExternalApiVali
   await db.deleteFrom('Fixture').where('season', 'in', seasons).execute()
   await db.deleteFrom('Team').where('season', 'in', seasons).execute()
   await db.deleteFrom('League').where('season', 'in', seasons).execute()
-  await db.deleteFrom('Season').where('seasonId', 'in', seasons).execute()
 
   for (const season of seasons) {
     const leagues = getSupportedLeagues(season)
+
+    // eslint-disable-next-line no-console
+    console.log(
+      `Fetching data for ${leagues.length} leagues [${leagues.map(l => l.name).join(', ')}] of season ${season}`,
+    )
 
     for (const league of leagues) {
       const leagueData = await fetchLeagueInfo(league.id, season)

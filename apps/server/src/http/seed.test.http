@@ -3,17 +3,36 @@
 ### Initialize database fully
 # csv files are required for tables below
 # User, UserSettings, League, Nation, Season, Team
-POST {{baseUrl}}/init-all
+POST {{baseUrl}}/init-all-tables-from-csv
 Content-Type: application/json
 
 {
-   "tablesWithoutRelations": ["Season", "League", "Nation"],
-   "tablesWithRelations": ["Team"],
    "seasons": [2025],
    "fixtureExternalLeagueIds": [15],
    "fixtureDateFrom": "2025-06-01",
    "fixtureDateTo": "2025-07-31",
-   "shouldMockCustomData": true
+   "shouldMockBetData": true
+}
+
+### Seed initial data for specific tables from csv files
+# Options: League, Nation, Season
+POST {{baseUrl}}/init-specific-tables-from-csv
+Content-Type: application/json
+
+{
+   "tablesWithoutRelations": ["Season"],
+   "seasons": [2025]
+}
+
+### Seed all data from external API
+# User, UserSettings, Season and Nation must be provided from csv files
+POST {{baseUrl}}/init-all-from-external-api
+Content-Type: application/json
+
+{
+   "seasons": [2025],
+   "dateFrom": "2025-08-01",
+   "dateTo": "2026-06-30"
 }
 
 ### Initialize Database
@@ -26,24 +45,6 @@ Content-Type: application/json
 POST {{baseUrl}}/init-users
 Content-Type: application/json
 
-{}
+{} 
 
-### Seed initial data for specific tables from csv files
-# Options: League, Nation, Season
-POST {{baseUrl}}/seed-from-csv
-Content-Type: application/json
 
-{
-   "tablesWithoutRelations": ["Season"],
-   "seasons": [2025]
-}
-
-### Seed initial data for specific tables from external API
-POST {{baseUrl}}/seed-from-external-api
-Content-Type: application/json
-
-{
-   "seasons": [2025],
-   "dateFrom": "2024-07-01",
-   "dateTo": "2025-06-30"
-}

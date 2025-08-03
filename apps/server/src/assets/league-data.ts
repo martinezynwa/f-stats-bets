@@ -10,7 +10,7 @@ export type SupportedLeague = Record<
     seasons: number[]
     federation: FederationType
     organization: OrganizationType
-    disabled?: boolean
+    disabled: boolean
   }[]
 >
 
@@ -26,6 +26,7 @@ export const getSupportedLeagues = (season: number) =>
           federation: league.federation,
           type: league.type,
           organization: league.organization,
+          name: league.name,
         })),
       )
       .filter(league => league.season === season),
@@ -128,6 +129,7 @@ export const supportedLeagues: SupportedLeague = {
       federation: FederationType.WORLD,
       organization: OrganizationType.FIFA,
       seasons: [2025],
+      disabled: true,
     },
     {
       id: 10,
@@ -149,6 +151,7 @@ export const supportedLeagues: SupportedLeague = {
       federation: FederationType.EUROPE,
       organization: OrganizationType.UEFA,
       seasons: [2025],
+      disabled: true,
     },
     {
       id: 3,
@@ -158,6 +161,7 @@ export const supportedLeagues: SupportedLeague = {
       federation: FederationType.EUROPE,
       organization: OrganizationType.UEFA,
       seasons: [2025],
+      disabled: true,
     },
     {
       id: 848,
@@ -167,6 +171,7 @@ export const supportedLeagues: SupportedLeague = {
       federation: FederationType.EUROPE,
       organization: OrganizationType.UEFA,
       seasons: [2025],
+      disabled: true,
     },
     {
       id: 531,
@@ -176,6 +181,7 @@ export const supportedLeagues: SupportedLeague = {
       federation: FederationType.EUROPE,
       organization: OrganizationType.UEFA,
       seasons: [2025],
+      disabled: true,
     },
   ],
   England: [
@@ -187,6 +193,7 @@ export const supportedLeagues: SupportedLeague = {
       federation: FederationType.EUROPE,
       organization: OrganizationType.ENGLAND,
       seasons: [2025],
+      disabled: false,
     },
     {
       id: 45,
@@ -228,6 +235,7 @@ export const supportedLeagues: SupportedLeague = {
       federation: FederationType.EUROPE,
       organization: OrganizationType.GERMANY,
       seasons: [2025],
+      disabled: true,
     },
     {
       id: 81,
@@ -259,6 +267,7 @@ export const supportedLeagues: SupportedLeague = {
       federation: FederationType.EUROPE,
       organization: OrganizationType.SPAIN,
       seasons: [2025],
+      disabled: true,
     },
     {
       id: 143,
@@ -290,6 +299,7 @@ export const supportedLeagues: SupportedLeague = {
       federation: FederationType.EUROPE,
       organization: OrganizationType.ITALY,
       seasons: [2025],
+      disabled: true,
     },
     {
       id: 137,
@@ -321,6 +331,7 @@ export const supportedLeagues: SupportedLeague = {
       federation: FederationType.EUROPE,
       organization: OrganizationType.FRANCE,
       seasons: [2025],
+      disabled: true,
     },
     {
       id: 66,
@@ -352,6 +363,7 @@ export const supportedLeagues: SupportedLeague = {
       federation: FederationType.EUROPE,
       organization: OrganizationType.PORTUGAL,
       seasons: [2025],
+      disabled: true,
     },
     {
       id: 96,
@@ -393,6 +405,7 @@ export const supportedLeagues: SupportedLeague = {
       federation: FederationType.EUROPE,
       organization: OrganizationType.NETHERLANDS,
       seasons: [2025],
+      disabled: true,
     },
     {
       id: 90,
@@ -424,6 +437,7 @@ export const supportedLeagues: SupportedLeague = {
       federation: FederationType.EUROPE,
       organization: OrganizationType.BELGIUM,
       seasons: [2025],
+      disabled: true,
     },
     {
       id: 147,
@@ -455,6 +469,7 @@ export const supportedLeagues: SupportedLeague = {
       federation: FederationType.EUROPE,
       organization: OrganizationType.AUSTRIA,
       seasons: [2025],
+      disabled: true,
     },
     {
       id: 220,
@@ -476,6 +491,7 @@ export const supportedLeagues: SupportedLeague = {
       federation: FederationType.EUROPE,
       organization: OrganizationType.TURKEY,
       seasons: [2025],
+      disabled: true,
     },
     {
       id: 206,
@@ -507,6 +523,7 @@ export const supportedLeagues: SupportedLeague = {
       federation: FederationType.EUROPE,
       organization: OrganizationType.CZECH,
       seasons: [2025],
+      disabled: false,
     },
     {
       id: 347,

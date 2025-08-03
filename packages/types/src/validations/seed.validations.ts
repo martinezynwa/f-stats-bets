@@ -10,29 +10,39 @@ export const seedFromExternalApiValidationSchema = z.object({
   seasons: z.array(z.number()),
   dateFrom: z.string(),
   dateTo: z.string(),
+  shouldIgnoreBaseData: z.boolean().optional(),
 })
 
 export type SeedFromExternalApiValidationSchema = z.infer<
   typeof seedFromExternalApiValidationSchema
 >
 
-export const seedCustomDataSchema = z.object({
+export const seedAllTablesValidationSchema = z.object({
   seasons: z.array(z.number()),
   fixtureExternalLeagueIds: z.array(z.number()).optional(),
   fixtureDateFrom: z.string().optional(),
   fixtureDateTo: z.string().optional(),
   userIds: z.array(z.string()).optional(),
   deletePrevious: z.boolean().optional(),
-  betCompetitionName: z.string().optional(),
+  shouldMockBetData: z.boolean().optional(),
 })
+export type SeedAllTablesValidationSchema = z.infer<typeof seedAllTablesValidationSchema>
 
-export type SeedCustomDataSchema = z.infer<typeof seedCustomDataSchema>
-
-export const seedBaseDataValidationSchema = z
+export const seedSpecificTablesValidationSchema = z
   .object({
-    tablesWithRelations: z.array(z.string()).optional(),
     tablesWithoutRelations: z.array(z.string()).optional(),
-    shouldMockCustomData: z.boolean().optional(),
+    tablesWithRelations: z.array(z.string()).optional(),
   })
-  .merge(seedCustomDataSchema)
-export type SeedBaseDataValidationSchema = z.infer<typeof seedBaseDataValidationSchema>
+  .refine(
+    data => {
+      return (
+        (data.tablesWithoutRelations?.length ?? 0) > 0 ||
+        (data.tablesWithRelations?.length ?? 0) > 0
+      )
+    },
+    {
+      message:
+        "At least one of 'tablesWithoutRelations' or 'tablesWithRelations' must be provided with at least one item",
+    },
+  )
+export type SeedSpecificTablesValidationSchema = z.infer<typeof seedSpecificTablesValidationSchema>

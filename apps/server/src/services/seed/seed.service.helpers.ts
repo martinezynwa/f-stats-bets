@@ -3,8 +3,8 @@ import path from 'path'
 import { db } from '../../db'
 import { TableWithRelations, TableWithoutRelations } from './seed.service.types'
 
-export const getAssetPath = (fileName: string) =>
-  path.join(__dirname, `../../assets/seed/${fileName}`)
+export const getAssetPath = (fileName: string, customPath?: string) =>
+  path.join(__dirname, customPath ? `${customPath}/${fileName}` : `../../assets/seed/${fileName}`)
 
 export const parseCsv = (filePath: string) => {
   const content = fs.readFileSync(filePath, 'utf8')

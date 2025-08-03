@@ -4,7 +4,7 @@ import {
   InsertBetCompetition,
   MockBetCompetitionsSchema,
   MockBetsSchema,
-  SeedCustomDataSchema,
+  SeedAllTablesValidationSchema,
 } from '@f-stats-bets/types'
 import { db } from 'src/db'
 import { END_OF_DAY, START_OF_DAY } from '../../constants/constants'
@@ -115,7 +115,7 @@ export const mockBetCompetitions = async (input: MockBetCompetitionsSchema) => {
   }
 }
 
-export const mockCustomData = async (input: SeedCustomDataSchema) => {
+export const mockBetData = async (input: SeedAllTablesValidationSchema) => {
   const {
     userIds,
     fixtureExternalLeagueIds,
@@ -123,7 +123,6 @@ export const mockCustomData = async (input: SeedCustomDataSchema) => {
     fixtureDateFrom,
     fixtureDateTo,
     deletePrevious,
-    betCompetitionName,
   } = input
 
   for (const season of seasons) {
@@ -131,7 +130,7 @@ export const mockCustomData = async (input: SeedCustomDataSchema) => {
       userIds,
       externalLeagueIds: fixtureExternalLeagueIds!,
       season,
-      name: betCompetitionName || `Test Bet Competition ${season}`,
+      name: `Bet Competition ${season}`,
       deletePrevious,
     })
 
