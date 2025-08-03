@@ -1,9 +1,9 @@
 import FontAwesome6 from '@expo/vector-icons/FontAwesome6'
 import { Redirect, Tabs } from 'expo-router'
-import React, { useCallback } from 'react'
+import React from 'react'
 
-import { scrollToTopEmitter } from '@/lib/scrollToTop'
 import { useAuth } from '@/providers/AuthProvider'
+import { useScroll } from '@/providers/ScrollProvider'
 import { Colors } from '@/ui/colors'
 
 type IconProps = {
@@ -23,10 +23,7 @@ const TabBarIcon = ({ name, color }: IconProps) => (
 
 export default function TabLayout() {
   const { session, authLoading } = useAuth()
-
-  const tabPress = useCallback(() => {
-    scrollToTopEmitter.emit('scrollToTop')
-  }, [])
+  const { scrollToTop } = useScroll()
 
   if (authLoading) {
     return null
@@ -88,7 +85,7 @@ export default function TabLayout() {
               />
             ),
           }}
-          listeners={{ tabPress }}
+          listeners={{ tabPress: () => scrollToTop() }}
         />
       ))}
     </Tabs>

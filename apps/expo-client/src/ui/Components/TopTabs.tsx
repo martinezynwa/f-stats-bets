@@ -4,7 +4,7 @@ import { TabBar, TabView } from 'react-native-tab-view'
 
 import { Colors } from '../colors'
 
-import { scrollToTopEmitter } from '@/lib/scrollToTop'
+import { useScroll } from '@/providers/ScrollProvider'
 
 interface Props {
   routes: { key: string; title: string }[]
@@ -14,10 +14,7 @@ interface Props {
 export const TopTabs = ({ routes, screens }: Props) => {
   const layout = useWindowDimensions()
   const [index, setIndex] = useState(0)
-
-  const handleTabPress = () => {
-    scrollToTopEmitter.emit('scrollToTop')
-  }
+  const { scrollToTop } = useScroll()
 
   return (
     <TabView
@@ -32,7 +29,7 @@ export const TopTabs = ({ routes, screens }: Props) => {
           style={{
             backgroundColor: Colors.topTabBarBackground,
           }}
-          onTabPress={handleTabPress}
+          onTabPress={() => scrollToTop()}
         />
       )}
     />

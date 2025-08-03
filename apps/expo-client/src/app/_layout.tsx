@@ -10,6 +10,7 @@ import { NotVerified } from '@/components/User/NotVerified'
 import { usePreloadAppData } from '@/hooks/usePreloadAppData'
 import { usePreloadUserData } from '@/hooks/usePreloadUserData'
 import '@/i18n'
+import { ScrollProvider } from '@/providers/ScrollProvider'
 import AuthProvider, { useAuth } from '@/providers/AuthProvider'
 import QueryProvider from '@/providers/QueryProvider'
 import { useUserDataStore } from '@/store'
@@ -19,7 +20,9 @@ export default function App() {
   return (
     <QueryProvider>
       <AuthProvider>
-        <AppContent />
+        <ScrollProvider>
+          <AppContent />
+        </ScrollProvider>
       </AuthProvider>
     </QueryProvider>
   )

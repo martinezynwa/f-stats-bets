@@ -4,8 +4,8 @@ import { RefreshControl, ScrollView, StyleSheet } from 'react-native'
 import { APP_PADDING_HORIZONTAL } from '../styles'
 
 import { RefetchFunction, useManualRefresh } from '@/hooks/useManualRefresh'
-import { useScrollToTop } from '@/hooks/useScrollToTop'
 import { OnScrollProps } from '@/lib/types'
+import { useRegisterScrollToTop } from '@/providers/ScrollProvider'
 
 interface Props extends PropsWithChildren, OnScrollProps {
   refetch?: RefetchFunction
@@ -16,7 +16,7 @@ export const ScrollViewWrapper = ({ children, refetch, onScroll }: Props) => {
 
   const scrollViewRef = useRef<ScrollView>(null)
 
-  useScrollToTop(scrollViewRef)
+  useRegisterScrollToTop(scrollViewRef)
 
   return (
     <ScrollView

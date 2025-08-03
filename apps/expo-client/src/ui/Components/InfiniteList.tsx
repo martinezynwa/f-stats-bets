@@ -15,7 +15,7 @@ import { Text } from '../Typography/Text'
 import { Colors } from '../colors'
 import { APP_PADDING_HORIZONTAL, APP_PADDING_TOP, PAGE_BOTTOM_PADDING } from '../styles'
 
-import { useScrollToTop } from '@/hooks/useScrollToTop'
+import { useRegisterScrollToTop } from '@/providers/ScrollProvider'
 
 export type ListItemType = {
   id: string
@@ -71,7 +71,7 @@ export const InfiniteList = ({
     setIsManualRefresh(false)
   }
 
-  useScrollToTop(listRef)
+  useRegisterScrollToTop(listRef)
 
   return (
     <FlashList
