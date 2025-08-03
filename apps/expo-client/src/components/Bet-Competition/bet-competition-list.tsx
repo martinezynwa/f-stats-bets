@@ -24,7 +24,7 @@ export const BetCompetitionList = ({ betCompetitions }: Props) => {
             <TouchableOpacity
               key={betCompetition.betCompetitionId}
               style={styles.competitionRow}
-              onPress={() => navigate(`/bet-competition/${betCompetitionId}/id`)}
+              onPress={() => navigate(`/bet-competition/${betCompetitionId}`)}
             >
               <View style={styles.rowContent}>
                 <Text variant='lg' style={styles.title}>

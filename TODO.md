@@ -1,14 +1,13 @@
 ## TODO FEATURE
 
-- [] |CLIENT| Bet competition standings
-- [] |CLIENT| type safe navigation
 - [] |CLIENT| Fallback component
-- [] |CLIENT| Header component
-- [] |SERVER| Implement job for fixtures
-- [] |SERVER| Implement fixture round logic for various league types
+- [] |CLIENT| type safe navigation
+- [] |SERVER| Implement job for fixture eval process
+- [] |SERVER| Implement job for fixture update
 
 ## TODO APP
 
+- [] |APP| Update versions
 - [] |SERVER| mock setting up auth header when testing
 - [] |APP| Build Expo project
 - [] |SERVER| Fix highlight eslint warnings | migrate to Biome?
@@ -21,6 +20,10 @@
 
 
 ## Completed (0.0.1)
+
+- [x] |CLIENT| Header component
+
+- [x] |CLIENT| Bet competition standings
 
 - [x] |CLIENT| Mock data with many users
 

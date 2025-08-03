@@ -23,7 +23,7 @@ import { getGlobalBetCompetitionId } from '../services/bet/bet.service.queries'
 
 const router = Router()
 
-//router.use(requireAuth)
+router.use(requireAuth)
 
 router.get(
   '/global',

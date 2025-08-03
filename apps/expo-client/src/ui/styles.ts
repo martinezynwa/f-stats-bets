@@ -29,4 +29,4 @@ export const commonInputStyle: TextStyle = {
 
 export const PAGE_BOTTOM_PADDING = 70
 export const APP_PADDING_HORIZONTAL = 8
-export const APP_PADDING_TOP = 12
+export const APP_PADDING_TOP = 16

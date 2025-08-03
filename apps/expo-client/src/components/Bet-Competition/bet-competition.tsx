@@ -3,11 +3,12 @@ import { StyleSheet, View } from 'react-native'
 
 import { useBetCompetition } from '@/api'
 import { useTranslation } from '@/i18n/useTranslation'
+import { OnScrollProps } from '@/lib/types'
 import { formatDateToFull } from '@/lib/util'
 import { useCatalogStore } from '@/store'
 import { Colors, ScrollViewWrapper, Text } from '@/ui'
 
-export const BetCompetition = () => {
+export const BetCompetition = ({ onScroll }: OnScrollProps) => {
   const { t } = useTranslation()
 
   const { id } = useLocalSearchParams()
@@ -114,7 +115,7 @@ export const BetCompetition = () => {
   ]
 
   return (
-    <ScrollViewWrapper>
+    <ScrollViewWrapper onScroll={onScroll}>
       <View style={styles.header}>
         <Text variant='xl' style={styles.title}>
           {name}

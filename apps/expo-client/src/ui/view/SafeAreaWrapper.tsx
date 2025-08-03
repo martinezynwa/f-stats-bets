@@ -7,7 +7,7 @@ import { APP_PADDING_HORIZONTAL } from '../styles'
 
 export const SafeAreaWrapper = ({ children }: PropsWithChildren) => {
   return (
-    <SafeAreaView edges={[]} style={styles.safeArea}>
+    <SafeAreaView edges={['top']} style={styles.safeArea}>
       {children}
     </SafeAreaView>
   )

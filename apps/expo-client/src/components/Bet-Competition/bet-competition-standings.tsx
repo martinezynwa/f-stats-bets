@@ -4,9 +4,10 @@ import { useState } from 'react'
 import { StyleSheet, View } from 'react-native'
 
 import { useBetCompetitionStandings } from '@/api'
+import { OnScrollProps } from '@/lib/types'
 import { ScrollViewWrapper, Table } from '@/ui'
 
-export const BetCompetitionStandings = () => {
+export const BetCompetitionStandings = ({ onScroll }: OnScrollProps) => {
   const { id } = useLocalSearchParams()
 
   const [filter, setFilter] = useState<{ page: number }>({ page: 1 })
@@ -17,7 +18,7 @@ export const BetCompetitionStandings = () => {
   if (!data || data.items.length === 0) return null
 
   return (
-    <ScrollViewWrapper refetch={() => refetch()}>
+    <ScrollViewWrapper onScroll={onScroll} refetch={() => refetch()}>
       <View style={styles.container}>
         <Table<TBetCompetitionStandings>
           data={data.items}

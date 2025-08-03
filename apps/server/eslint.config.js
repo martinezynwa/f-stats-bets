@@ -1,10 +1,13 @@
-import eslint from '@eslint/js'
-import tseslint from '@typescript-eslint/eslint-plugin'
-import tseslintParser from '@typescript-eslint/parser'
-import prettierConfig from 'eslint-config-prettier'
-import prettier from 'eslint-plugin-prettier'
+/* eslint-env node */
+/* eslint-disable no-undef */
 
-export default [
+const eslint = require('@eslint/js')
+const tseslint = require('@typescript-eslint/eslint-plugin')
+const tseslintParser = require('@typescript-eslint/parser')
+const prettierConfig = require('eslint-config-prettier')
+const prettier = require('eslint-plugin-prettier')
+
+module.exports = [
   eslint.configs.recommended,
   {
     files: ['**/*.ts'],
@@ -19,6 +22,10 @@ export default [
         process: true,
         console: true,
         fetch: true,
+        require: true,
+        __dirname: true,
+        __filename: true,
+        document: true,
       },
     },
     plugins: {
@@ -36,6 +43,7 @@ export default [
       'no-debugger': 'warn',
       'no-duplicate-imports': 'error',
       'no-unused-expressions': 'error',
+      'no-extra-boolean-cast': 'off',
 
       semi: ['error', 'never'],
       '@typescript-eslint/semi': ['error', 'never'],

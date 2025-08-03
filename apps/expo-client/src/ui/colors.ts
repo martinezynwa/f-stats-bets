@@ -15,6 +15,7 @@ export const Colors = {
   headerBack: '#FFFFFF',
 
   headerBackground: '#101112',
+  footerBackground: '#101112',
 
   text: '#CDCDCD',
   textFaded: '#666',
@@ -45,6 +46,8 @@ export const Colors = {
   topTabBarBackground: '#1A1A1A',
   topTabBarIndicator: '#A0A0A0',
   topTabBarText: '#FFFFFF',
+  tabBarActiveTintColor: '#E0E0E0',
+  tabBarInactiveTintColor: '#666666',
 
   toastBackground: '#1D1F30',
   toastTitle: '#CDCDCD',

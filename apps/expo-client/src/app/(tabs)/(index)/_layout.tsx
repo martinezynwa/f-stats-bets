@@ -1,15 +1,10 @@
-import { useTranslation } from '@/i18n/useTranslation'
-import { HeaderLayout, HorizontalDatePicker } from '@/ui'
+import { Stack } from 'expo-router'
 
 const HomeLayout = () => {
-  const { t } = useTranslation()
-
   return (
-    <HeaderLayout
-      name='index'
-      headerTitle={t('home.home')}
-      headerComponent={<HorizontalDatePicker />}
-    />
+    <Stack>
+      <Stack.Screen name='index' options={{ headerShown: false }} />
+    </Stack>
   )
 }
 

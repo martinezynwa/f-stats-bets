@@ -14,7 +14,6 @@ import {
   Form,
   ScrollViewWrapper,
   SelectListModalForm,
-  Text,
   TextFormInput,
 } from '@/ui'
 
@@ -64,9 +63,6 @@ export const CreateBetCompetition = () => {
       <Form form={form} onSubmit={form.handleSubmit(onSubmit)}>
         {({ SubmitButton }) => (
           <View style={styles.container}>
-            <Text variant='xl' fontWeight={600}>
-              Create a new competition
-            </Text>
             <TextFormInput required name='name' label='Name' type='text' />
 
             <DatePickerForm required label='Start date' name='dateStart' mode='datetime' />

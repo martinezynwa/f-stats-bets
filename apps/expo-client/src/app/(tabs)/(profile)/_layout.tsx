@@ -1,11 +1,10 @@
-import { useTranslation } from '@/i18n/useTranslation'
-import { HeaderLayout } from '@/ui'
+import { Stack } from 'expo-router'
 
 const ProfileLayout = () => {
-  const { t } = useTranslation()
-
   return (
-    <HeaderLayout name='profile' headerTitle={t('profile.profile')} largeHeader headerTransparent />
+    <Stack>
+      <Stack.Screen name='profile' options={{ headerShown: false }} />
+    </Stack>
   )
 }
 

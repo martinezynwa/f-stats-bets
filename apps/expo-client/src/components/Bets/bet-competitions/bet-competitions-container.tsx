@@ -3,9 +3,10 @@ import { Pressable, StyleSheet, View } from 'react-native'
 
 import { useNavigate } from '@/hooks/useNavigate'
 import { useTranslation } from '@/i18n/useTranslation'
+import { OnScrollProps } from '@/lib/types'
 import { APP_PADDING_TOP, Colors, ScrollViewWrapper, Text } from '@/ui'
 
-export const BetCompetitionsContainer = () => {
+export const BetCompetitionsContainer = ({ onScroll }: OnScrollProps) => {
   const { t } = useTranslation()
   const navigate = useNavigate()
 
@@ -41,7 +42,7 @@ export const BetCompetitionsContainer = () => {
   ]
 
   return (
-    <ScrollViewWrapper>
+    <ScrollViewWrapper onScroll={onScroll}>
       <View style={styles.container}>
         {items.map(item => (
           <Pressable

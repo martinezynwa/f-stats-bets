@@ -2,10 +2,8 @@ import { BottomSheetModalProvider } from '@gorhom/bottom-sheet'
 import { Stack } from 'expo-router'
 import * as SplashScreen from 'expo-splash-screen'
 import React, { useEffect } from 'react'
-import { Text, View } from 'react-native'
 import { GestureHandlerRootView } from 'react-native-gesture-handler'
 import { NotifierWrapper } from 'react-native-notifier'
-import { SafeAreaView } from 'react-native-safe-area-context'
 
 import { SignUpScreenComponent } from '@/components/Auth/SignUp'
 import { NotVerified } from '@/components/User/NotVerified'
@@ -15,7 +13,7 @@ import '@/i18n'
 import AuthProvider, { useAuth } from '@/providers/AuthProvider'
 import QueryProvider from '@/providers/QueryProvider'
 import { useUserDataStore } from '@/store'
-import { Colors, HeaderBack } from '@/ui'
+import { Colors, IntroSkeleton } from '@/ui'
 
 export default function App() {
   return (
@@ -58,37 +56,27 @@ function AppContent() {
     }
   }, [completelyLoaded])
 
-  if (!completelyLoaded) return <Loading />
+  if (!completelyLoaded) return <IntroSkeleton />
   if ((session && !!user && !user.isVerified) || (session && userNotFound)) return <NotVerified />
   if (userNotFound) return <SignUpScreenComponent />
 
   return (
-    <SafeAreaView edges={['top']} style={{ flex: 1, backgroundColor: Colors.background }}>
-      <GestureHandlerRootView>
-        <NotifierWrapper>
-          <BottomSheetModalProvider>
-            <Stack
-              screenOptions={{
-                headerShown: true,
-                headerLeft: ({ canGoBack }) => canGoBack && <HeaderBack />,
-                headerTitle: () => <></>,
-                headerStyle: { backgroundColor: Colors.background },
-                headerShadowVisible: false,
-              }}
-            >
-              <Stack.Screen name='(auth)' options={{ headerShown: false }} />
-              <Stack.Screen name='(tabs)' options={{ headerShown: false }} />
-              <Stack.Screen name='modal' options={{ presentation: 'modal' }} />
-            </Stack>
-          </BottomSheetModalProvider>
-        </NotifierWrapper>
-      </GestureHandlerRootView>
-    </SafeAreaView>
+    <GestureHandlerRootView>
+      <NotifierWrapper>
+        <BottomSheetModalProvider>
+          <Stack
+            screenOptions={{
+              headerShown: false,
+              headerStyle: { backgroundColor: Colors.background },
+              headerShadowVisible: false,
+            }}
+          >
+            <Stack.Screen name='(auth)' options={{ headerShown: false }} />
+            <Stack.Screen name='(tabs)' options={{ headerShown: false }} />
+            <Stack.Screen name='modal' options={{ presentation: 'modal' }} />
+          </Stack>
+        </BottomSheetModalProvider>
+      </NotifierWrapper>
+    </GestureHandlerRootView>
   )
 }
-
-const Loading = () => (
-  <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-    <Text style={{ color: Colors.text }}>Loading...</Text>
-  </View>
-)

@@ -64,5 +64,12 @@
   "bets.betCompetition.label.1stPlace": "1st Place",
   "bets.betCompetition.label.2ndPlace": "2nd Place",
   "bets.betCompetition.label.3rdPlace": "3rd Place",
-  "bets.betCompetition.label.4thPlace": "4th Place"
+  "bets.betCompetition.label.4thPlace": "4th Place",
+
+  "header.title.home": "Home",
+  "header.title.profile": "Profile",
+  "header.title.globalCompetitions": "Global Competitions",
+  "header.title.joinedCompetitions": "Joined Competitions",
+  "header.title.userCreatedCompetitions": "User Created Competitions",
+  "header.title.createCompetition": "Create a new competition"
 }

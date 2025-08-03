@@ -1,24 +1,33 @@
-import BetCompetitionsScreen from './bet-competitions'
-import UserBetsScreen from './user-bets'
-
-import { useTranslation } from '@/i18n/useTranslation'
-import { TabProps, TopTabs } from '@/ui/Components'
+import { BetCompetitionsContainer, UserBetsContainer } from '@/components/Bets'
+import { useAnimatedScroll } from '@/hooks/useAnimatedScroll'
+import { CollapsibleHeader, ScreenWrapper } from '@/ui'
+import { TopTabs } from '@/ui/Components'
 
 const BetsLayout = () => {
-  const { t } = useTranslation()
+  const { onScroll } = useAnimatedScroll()
 
-  const tabs: TabProps[] = [
-    {
-      name: t('bets.tab.userBets'),
-      component: UserBetsScreen,
-    },
-    {
-      name: t('bets.tab.betCompetitions'),
-      component: BetCompetitionsScreen,
-    },
+  const routes = [
+    { key: 'screen1', title: 'User Bets' },
+    { key: 'screen2', title: 'Bet Competitions' },
   ]
 
-  return <TopTabs tabs={tabs} />
+  return (
+    <ScreenWrapper>
+      {({ scrollOffsetY }) => (
+        <>
+          <CollapsibleHeader title='Bets' scrollOffsetY={scrollOffsetY} />
+
+          <TopTabs
+            routes={routes}
+            screens={{
+              screen1: () => <UserBetsContainer onScroll={onScroll(scrollOffsetY)} />,
+              screen2: () => <BetCompetitionsContainer />,
+            }}
+          />
+        </>
+      )}
+    </ScreenWrapper>
+  )
 }
 
 export default BetsLayout

@@ -4,10 +4,14 @@ import { StyleSheet, View } from 'react-native'
 import { UserBetItem } from './user-bet-item'
 
 import { useBets } from '@/api'
+import { useScrollToTop } from '@/hooks/useScrollToTop'
+import { OnScrollProps } from '@/lib/types'
 import { useUserDataStore } from '@/store'
-import { Colors, InfiniteList } from '@/ui'
+import { Colors, InfiniteList, ListItemType } from '@/ui'
 
-export const UserBetsContainer = () => {
+export const UserBetsContainer = ({ onScroll }: OnScrollProps) => {
+  const listRef = useScrollToTop<ListItemType>()
+
   const { user } = useUserDataStore()
   const { data, isLoading, isFetchingNextPage, hasNextPage, fetchNextPage, refetch } = useBets({
     userId: user?.id!,
@@ -29,6 +33,7 @@ export const UserBetsContainer = () => {
   return (
     <View style={styles.container}>
       <InfiniteList
+        ref={listRef}
         verticalSpace
         items={items}
         onItemPress={onItemPress}
@@ -39,7 +44,10 @@ export const UserBetsContainer = () => {
         }}
         isLoadingMore={isFetchingNextPage}
         isRefreshing={isFetchingNextPage}
-        onRefresh={refetch}
+        onRefresh={async () => {
+          await refetch()
+        }}
+        onScroll={onScroll}
       />
     </View>
   )

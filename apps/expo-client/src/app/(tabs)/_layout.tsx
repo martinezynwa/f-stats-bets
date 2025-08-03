@@ -1,7 +1,8 @@
 import FontAwesome6 from '@expo/vector-icons/FontAwesome6'
 import { Redirect, Tabs } from 'expo-router'
-import React from 'react'
+import React, { useCallback } from 'react'
 
+import { scrollToTopEmitter } from '@/hooks/useScrollToTop'
 import { useAuth } from '@/providers/AuthProvider'
 import { Colors } from '@/ui/colors'
 
@@ -20,8 +21,16 @@ const TabBarIcon = ({ name, color }: IconProps) => (
   <FontAwesome6 name={name} size={24} color={color} />
 )
 
+const allTabs = ['(index)', '(bets)', '(profile)']
+
 export default function TabLayout() {
   const { session, authLoading } = useAuth()
+
+  const handleTabPress = useCallback((name: string) => {
+    if (allTabs.includes(name)) {
+      scrollToTopEmitter.emit('scrollToTop')
+    }
+  }, [])
 
   if (authLoading) {
     return null
@@ -56,11 +65,18 @@ export default function TabLayout() {
         tabBarStyle: {
           borderTopWidth: 0,
           position: 'absolute',
-          backgroundColor: Colors.bottomNav,
+          backgroundColor: Colors.footerBackground,
+          paddingTop: 4,
         },
-        tabBarActiveTintColor: Colors.bottomNavActive,
-        tabBarInactiveTintColor: Colors.bottomNavInactive,
-        tabBarLabelStyle: { fontSize: 12 },
+        tabBarActiveTintColor: Colors.tabBarActiveTintColor,
+        tabBarInactiveTintColor: Colors.tabBarInactiveTintColor,
+        tabBarLabelStyle: {
+          fontSize: 12,
+          fontWeight: 'bold',
+        },
+        tabBarIconStyle: {
+          marginBottom: 2,
+        },
       }}
     >
       {tabs.map(({ name, label, iconName }) => (
@@ -72,9 +88,12 @@ export default function TabLayout() {
             tabBarIcon: ({ focused }) => (
               <TabBarIcon
                 name={iconName}
-                color={focused ? Colors.bottomNavActive : Colors.bottomNavInactive}
+                color={focused ? Colors.tabBarActiveTintColor : Colors.tabBarInactiveTintColor}
               />
             ),
+          }}
+          listeners={{
+            tabPress: () => handleTabPress(name),
           }}
         />
       ))}
