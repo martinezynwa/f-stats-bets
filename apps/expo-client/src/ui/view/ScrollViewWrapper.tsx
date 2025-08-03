@@ -1,10 +1,10 @@
-import { PropsWithChildren, useEffect, useRef } from 'react'
+import { PropsWithChildren, useRef } from 'react'
 import { RefreshControl, ScrollView, StyleSheet } from 'react-native'
 
 import { APP_PADDING_HORIZONTAL } from '../styles'
 
 import { RefetchFunction, useManualRefresh } from '@/hooks/useManualRefresh'
-import { scrollToTopEmitter } from '@/hooks/useScrollToTop'
+import { useScrollToTop } from '@/hooks/useScrollToTop'
 import { OnScrollProps } from '@/lib/types'
 
 interface Props extends PropsWithChildren, OnScrollProps {
@@ -16,17 +16,7 @@ export const ScrollViewWrapper = ({ children, refetch, onScroll }: Props) => {
 
   const scrollViewRef = useRef<ScrollView>(null)
 
-  useEffect(() => {
-    const handleScrollToTop = () => {
-      scrollViewRef.current?.scrollTo({ y: 0, animated: true })
-    }
-
-    scrollToTopEmitter?.on?.('scrollToTop', handleScrollToTop)
-
-    return () => {
-      scrollToTopEmitter?.off?.('scrollToTop', handleScrollToTop)
-    }
-  }, [])
+  useScrollToTop(scrollViewRef)
 
   return (
     <ScrollView

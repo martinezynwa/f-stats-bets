@@ -1,24 +1,32 @@
-import { EventEmitter } from 'events'
-
 import { FlashList } from '@shopify/flash-list'
-import { useRef, useEffect } from 'react'
+import { ReactNode, RefObject, useEffect } from 'react'
+import { ScrollView } from 'react-native'
 
-export const scrollToTopEmitter = new EventEmitter()
+import { scrollToTopEmitter } from '@/lib/scrollToTop'
 
-export const useScrollToTop = <T>() => {
-  const listRef = useRef<FlashList<T>>(null)
+type ListItemType = {
+  id: string
+  item?: ReactNode
+}
 
+type RefObjectType = FlashList<ListItemType> | ScrollView | null
+
+export const useScrollToTop = (ref: RefObject<RefObjectType>) => {
   useEffect(() => {
     const handleScrollToTop = () => {
-      listRef.current?.scrollToOffset({ offset: 0, animated: true })
+      if (ref.current) {
+        if ('scrollToOffset' in ref.current) {
+          ref.current.scrollToOffset({ offset: 0, animated: true })
+        } else {
+          ref.current.scrollTo({ y: 0, animated: true })
+        }
+      }
     }
 
-    scrollToTopEmitter?.on?.('scrollToTop', handleScrollToTop)
+    scrollToTopEmitter.on?.('scrollToTop', handleScrollToTop)
 
     return () => {
-      scrollToTopEmitter?.off?.('scrollToTop', handleScrollToTop)
+      scrollToTopEmitter.off?.('scrollToTop', handleScrollToTop)
     }
-  }, [])
-
-  return listRef
+  }, [ref])
 }

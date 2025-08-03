@@ -4,7 +4,7 @@ import { TabBar, TabView } from 'react-native-tab-view'
 
 import { Colors } from '../colors'
 
-import { scrollToTopEmitter } from '@/hooks/useScrollToTop'
+import { scrollToTopEmitter } from '@/lib/scrollToTop'
 
 interface Props {
   routes: { key: string; title: string }[]

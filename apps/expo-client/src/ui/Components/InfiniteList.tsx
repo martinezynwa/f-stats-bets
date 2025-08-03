@@ -1,6 +1,6 @@
 import FontAwesome5 from '@expo/vector-icons/FontAwesome5'
 import { FlashList } from '@shopify/flash-list'
-import { ReactNode, forwardRef, useState } from 'react'
+import { ReactNode, useRef, useState } from 'react'
 import {
   ActivityIndicator,
   NativeSyntheticEvent,
@@ -14,6 +14,8 @@ import {
 import { Text } from '../Typography/Text'
 import { Colors } from '../colors'
 import { APP_PADDING_HORIZONTAL, APP_PADDING_TOP, PAGE_BOTTOM_PADDING } from '../styles'
+
+import { useScrollToTop } from '@/hooks/useScrollToTop'
 
 export type ListItemType = {
   id: string
@@ -36,125 +38,120 @@ interface ListProps {
   contentInsetTop?: number
 }
 
-export const InfiniteList = forwardRef<FlashList<ListItemType>, ListProps>(
-  (
-    {
-      outerHeader,
-      innerHeader,
-      items,
-      onItemPress,
-      onOuterHeaderPress,
-      onInnerHeaderPress,
-      onEndReached,
-      isLoadingMore,
-      onRefresh,
-      isRefreshing = false,
-      verticalSpace,
-      onScroll,
-      contentInsetTop = 10,
-    },
-    ref,
-  ) => {
-    const [isManualRefresh, setIsManualRefresh] = useState(false)
+export const InfiniteList = ({
+  outerHeader,
+  innerHeader,
+  items,
+  onItemPress,
+  onOuterHeaderPress,
+  onInnerHeaderPress,
+  onEndReached,
+  isLoadingMore,
+  onRefresh,
+  isRefreshing = false,
+  verticalSpace,
+  onScroll,
+  contentInsetTop = 10,
+}: ListProps) => {
+  const listRef = useRef<FlashList<ListItemType>>(null)
+  const [isManualRefresh, setIsManualRefresh] = useState(false)
 
-    const handleScroll = (event: NativeSyntheticEvent<NativeScrollEvent>) => {
-      onScroll?.(event)
-    }
+  const handleScroll = (event: NativeSyntheticEvent<NativeScrollEvent>) => {
+    onScroll?.(event)
+  }
 
-    const handleEndReached = () => {
-      onEndReached?.()
-    }
+  const handleEndReached = () => {
+    onEndReached?.()
+  }
 
-    const handleRefresh = async () => {
-      if (!onRefresh) return
-      setIsManualRefresh(true)
-      await onRefresh()
-      setIsManualRefresh(false)
-    }
+  const handleRefresh = async () => {
+    if (!onRefresh) return
+    setIsManualRefresh(true)
+    await onRefresh()
+    setIsManualRefresh(false)
+  }
 
-    return (
-      <FlashList
-        ref={ref}
-        estimatedItemSize={50}
-        data={items}
-        keyExtractor={item => item.id}
-        onEndReached={handleEndReached}
-        onEndReachedThreshold={0.5}
-        showsVerticalScrollIndicator={false}
-        contentInsetAdjustmentBehavior='automatic'
-        onScroll={handleScroll}
-        scrollEventThrottle={5}
-        contentContainerStyle={{
-          paddingBottom: verticalSpace ? PAGE_BOTTOM_PADDING : 0,
-          paddingTop: contentInsetTop || (verticalSpace ? APP_PADDING_TOP : 0),
-          paddingHorizontal: APP_PADDING_HORIZONTAL,
-        }}
-        refreshControl={
-          onRefresh ? (
-            <RefreshControl
-              refreshing={isManualRefresh && isRefreshing}
-              onRefresh={handleRefresh}
-            />
-          ) : undefined
-        }
-        ListHeaderComponent={
-          <View>
-            {outerHeader && (
-              <TouchableOpacity style={styles.outerHeader} onPress={onOuterHeaderPress}>
-                <Text fontWeight={600} variant='xl'>
-                  {outerHeader}
-                </Text>
-              </TouchableOpacity>
-            )}
-            {innerHeader && (
-              <TouchableOpacity style={styles.innerHeader} onPress={onInnerHeaderPress}>
-                <Text color='gray' fontWeight={600}>
-                  {innerHeader}
-                </Text>
-                <FontAwesome5
-                  name='chevron-right'
-                  size={12}
-                  color={Colors.textFaded}
-                  style={styles.headerIcon}
-                />
-              </TouchableOpacity>
-            )}
+  useScrollToTop(listRef)
+
+  return (
+    <FlashList
+      ref={listRef}
+      estimatedItemSize={50}
+      data={items}
+      keyExtractor={item => item.id}
+      onEndReached={handleEndReached}
+      onEndReachedThreshold={0.5}
+      showsVerticalScrollIndicator={false}
+      contentInsetAdjustmentBehavior='automatic'
+      onScroll={handleScroll}
+      scrollEventThrottle={5}
+      contentContainerStyle={{
+        paddingBottom: verticalSpace ? PAGE_BOTTOM_PADDING : 0,
+        paddingTop: contentInsetTop || (verticalSpace ? APP_PADDING_TOP : 0),
+        paddingHorizontal: APP_PADDING_HORIZONTAL,
+      }}
+      refreshControl={
+        onRefresh ? (
+          <RefreshControl refreshing={isManualRefresh && isRefreshing} onRefresh={handleRefresh} />
+        ) : undefined
+      }
+      ListHeaderComponent={
+        <View>
+          {outerHeader && (
+            <TouchableOpacity style={styles.outerHeader} onPress={onOuterHeaderPress}>
+              <Text fontWeight={600} variant='xl'>
+                {outerHeader}
+              </Text>
+            </TouchableOpacity>
+          )}
+          {innerHeader && (
+            <TouchableOpacity style={styles.innerHeader} onPress={onInnerHeaderPress}>
+              <Text color='gray' fontWeight={600}>
+                {innerHeader}
+              </Text>
+              <FontAwesome5
+                name='chevron-right'
+                size={12}
+                color={Colors.textFaded}
+                style={styles.headerIcon}
+              />
+            </TouchableOpacity>
+          )}
+        </View>
+      }
+      ListFooterComponent={
+        isLoadingMore ? (
+          <View style={styles.loadingMore}>
+            <ActivityIndicator size='small' color={Colors.textFaded} />
           </View>
-        }
-        ListFooterComponent={
-          isLoadingMore ? (
-            <View style={styles.loadingMore}>
-              <ActivityIndicator size='small' color={Colors.textFaded} />
-            </View>
-          ) : null
-        }
-        renderItem={({ item, index }) => {
-          const isFirst = index === 0
-          const isLast = index === items.length - 1
+        ) : null
+      }
+      renderItem={({ item, index }) => {
+        const isFirst = index === 0
+        const isLast = index === items.length - 1
 
-          return (
-            <View
-              style={[
-                styles.itemContainer,
-                isFirst && styles.radiusTop,
-                isLast && styles.radiusBottom,
-              ]}
+        return (
+          <View
+            style={[
+              styles.itemContainer,
+              isFirst && styles.radiusTop,
+              isLast && styles.radiusBottom,
+            ]}
+          >
+            <TouchableOpacity
+              activeOpacity={1}
+              onPress={() => {
+                onItemPress?.(item.id)
+              }}
             >
-              <TouchableOpacity
-                activeOpacity={1}
-                onPress={() => {
-                  onItemPress?.(item.id)
-                }}
-              >
-                {item.item}
-              </TouchableOpacity>
-            </View>
-          )
-        }}
-      />
-    )
-  },
-)
+              {item.item}
+            </TouchableOpacity>
+          </View>
+        )
+      }}
+    />
+  )
+}
 
 const styles = StyleSheet.create({
   outerHeader: {
