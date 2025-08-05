@@ -1,20 +1,19 @@
 import { z } from 'zod'
 
 export const insertLeagueValidationSchema = z.object({
-  externalLeagueId: z.number(),
+  leagueId: z.number(),
   season: z.number(),
 })
 export type InsertLeagueValidationSchema = z.infer<typeof insertLeagueValidationSchema>
 
 export const insertTeamValidationSchema = z.object({
-  leagueId: z.string(),
-  externalLeagueId: z.number(),
+  leagueId: z.number(),
   season: z.number(),
 })
 export type InsertTeamValidationSchema = z.infer<typeof insertTeamValidationSchema>
 
 export const insertFixturesValidationSchema = z.object({
-  externalLeagueIds: z.array(z.number()),
+  leagueIds: z.array(z.number()),
   season: z.number(),
   dateFrom: z.string(),
   dateTo: z.string(),
@@ -22,7 +21,7 @@ export const insertFixturesValidationSchema = z.object({
 export type InsertFixturesValidationSchema = z.infer<typeof insertFixturesValidationSchema>
 
 export const initLeaguesValidationSchema = z.object({
-  externalLeagueIds: z.array(z.number()),
+  leagueIds: z.array(z.number()),
   season: z.number(),
 })
 export type InitLeaguesValidationSchema = z.infer<typeof initLeaguesValidationSchema>
@@ -33,3 +32,10 @@ export const initSupportedLeaguesValidationSchema = z.object({
 export type InitSupportedLeaguesValidationSchema = z.infer<
   typeof initSupportedLeaguesValidationSchema
 >
+
+export const insertPlayersValidationSchema = z.object({
+  leagueIds: z.array(z.number()).optional(),
+  teamIds: z.array(z.number()).optional(),
+  season: z.number(),
+})
+export type InsertPlayersValidationSchema = z.infer<typeof insertPlayersValidationSchema>

@@ -12,6 +12,9 @@ DROP TABLE IF EXISTS "User" CASCADE;
 DROP TABLE IF EXISTS "Log" CASCADE;
 DROP TABLE IF EXISTS "BetEvaluated" CASCADE;
 DROP TABLE IF EXISTS "UserToBetCompetition" CASCADE;
+DROP TABLE IF EXISTS "Player" CASCADE;
+DROP TABLE IF EXISTS "PlayerToTeam" CASCADE;
+DROP TABLE IF EXISTS "TeamToLeague" CASCADE;
 DROP TYPE IF EXISTS federation_type;
 DROP TYPE IF EXISTS organization_type;
 DROP TYPE IF EXISTS league_type;
@@ -105,9 +108,8 @@ CREATE TABLE IF NOT EXISTS "Season" (
 );
 
 CREATE TABLE IF NOT EXISTS "League" (
-    "id" UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    "leagueId" INTEGER PRIMARY KEY,
     "season" INTEGER NOT NULL,
-    "externalLeagueId" INTEGER NOT NULL,
     "countPlayerStats" BOOLEAN,
     "country" TEXT NOT NULL,
     "dateEnd" TEXT NOT NULL,
@@ -136,14 +138,9 @@ CREATE TABLE IF NOT EXISTS "Nation" (
 );
 
 CREATE TABLE IF NOT EXISTS "Team" (
-    "id" UUID PRIMARY KEY DEFAULT gen_random_uuid(),
-    "leagueId" UUID NOT NULL,
-    "season" INTEGER NOT NULL,
-    "externalLeagueId" INTEGER NOT NULL,
-    "externalTeamId" INTEGER NOT NULL,
+    "teamId" INTEGER PRIMARY KEY,
     "code" TEXT,
     "country" TEXT NOT NULL,
-    "isForUnassigned" BOOLEAN DEFAULT FALSE,
     "logo" TEXT,
     "name" TEXT NOT NULL,
     "national" BOOLEAN NOT NULL,
@@ -152,60 +149,63 @@ CREATE TABLE IF NOT EXISTS "Team" (
     "updatedAt" TIMESTAMP WITH TIME ZONE
 );
 
-ALTER TABLE "Team" ADD CONSTRAINT "Team_leagueId_fkey" 
-    FOREIGN KEY ("leagueId") REFERENCES "League"("id") ON DELETE CASCADE;
+CREATE TABLE IF NOT EXISTS "TeamToLeague" (
+    "teamId" INTEGER NOT NULL,
+    "season" INTEGER NOT NULL,
+    "leagueId" INTEGER NOT NULL,
+    PRIMARY KEY ("teamId", "season")
+);
+
+ALTER TABLE "TeamToLeague" ADD CONSTRAINT "TeamToLeague_teamId_fkey" 
+    FOREIGN KEY ("teamId") REFERENCES "Team"("teamId") ON DELETE CASCADE;
 
 CREATE TABLE IF NOT EXISTS "Fixture" (
     "fixtureId" INTEGER PRIMARY KEY,
-    "leagueId" UUID NOT NULL,
+    "leagueId" INTEGER NOT NULL,
     "season" INTEGER NOT NULL,
     "id" UUID DEFAULT gen_random_uuid(),
-    "externalLeagueId" INTEGER NOT NULL,
-    "awayTeamExternalId" INTEGER NOT NULL,
     "awayTeamGoalsExtra" INTEGER,
     "awayTeamGoalsFinish" INTEGER,
     "awayTeamGoalsHalf" INTEGER,
     "awayTeamGoalsPenalty" INTEGER,
-    "awayTeamId" UUID NOT NULL,
+    "awayTeamId" INTEGER NOT NULL,
     "date" TEXT NOT NULL,
     "elapsed" INTEGER,
     "fixtureRoundId" TEXT,
-    "homeTeamExternalId" INTEGER NOT NULL,
     "homeTeamGoalsExtra" INTEGER,
     "homeTeamGoalsFinish" INTEGER,
     "homeTeamGoalsHalf" INTEGER,
     "homeTeamGoalsPenalty" INTEGER,
-    "homeTeamId" UUID NOT NULL,
+    "homeTeamId" INTEGER NOT NULL,
     "referee" TEXT,
     "round" INTEGER NOT NULL,
     "status" TEXT NOT NULL,
-    "teamIdWon" TEXT,
+    "teamIdWon" INTEGER,
     "venue" TEXT,
     "createdAt" TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
     "updatedAt" TIMESTAMP WITH TIME ZONE
 );
 
 ALTER TABLE "Fixture" ADD CONSTRAINT "Fixture_leagueId_fkey" 
-    FOREIGN KEY ("leagueId") REFERENCES "League"("id") ON DELETE CASCADE;
+    FOREIGN KEY ("leagueId") REFERENCES "League"("leagueId") ON DELETE CASCADE;
 
 ALTER TABLE "Fixture" ADD CONSTRAINT "Fixture_homeTeamId_fkey"
-    FOREIGN KEY ("homeTeamId") REFERENCES "Team"("id") ON DELETE CASCADE;
+    FOREIGN KEY ("homeTeamId") REFERENCES "Team"("teamId") ON DELETE CASCADE;
 
 ALTER TABLE "Fixture" ADD CONSTRAINT "Fixture_awayTeamId_fkey"
-    FOREIGN KEY ("awayTeamId") REFERENCES "Team"("id") ON DELETE CASCADE;
+    FOREIGN KEY ("awayTeamId") REFERENCES "Team"("teamId") ON DELETE CASCADE;
 
 CREATE TABLE IF NOT EXISTS "FixtureRound" (
     "id" UUID PRIMARY KEY DEFAULT gen_random_uuid(),
-    "leagueId" UUID NOT NULL,
+    "leagueId" INTEGER NOT NULL,
     "season" INTEGER NOT NULL,
-    "externalLeagueId" INTEGER NOT NULL,
     "dateStarted" TEXT NOT NULL,
     "hasStarted" BOOLEAN NOT NULL DEFAULT FALSE,
     "round" INTEGER NOT NULL
 );
 
 ALTER TABLE "FixtureRound" ADD CONSTRAINT "FixtureRound_leagueId_fkey" 
-    FOREIGN KEY ("leagueId") REFERENCES "League"("id") ON DELETE CASCADE;
+    FOREIGN KEY ("leagueId") REFERENCES "League"("leagueId") ON DELETE CASCADE;
 
 CREATE TABLE IF NOT EXISTS "BetCompetition" (
     "betCompetitionId" UUID PRIMARY KEY DEFAULT gen_random_uuid(),
@@ -250,19 +250,19 @@ ALTER TABLE "UserToBetCompetition" ADD CONSTRAINT "UserToBetCompetition_betCompe
 
 CREATE TABLE IF NOT EXISTS "BetCompetitionToLeague" (
     "betCompetitionId" UUID NOT NULL,
-    "leagueId" UUID NOT NULL,
+    "leagueId" INTEGER NOT NULL,
     PRIMARY KEY ("betCompetitionId", "leagueId")
 );
 
 ALTER TABLE "BetCompetitionToLeague" ADD CONSTRAINT "BetCompetitionToLeague_betCompetitionId_fkey" 
     FOREIGN KEY ("betCompetitionId") REFERENCES "BetCompetition"("betCompetitionId") ON DELETE CASCADE;
 ALTER TABLE "BetCompetitionToLeague" ADD CONSTRAINT "BetCompetitionToLeague_leagueId_fkey" 
-    FOREIGN KEY ("leagueId") REFERENCES "League"("id") ON DELETE CASCADE;
+    FOREIGN KEY ("leagueId") REFERENCES "League"("leagueId") ON DELETE CASCADE;
 
 CREATE TABLE IF NOT EXISTS "Bet" (
     "betId" UUID PRIMARY KEY DEFAULT gen_random_uuid(),
     "fixtureId" INTEGER NOT NULL,
-    "leagueId" UUID NOT NULL,
+    "leagueId" INTEGER NOT NULL,
     "season" INTEGER NOT NULL,
     "userId" UUID NOT NULL,
     "betCompetitionId" UUID NOT NULL,
@@ -278,7 +278,7 @@ CREATE TABLE IF NOT EXISTS "Bet" (
 ALTER TABLE "Bet" ADD CONSTRAINT "Bet_fixtureId_fkey" 
     FOREIGN KEY ("fixtureId") REFERENCES "Fixture"("fixtureId") ON DELETE CASCADE;
 ALTER TABLE "Bet" ADD CONSTRAINT "Bet_leagueId_fkey" 
-    FOREIGN KEY ("leagueId") REFERENCES "League"("id") ON DELETE CASCADE;
+    FOREIGN KEY ("leagueId") REFERENCES "League"("leagueId") ON DELETE CASCADE;
 ALTER TABLE "Bet" ADD CONSTRAINT "Bet_userId_fkey" 
     FOREIGN KEY ("userId") REFERENCES "User"("id") ON DELETE CASCADE;
 ALTER TABLE "Bet" ADD CONSTRAINT "Bet_betCompetitionId_fkey" 
@@ -308,6 +308,30 @@ ALTER TABLE "BetEvaluated" ADD CONSTRAINT "BetEvaluated_betId_fkey"
 ALTER TABLE "BetEvaluated" ADD CONSTRAINT "BetEvaluated_betCompetitionId_fkey" 
     FOREIGN KEY ("betCompetitionId") REFERENCES "BetCompetition"("betCompetitionId") ON DELETE CASCADE;
 
+CREATE TABLE IF NOT EXISTS "Player" (
+    "playerId" INTEGER PRIMARY KEY,
+    "name" TEXT NOT NULL,
+    "firstName" TEXT NOT NULL,
+    "lastName" TEXT NOT NULL,
+    "age" INTEGER,
+    "birthDate" TEXT,
+    "birthCountry" TEXT,
+    "height" TEXT,
+    "weight" TEXT,
+    "photo" TEXT,
+    "createdAt" TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
+    "updatedAt" TIMESTAMP WITH TIME ZONE
+);
+
+CREATE TABLE IF NOT EXISTS "PlayerToTeam" (
+    "playerId" INTEGER NOT NULL,
+    "teamId" INTEGER NOT NULL,
+    "season" INTEGER NOT NULL,
+    PRIMARY KEY ("playerId", "teamId", "season"),
+    FOREIGN KEY ("playerId") REFERENCES "Player"("playerId") ON DELETE CASCADE,
+    FOREIGN KEY ("teamId") REFERENCES "Team"("teamId") ON DELETE CASCADE
+);
+
 CREATE TABLE IF NOT EXISTS "Log" (
     "id" UUID PRIMARY KEY DEFAULT gen_random_uuid(),
     "userId" UUID,
@@ -335,3 +359,6 @@ ALTER TABLE "BetCompetitionToLeague" ENABLE ROW LEVEL SECURITY;
 ALTER TABLE "Log" ENABLE ROW LEVEL SECURITY;
 ALTER TABLE "BetEvaluated" ENABLE ROW LEVEL SECURITY;
 ALTER TABLE "UserToBetCompetition" ENABLE ROW LEVEL SECURITY;
+ALTER TABLE "Player" ENABLE ROW LEVEL SECURITY;
+ALTER TABLE "PlayerToTeam" ENABLE ROW LEVEL SECURITY;
+ALTER TABLE "TeamToLeague" ENABLE ROW LEVEL SECURITY;

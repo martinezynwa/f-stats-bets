@@ -53,6 +53,7 @@ export const externalRequestHandler = async <T>({
     }
 
     if (response.headers.get('x-ratelimit-remaining') === '0') {
+      // eslint-disable-next-line no-console
       console.log('rate limit at 0')
       await new Promise(resolve => setTimeout(resolve, 25000))
     }
@@ -61,12 +62,14 @@ export const externalRequestHandler = async <T>({
     const { current: currentPage, total: totalPages } = data.paging
 
     if (currentPage === totalPages) {
+      // eslint-disable-next-line no-unused-expressions
       Array.isArray(data.response)
         ? responseArray.push(...data.response)
         : responseArray.push(data.response)
       return responseArray
     }
 
+    // eslint-disable-next-line no-unused-expressions
     Array.isArray(data.response)
       ? responseArray.push(...data.response)
       : responseArray.push(data.response)
@@ -77,7 +80,7 @@ export const externalRequestHandler = async <T>({
       params: { ...params, page: currentPage + 1 },
       responseArray,
     })
-  } catch (error) {
+  } catch {
     await logger({
       type: LogType.ERROR,
       action: 'Fetch error',

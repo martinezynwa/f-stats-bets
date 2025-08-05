@@ -86,8 +86,8 @@ export const upsertFixtures = async (
 
     const newFixtures = await createFixtures(fixturesToInsert)
 
-    const fixtureIds = newFixtures.map(fixture => fixture.fixtureId)
-    /*     const newFixtureRounds = await createFixtureRounds(fixtureIds)
+    /*const fixtureIds = newFixtures.map(fixture => fixture.fixtureId)
+      const newFixtureRounds = await createFixtureRounds(fixtureIds)
 
     await updateFixturesWithFixtureRound(newFixtureRounds, newFixtures) */
 
@@ -111,14 +111,14 @@ export const upsertFixtures = async (
 export const createFixtureRounds = async (fixtureIds: number[]) => {
   const fixtures = await db
     .selectFrom('Fixture')
-    .select(['fixtureId', 'externalLeagueId', 'leagueId', 'season', 'round', 'date'])
+    .select(['fixtureId', 'leagueId', 'season', 'round', 'date'])
     .where('fixtureId', 'in', fixtureIds)
     .where('round', '>=', 1)
     .execute()
 
   const rounds = fixtures.reduce(
     (acc, curr) => {
-      const key = `${curr.externalLeagueId}-${curr.round}`
+      const key = `${curr.leagueId}-${curr.round}`
 
       if (!acc[key]) {
         acc[key] = []
@@ -133,10 +133,9 @@ export const createFixtureRounds = async (fixtureIds: number[]) => {
   const fixtureRounds = Object.entries(rounds).map(([_, items]) => {
     const sorted = items.sort((a, b) => new Date(a.date).getTime() - new Date(b.date).getTime())
 
-    const { externalLeagueId, leagueId, season, round, date } = sorted[0]!
+    const { leagueId, season, round, date } = sorted[0]!
 
     return {
-      externalLeagueId,
       leagueId,
       season,
       round,
@@ -191,23 +190,19 @@ export const updateFixturesWithFixtureRound = async (
  * date, referee, venue
  */
 export const updateExistingFixturesWithNewDate = async (fixtures: Fixture[]) => {
-  try {
-    const updated = await db.transaction().execute(async trx => {
-      const updates = fixtures.map(fixture =>
-        trx
-          .updateTable('Fixture')
-          .set(fixture)
-          .where('fixtureId', '=', fixture.fixtureId)
-          .returningAll()
-          .execute(),
-      )
-      return await Promise.all(updates)
-    })
+  const updated = await db.transaction().execute(async trx => {
+    const updates = fixtures.map(fixture =>
+      trx
+        .updateTable('Fixture')
+        .set(fixture)
+        .where('fixtureId', '=', fixture.fixtureId)
+        .returningAll()
+        .execute(),
+    )
+    return await Promise.all(updates)
+  })
 
-    return updated
-  } catch (error) {
-    throw error
-  }
+  return updated
 }
 
 /**

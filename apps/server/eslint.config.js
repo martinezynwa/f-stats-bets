@@ -26,6 +26,8 @@ module.exports = [
         __dirname: true,
         __filename: true,
         document: true,
+        setTimeout: true,
+        URL: true,
       },
     },
     plugins: {

@@ -7,6 +7,8 @@ export enum ENDPOINTS {
   ODDS = '/odds',
   STANDINGS = '/standings',
   TRANSFERS = '/transfers',
+  PLAYERS_SQUADS = '/players/squads',
+  PLAYERS_PROFILES = '/players/profiles',
 }
 
 export enum SUBENDPOINTS {

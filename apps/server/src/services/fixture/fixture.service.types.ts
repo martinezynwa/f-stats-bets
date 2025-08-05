@@ -1,7 +1,6 @@
 export type FixtureDetailWithRound = {
   fixtureId: number
-  externalLeagueId: number
-  leagueId: string
+  leagueId: number
   season: number
   round: number
   date: string

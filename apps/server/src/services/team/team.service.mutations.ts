@@ -1,49 +1,94 @@
-import { InsertTeam } from '@f-stats-bets/types'
+import { InsertTeam, Team, TeamToLeague } from '@f-stats-bets/types'
 import { db } from '../../db'
-import { InsertTeamToDbProps } from './team.service.types'
+import { InsertTeamToDbProps, PrepareTeamsDataProps } from './team.service.types'
 
-export const insertTeamsToDb = async ({
-  externalLeagueId,
-  leagueId,
-  season,
-  teamsData,
-  nationIds,
-  national,
-}: InsertTeamToDbProps) => {
-  const externalTeamIdsFromAPIResponse = teamsData.map(team => team.team.id)
+type GetTeamKeyProps = {
+  teamId: number
+  season: number
+  leagueId: number
+}
+
+const getTeamKey = (input: GetTeamKeyProps) => `${input.teamId}-${input.season}-${input.leagueId}`
+
+const prepareTeamsDataForInsert = async (input: PrepareTeamsDataProps) => {
+  const { teamsData, season, leagueId } = input
+
+  const teamIdsFromExternalResponse = teamsData.map(team => team.team.id)
   const existingTeams = await db
     .selectFrom('Team')
-    .select('externalTeamId')
-    .where('leagueId', '=', leagueId)
-    .where('season', '=', season)
-    .where('externalTeamId', 'in', externalTeamIdsFromAPIResponse)
+    .select('teamId')
+    .where('teamId', 'in', teamIdsFromExternalResponse)
     .execute()
 
-  const existingTeamExternalIds = existingTeams.map(
-    (team: { externalTeamId: number }) => team.externalTeamId,
-  )
+  const existingTeamIds = existingTeams.map(team => team.teamId)
 
-  const data: InsertTeam[] = teamsData
-    .filter(team => !existingTeamExternalIds.includes(team.team.id))
-    .filter(team => (!national ? true : nationIds?.includes(team.team.id)))
+  const teamDataToInsert: InsertTeam[] = teamsData
+    .filter(team => !existingTeamIds.includes(team.team.id))
     .map(({ team, venue }) => ({
-      externalTeamId: team.id,
-      externalLeagueId,
-      season: season,
-      name: team.name,
-      leagueId: leagueId,
+      teamId: team.id,
       code: team.code ? team.code : team.name.replace(/\s+/g, '').substring(0, 3).toUpperCase(),
       country: team.country,
       logo: team.logo,
-      national: national ?? team.national,
+      name: team.name,
+      national: team.national,
       venue: venue.name || '',
     }))
 
-  if (data.length === 0) {
-    return []
+  const existingTeamsToLeagueRecords = await db
+    .selectFrom('TeamToLeague')
+    .selectAll()
+    .where('teamId', 'in', teamIdsFromExternalResponse)
+    .where('season', '=', season)
+    .where('leagueId', '=', leagueId)
+    .execute()
+
+  const existingTeamsToLeagueKeys = existingTeamsToLeagueRecords.map(team =>
+    getTeamKey({
+      teamId: team.teamId,
+      season,
+      leagueId,
+    }),
+  )
+
+  const teamsToLeagueToInsert = teamsData
+    .filter(team => {
+      const teamKey = getTeamKey({
+        teamId: team.team.id,
+        season,
+        leagueId,
+      })
+      return !existingTeamsToLeagueKeys.includes(teamKey)
+    })
+    .map(team => ({
+      teamId: team.team.id,
+      season,
+      leagueId,
+    }))
+
+  return { teamDataToInsert, teamsToLeagueToInsert }
+}
+
+export const insertTeamsToDb = async ({ leagueId, season, teamsData }: InsertTeamToDbProps) => {
+  const { teamDataToInsert, teamsToLeagueToInsert } = await prepareTeamsDataForInsert({
+    teamsData,
+    season,
+    leagueId,
+  })
+
+  let addedTeams: Team[] = []
+  let addedTeamsToLeague: TeamToLeague[] = []
+
+  if (teamDataToInsert.length > 0) {
+    addedTeams = await db.insertInto('Team').values(teamDataToInsert).returningAll().execute()
   }
 
-  const added = await db.insertInto('Team').values(data).returningAll().execute()
+  if (teamsToLeagueToInsert.length > 0) {
+    addedTeamsToLeague = await db
+      .insertInto('TeamToLeague')
+      .values(teamsToLeagueToInsert)
+      .returningAll()
+      .execute()
+  }
 
-  return added
+  return { addedTeams, addedTeamsToLeague }
 }

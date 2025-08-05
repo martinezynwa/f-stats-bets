@@ -40,7 +40,7 @@ router.post(
     if (fixturesIncludedInSeed) {
       for (const season of seasons) {
         const externalFixturesData = await fetchFixtures({
-          externalLeagueIds: fixtureExternalLeagueIds,
+          leagueIds: fixtureExternalLeagueIds,
           season,
           dateFrom: fixtureDateFrom,
           dateTo: fixtureDateTo,

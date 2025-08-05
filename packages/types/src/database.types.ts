@@ -78,8 +78,11 @@ export interface DatabaseTypes {
   League: Selectable<DB['League']>
   Log: Selectable<DB['Log']>
   Nation: Selectable<DB['Nation']>
+  Player: Selectable<DB['Player']>
+  PlayerToTeam: Selectable<DB['PlayerToTeam']>
   Season: Selectable<DB['Season']>
   Team: Selectable<DB['Team']>
+  TeamToLeague: Selectable<DB['TeamToLeague']>
   User: Selectable<DB['User']>
   UserSettings: Selectable<DB['UserSettings']>
   UserToBetCompetition: Selectable<DB['UserToBetCompetition']>
@@ -121,6 +124,14 @@ export type Nation = Selectable<DB['Nation']>
 export type InsertNation = Insertable<DB['Nation']>
 export type UpdateNation = Updateable<DB['Nation']>
 
+export type Player = Selectable<DB['Player']>
+export type InsertPlayer = Insertable<DB['Player']>
+export type UpdatePlayer = Updateable<DB['Player']>
+
+export type PlayerToTeam = Selectable<DB['PlayerToTeam']>
+export type InsertPlayerToTeam = Insertable<DB['PlayerToTeam']>
+export type UpdatePlayerToTeam = Updateable<DB['PlayerToTeam']>
+
 export type Season = Selectable<DB['Season']>
 export type InsertSeason = Insertable<DB['Season']>
 export type UpdateSeason = Updateable<DB['Season']>
@@ -128,6 +139,10 @@ export type UpdateSeason = Updateable<DB['Season']>
 export type Team = Selectable<DB['Team']>
 export type InsertTeam = Insertable<DB['Team']>
 export type UpdateTeam = Updateable<DB['Team']>
+
+export type TeamToLeague = Selectable<DB['TeamToLeague']>
+export type InsertTeamToLeague = Insertable<DB['TeamToLeague']>
+export type UpdateTeamToLeague = Updateable<DB['TeamToLeague']>
 
 export type User = Selectable<DB['User']>
 export type InsertUser = Insertable<DB['User']>

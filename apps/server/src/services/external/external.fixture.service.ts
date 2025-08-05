@@ -9,15 +9,15 @@ import { ExternalFixtureResponse } from '../../types/external/external-fixture.t
  * @dateTo - YYYY-MM-DD format
  */
 export const fetchFixtures = async (input: InsertFixturesValidationSchema) => {
-  const { externalLeagueIds, season, dateFrom, dateTo } = input
+  const { leagueIds, season, dateFrom, dateTo } = input
 
   const externalFixturesData: ExternalFixtureResponse[] = []
 
-  for (const league of externalLeagueIds) {
+  for (const leagueId of leagueIds) {
     const fixturesOfLeague = await externalRequestHandler<ExternalFixtureResponse>({
       endpoint: ENDPOINTS.FIXTURES,
       params: {
-        league,
+        league: leagueId,
         season,
         from: dateFrom,
         to: dateTo,

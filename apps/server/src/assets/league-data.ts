@@ -523,7 +523,7 @@ export const supportedLeagues: SupportedLeague = {
       federation: FederationType.EUROPE,
       organization: OrganizationType.CZECH,
       seasons: [2025],
-      disabled: false,
+      disabled: true,
     },
     {
       id: 347,

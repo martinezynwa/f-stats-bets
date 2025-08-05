@@ -69,7 +69,7 @@ export interface Bet {
     fixtureResultBet: BetResultType | null;
     fixtureScorersBet: Json | null;
     isEvaluated: Generated<boolean>;
-    leagueId: string;
+    leagueId: number;
     oddValue: Json | null;
     season: number;
     updatedAt: Timestamp | null;
@@ -103,7 +103,7 @@ export interface BetCompetition {
 }
 export interface BetCompetitionToLeague {
     betCompetitionId: string;
-    leagueId: string;
+    leagueId: number;
 }
 export interface BetEvaluated {
     betCompetitionId: string;
@@ -124,40 +124,36 @@ export interface BetEvaluated {
     userId: string;
 }
 export interface Fixture {
-    awayTeamExternalId: number;
     awayTeamGoalsExtra: number | null;
     awayTeamGoalsFinish: number | null;
     awayTeamGoalsHalf: number | null;
     awayTeamGoalsPenalty: number | null;
-    awayTeamId: string;
+    awayTeamId: number;
     createdAt: Generated<Timestamp | null>;
     date: string;
     elapsed: number | null;
-    externalLeagueId: number;
     fixtureId: number;
     fixtureRoundId: string | null;
-    homeTeamExternalId: number;
     homeTeamGoalsExtra: number | null;
     homeTeamGoalsFinish: number | null;
     homeTeamGoalsHalf: number | null;
     homeTeamGoalsPenalty: number | null;
-    homeTeamId: string;
+    homeTeamId: number;
     id: Generated<string | null>;
-    leagueId: string;
+    leagueId: number;
     referee: string | null;
     round: number;
     season: number;
     status: string;
-    teamIdWon: string | null;
+    teamIdWon: number | null;
     updatedAt: Timestamp | null;
     venue: string | null;
 }
 export interface FixtureRound {
     dateStarted: string;
-    externalLeagueId: number;
     hasStarted: Generated<boolean>;
     id: Generated<string>;
-    leagueId: string;
+    leagueId: number;
     round: number;
     season: number;
 }
@@ -167,13 +163,12 @@ export interface League {
     createdAt: Generated<Timestamp | null>;
     dateEnd: string;
     dateStart: string;
-    externalLeagueId: number;
     federation: FederationType;
     flag: string;
     gamesPlayed: Generated<number>;
     groupStage: boolean | null;
-    id: Generated<string>;
     isForUnassigned: Generated<boolean | null>;
+    leagueId: number;
     logo: string;
     name: string;
     national: boolean;
@@ -199,6 +194,25 @@ export interface Nation {
     id: number;
     nationName: string;
 }
+export interface Player {
+    age: number | null;
+    birthCountry: string | null;
+    birthDate: string | null;
+    createdAt: Generated<Timestamp | null>;
+    firstName: string;
+    height: string | null;
+    lastName: string;
+    name: string;
+    photo: string | null;
+    playerId: number;
+    updatedAt: Timestamp | null;
+    weight: string | null;
+}
+export interface PlayerToTeam {
+    playerId: number;
+    season: number;
+    teamId: number;
+}
 export interface Season {
     isActual: Generated<boolean>;
     isSupported: boolean | null;
@@ -211,17 +225,17 @@ export interface Team {
     code: string | null;
     country: string;
     createdAt: Generated<Timestamp | null>;
-    externalLeagueId: number;
-    externalTeamId: number;
-    id: Generated<string>;
-    isForUnassigned: Generated<boolean | null>;
-    leagueId: string;
     logo: string | null;
     name: string;
     national: boolean;
-    season: number;
+    teamId: number;
     updatedAt: Timestamp | null;
     venue: string | null;
+}
+export interface TeamToLeague {
+    leagueId: number;
+    season: number;
+    teamId: number;
 }
 export interface User {
     avatar: string | null;
@@ -256,8 +270,11 @@ export interface DB {
     League: League;
     Log: Log;
     Nation: Nation;
+    Player: Player;
+    PlayerToTeam: PlayerToTeam;
     Season: Season;
     Team: Team;
+    TeamToLeague: TeamToLeague;
     User: User;
     UserSettings: UserSettings;
     UserToBetCompetition: UserToBetCompetition;

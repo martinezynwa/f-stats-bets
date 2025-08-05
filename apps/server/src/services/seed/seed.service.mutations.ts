@@ -19,6 +19,7 @@ import { insertLeagueToDb } from '../league/league.service.mutations'
 import { insertTeamsToDb } from '../team/team.service.mutations'
 import { getAssetPath, handleCsvSeed, parseCsv } from './seed.service.helpers'
 import { TableWithRelations, TableWithoutRelations } from './seed.service.types'
+import { fetchAndInsertPlayers } from '../player/player.service.mutations'
 
 export const initDatabase = async (dbSchemaPath?: string) => {
   try {
@@ -123,7 +124,7 @@ export const seedDatabaseFromExternalApi = async (input: SeedFromExternalApiVali
 
   await db.deleteFrom('FixtureRound').where('season', 'in', seasons).execute()
   await db.deleteFrom('Fixture').where('season', 'in', seasons).execute()
-  await db.deleteFrom('Team').where('season', 'in', seasons).execute()
+  await db.deleteFrom('TeamToLeague').where('season', 'in', seasons).execute()
   await db.deleteFrom('League').where('season', 'in', seasons).execute()
 
   for (const season of seasons) {
@@ -135,24 +136,27 @@ export const seedDatabaseFromExternalApi = async (input: SeedFromExternalApiVali
     )
 
     for (const league of leagues) {
-      const leagueData = await fetchLeagueInfo(league.id, season)
-      const createdLeague = await insertLeagueToDb({ leagueData, season })
+      const leagueId = league.id
 
-      const teamsData = await fetchTeamsInfo(league.id, season)
+      const leagueData = await fetchLeagueInfo(leagueId, season)
+      await insertLeagueToDb({ leagueData, season })
+
+      const teamsData = await fetchTeamsInfo(leagueId, season)
       await insertTeamsToDb({
-        leagueId: createdLeague!.id,
-        externalLeagueId: league.id,
+        leagueId,
         season,
         teamsData,
       })
 
       const externalFixturesData = await fetchFixtures({
-        externalLeagueIds: [league.id],
+        leagueIds: [leagueId],
         season,
         dateFrom,
         dateTo,
       })
       await upsertFixtures(externalFixturesData, season)
+
+      await fetchAndInsertPlayers({ season, leagueIds: [leagueId] })
     }
   }
 }

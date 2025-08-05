@@ -1,6 +1,6 @@
 import { Bet, Fixture, Team } from '../../database.types'
 
-export type TeamDetailSimple = Pick<Team, 'id' | 'name' | 'logo' | 'code' | 'externalTeamId'>
+export type TeamDetailSimple = Pick<Team, 'teamId' | 'name' | 'logo' | 'code'>
 
 type TeamsInfo = {
   HomeTeam: TeamDetailSimple

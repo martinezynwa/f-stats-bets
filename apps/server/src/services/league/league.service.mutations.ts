@@ -14,7 +14,7 @@ export const insertLeagueToDb = async ({ leagueData, season }: InsertLeagueToDbP
 
   const data: InsertLeague = {
     season,
-    externalLeagueId: leagueData.league.id,
+    leagueId: leagueData.league.id,
     country: leagueData.country.code || leagueData.country.name,
     flag: leagueData.country.flag || '',
     logo: leagueData.league.logo,
