@@ -19,7 +19,7 @@ export type SeedFromExternalApiValidationSchema = z.infer<
 
 export const seedAllTablesValidationSchema = z.object({
   seasons: z.array(z.number()),
-  fixtureExternalLeagueIds: z.array(z.number()).optional(),
+  fixtureLeagueIds: z.array(z.number()).optional(),
   fixtureDateFrom: z.string().optional(),
   fixtureDateTo: z.string().optional(),
   userIds: z.array(z.string()).optional(),

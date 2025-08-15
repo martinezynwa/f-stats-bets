@@ -15,7 +15,7 @@ import { fetchFixtures } from '../external/external.fixture.service'
 import { fetchLeagueInfo } from '../external/external.league.service'
 import { fetchTeamsInfo } from '../external/external.team.service'
 import { upsertFixtures } from '../fixture/fixture.service.mutations'
-import { insertLeagueToDb } from '../league/league.service.mutations'
+import { insertLeagueToDb, insertLeagueToSeasonToDb } from '../league/league.service.mutations'
 import { insertTeamsToDb } from '../team/team.service.mutations'
 import { getAssetPath, handleCsvSeed, parseCsv } from './seed.service.helpers'
 import { TableWithRelations, TableWithoutRelations } from './seed.service.types'
@@ -140,6 +140,7 @@ export const seedDatabaseFromExternalApi = async (input: SeedFromExternalApiVali
 
       const leagueData = await fetchLeagueInfo(leagueId, season)
       await insertLeagueToDb({ leagueData, season })
+      await insertLeagueToSeasonToDb(leagueId, season)
 
       const teamsData = await fetchTeamsInfo(leagueId, season)
       await insertTeamsToDb({

@@ -12,7 +12,7 @@ export type MockBetsSchema = z.infer<typeof mockBetsSchema>
 
 export const mockBetCompetitionsSchema = z.object({
   userIds: z.array(z.string()).optional(),
-  externalLeagueIds: z.array(z.number()),
+  leagueIds: z.array(z.number()),
   season: z.number(),
   name: z.string(),
   deletePrevious: z.boolean().optional(),

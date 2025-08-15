@@ -11,3 +11,9 @@ export interface PrepareTeamsDataProps {
   season: number
   leagueId: number
 }
+
+export type GetTeamKeyProps = {
+  teamId: number
+  season: number
+  leagueId: number
+}

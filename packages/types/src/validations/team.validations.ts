@@ -1,7 +1,7 @@
 import { z } from 'zod'
 
 export const teamsValidationSchema = z.object({
-  externalLeagueId: z.number(),
+  leagueId: z.number(),
   season: z.number(),
 })
 

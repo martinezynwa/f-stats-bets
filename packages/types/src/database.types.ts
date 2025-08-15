@@ -76,6 +76,7 @@ export interface DatabaseTypes {
   Fixture: Selectable<DB['Fixture']>
   FixtureRound: Selectable<DB['FixtureRound']>
   League: Selectable<DB['League']>
+  LeagueToSeason: Selectable<DB['LeagueToSeason']>
   Log: Selectable<DB['Log']>
   Nation: Selectable<DB['Nation']>
   Player: Selectable<DB['Player']>
@@ -115,6 +116,10 @@ export type UpdateFixtureRound = Updateable<DB['FixtureRound']>
 export type League = Selectable<DB['League']>
 export type InsertLeague = Insertable<DB['League']>
 export type UpdateLeague = Updateable<DB['League']>
+
+export type LeagueToSeason = Selectable<DB['LeagueToSeason']>
+export type InsertLeagueToSeason = Insertable<DB['LeagueToSeason']>
+export type UpdateLeagueToSeason = Updateable<DB['LeagueToSeason']>
 
 export type Log = Selectable<DB['Log']>
 export type InsertLog = Insertable<DB['Log']>

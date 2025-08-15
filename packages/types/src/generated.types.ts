@@ -201,6 +201,11 @@ export interface League {
   updatedAt: Timestamp | null;
 }
 
+export interface LeagueToSeason {
+  leagueId: number;
+  season: number;
+}
+
 export interface Log {
   action: string;
   additionalData: Json | null;
@@ -301,6 +306,7 @@ export interface DB {
   Fixture: Fixture;
   FixtureRound: FixtureRound;
   League: League;
+  LeagueToSeason: LeagueToSeason;
   Log: Log;
   Nation: Nation;
   Player: Player;

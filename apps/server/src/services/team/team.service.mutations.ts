@@ -1,12 +1,6 @@
 import { InsertTeam, Team, TeamToLeague } from '@f-stats-bets/types'
 import { db } from '../../db'
-import { InsertTeamToDbProps, PrepareTeamsDataProps } from './team.service.types'
-
-type GetTeamKeyProps = {
-  teamId: number
-  season: number
-  leagueId: number
-}
+import { GetTeamKeyProps, InsertTeamToDbProps, PrepareTeamsDataProps } from './team.service.types'
 
 const getTeamKey = (input: GetTeamKeyProps) => `${input.teamId}-${input.season}-${input.leagueId}`
 

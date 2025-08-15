@@ -40,7 +40,7 @@ router.post(
     const { season } = req.body
 
     const leagues = getSupportedLeagues(season)
-    const added = await initLeagues({ externalLeagueIds: leagues.map(league => league.id), season })
+    const added = await initLeagues({ leagueIds: leagues.map(league => league.id), season })
 
     res.json(added)
   }, initSupportedLeaguesValidationSchema),
@@ -73,9 +73,9 @@ router.post(
 router.post(
   '/teams',
   validateRequestWithBody(async (req, res) => {
-    const { externalLeagueId, season } = req.body
+    const { leagueId, season } = req.body
 
-    const teamsData = await fetchTeamsInfo(externalLeagueId, season)
+    const teamsData = await fetchTeamsInfo(leagueId, season)
 
     res.json(teamsData)
   }, insertTeamValidationSchema),
@@ -84,13 +84,12 @@ router.post(
 router.post(
   '/insert-teams',
   validateRequestWithBody(async (req, res) => {
-    const { externalLeagueId, season, leagueId } = req.body
+    const { leagueId, season } = req.body
 
-    const teamsData = await fetchTeamsInfo(externalLeagueId, season)
+    const teamsData = await fetchTeamsInfo(leagueId, season)
 
     const added = await insertTeamsToDb({
       leagueId,
-      externalLeagueId,
       season,
       teamsData,
     })
@@ -102,10 +101,10 @@ router.post(
 router.post(
   '/fixtures',
   validateRequestWithBody(async (req, res) => {
-    const { externalLeagueIds, season, dateFrom, dateTo } = req.body
+    const { leagueIds, season, dateFrom, dateTo } = req.body
 
     const externalFixturesData = await fetchFixtures({
-      externalLeagueIds,
+      leagueIds,
       season,
       dateFrom,
       dateTo,
@@ -118,13 +117,13 @@ router.post(
 router.post(
   '/insert-fixtures',
   validateRequestWithBody(async (req, res) => {
-    const { externalLeagueIds, season, dateFrom, dateTo } = req.body
+    const { leagueIds, season, dateFrom, dateTo } = req.body
 
     await db.deleteFrom('Fixture').execute()
     await db.deleteFrom('FixtureRound').execute()
 
     const externalFixturesData = await fetchFixtures({
-      externalLeagueIds,
+      leagueIds,
       season,
       dateFrom,
       dateTo,

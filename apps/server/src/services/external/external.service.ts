@@ -8,13 +8,12 @@ import { fetchFixtures } from './external.fixture.service'
 import { upsertFixtures } from '../fixture/fixture.service.mutations'
 
 export const initLeagues = async (input: InitLeaguesValidationSchema) => {
-  const { externalLeagueIds, season } = input
+  const { leagueIds, season } = input
 
   const leagues = await db
     .selectFrom('League')
-    .select('League.externalLeagueId')
-    .where('externalLeagueId', 'in', externalLeagueIds)
-    .where('season', '=', season)
+    .select('leagueId')
+    .where('leagueId', 'in', leagueIds)
     .execute()
 
   const seasonData = await db
@@ -23,24 +22,25 @@ export const initLeagues = async (input: InitLeaguesValidationSchema) => {
     .where('seasonId', '=', season)
     .executeTakeFirst()
 
-  const alreadyExistingLeagues = leagues?.map(league => league.externalLeagueId) || []
+  const alreadyExistingLeagues = leagues?.map(league => league.leagueId) || []
 
-  const leaguesToInsert = externalLeagueIds.filter(id => !alreadyExistingLeagues.includes(id))
+  const leaguesToInsert = leagueIds.filter(id => !alreadyExistingLeagues.includes(id))
 
-  for (const externalLeagueId of leaguesToInsert) {
-    const leagueData = await fetchLeagueInfo(externalLeagueId, season)
+  for (const leagueId of leaguesToInsert) {
+    const leagueData = await fetchLeagueInfo(leagueId, season)
     const league = await insertLeagueToDb({ leagueData, season })
 
-    const teamsData = await fetchTeamsInfo(externalLeagueId, season)
+    //TODO create LeagueToSeason
+
+    const teamsData = await fetchTeamsInfo(leagueId, season)
     await insertTeamsToDb({
-      leagueId: league!.id,
-      externalLeagueId,
+      leagueId,
       season,
       teamsData,
     })
 
     const externalFixturesData = await fetchFixtures({
-      externalLeagueIds,
+      leagueIds,
       season,
       dateFrom: league?.dateStart || seasonData!.seasonStartDate,
       dateTo: league?.dateEnd || seasonData!.seasonEndDate,

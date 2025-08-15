@@ -48,9 +48,8 @@ POST {{baseUrl}}/teams
 Content-Type: application/json
 
 {
-  "externalLeagueId": 39,
   "season": 2025,
-  "leagueId": "d6dd86cb-6a43-4587-9472-b5b863e1f454"
+  "leagueId": 140
 }
 
 ### Fetch and insert teams
