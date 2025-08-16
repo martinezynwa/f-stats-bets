@@ -104,6 +104,7 @@ export interface BetCompetition {
 export interface BetCompetitionToLeague {
     betCompetitionId: string;
     leagueId: number;
+    season: number;
 }
 export interface BetEvaluated {
     betCompetitionId: string;
@@ -167,6 +168,7 @@ export interface League {
     flag: string;
     gamesPlayed: Generated<number>;
     groupStage: boolean | null;
+    id: Generated<string>;
     isForUnassigned: Generated<boolean | null>;
     leagueId: number;
     logo: string;

@@ -54,7 +54,7 @@ export const mockBets = async (input: MockBetsSchema) => {
 }
 
 export const mockBetCompetitions = async (input: MockBetCompetitionsSchema) => {
-  const { userIds: userIdsInput, externalLeagueIds, season, name, deletePrevious } = input
+  const { userIds: userIdsInput, leagueIds, season, name, deletePrevious } = input
 
   if (deletePrevious) {
     await db.deleteFrom('BetCompetitionToLeague').execute()
@@ -66,8 +66,8 @@ export const mockBetCompetitions = async (input: MockBetCompetitionsSchema) => {
 
   const leagues = await db
     .selectFrom('League')
-    .select(['externalLeagueId', 'id'])
-    .where('externalLeagueId', 'in', externalLeagueIds)
+    .select(['leagueId', 'id'])
+    .where('leagueId', 'in', leagueIds)
     .where('season', '=', season)
     .execute()
 
@@ -116,19 +116,13 @@ export const mockBetCompetitions = async (input: MockBetCompetitionsSchema) => {
 }
 
 export const mockBetData = async (input: SeedAllTablesValidationSchema) => {
-  const {
-    userIds,
-    fixtureExternalLeagueIds,
-    seasons,
-    fixtureDateFrom,
-    fixtureDateTo,
-    deletePrevious,
-  } = input
+  const { userIds, fixtureLeagueIds, seasons, fixtureDateFrom, fixtureDateTo, deletePrevious } =
+    input
 
   for (const season of seasons) {
     const { addedBetCompetition } = await mockBetCompetitions({
       userIds,
-      externalLeagueIds: fixtureExternalLeagueIds!,
+      leagueIds: fixtureLeagueIds!,
       season,
       name: `Bet Competition ${season}`,
       deletePrevious,

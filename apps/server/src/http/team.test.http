@@ -5,6 +5,6 @@ GET {{baseUrl}}
 Content-Type: application/json
 
 {
-  "externalLeagueId": 32,
+  "leagueId": 32,
   "season": 2024
 }

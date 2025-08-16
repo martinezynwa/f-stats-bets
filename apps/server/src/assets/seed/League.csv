@@ -1,2 +1,0 @@
-season,externalLeagueId,name,type,country,logo,flag,gamesPlayed,groupStage,supported,national,federation,dateStart,dateEnd,createdAt,updatedAt,isForUnassigned,countPlayerStats,organization
-2025,15,FIFA Club World Cup,ClubTournament,World,https://media.api-sports.io/football/leagues/15.png,https://,0,false,true,false,WORLD,2025-06-12,2025-07-15,2024-06-02 09:03:22.755,2025-01-18 12:11:28.003,false,true,FIFA

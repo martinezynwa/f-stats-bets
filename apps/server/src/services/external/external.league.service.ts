@@ -18,10 +18,10 @@ export const fetchLeagueInfo = async (leagueId: number, season?: number) => {
   return data[0]!
 }
 
-export const fetchLeagueStandings = async (externalLeagueId: number, season: number) => {
+export const fetchLeagueStandings = async (leagueId: number, season: number) => {
   const data = await externalRequestHandler<ExternalLeagueStandingsResponse>({
     endpoint: ENDPOINTS.STANDINGS,
-    params: { league: externalLeagueId, season },
+    params: { league: leagueId, season },
     responseArray: [],
   })
 

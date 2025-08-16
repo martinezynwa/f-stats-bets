@@ -1,11 +1,4 @@
-import {
-  InsertTeam,
-  LeagueType,
-  SeedFromExternalApiValidationSchema,
-  Team,
-  User,
-  UserSettings,
-} from '@f-stats-bets/types'
+import { SeedFromExternalApiValidationSchema, Team, User, UserSettings } from '@f-stats-bets/types'
 import fs from 'fs'
 import { sql } from 'kysely'
 import path from 'path'
@@ -86,31 +79,9 @@ export const seedRelationDataFromCsv = async (tableNames: TableWithRelations[]) 
   const mapper: Record<TableWithRelations, () => Promise<void>> = {
     Team: async () => {
       const teamDataFile = getAssetPath('Team.csv')
-      const parsedTeamData = parseCsv(teamDataFile) as Omit<Team, 'leagueId'>[]
+      const parsedTeamData = parseCsv(teamDataFile) as Team[]
 
-      const leagues = await db
-        .selectFrom('League')
-        .selectAll()
-        .where('type', 'not in', [LeagueType.UNASSIGNED, LeagueType.TOTALS])
-        .execute()
-
-      const insertTeamData: InsertTeam[] = leagues.flatMap(league => {
-        const teamsOfLeague = parsedTeamData.filter(
-          team =>
-            Number(team.externalLeagueId) === league.externalLeagueId &&
-            Number(team.season) === league.season,
-        )
-
-        return teamsOfLeague.map(team => ({
-          ...team,
-          externalLeagueId: Number(team.externalLeagueId),
-          externalTeamId: Number(team.externalTeamId),
-          season: Number(team.season),
-          leagueId: league.id,
-        }))
-      })
-
-      await db.insertInto('Team').values(insertTeamData).execute()
+      await db.insertInto('Team').values(parsedTeamData).execute()
     },
   }
 
@@ -120,44 +91,42 @@ export const seedRelationDataFromCsv = async (tableNames: TableWithRelations[]) 
 }
 
 export const seedDatabaseFromExternalApi = async (input: SeedFromExternalApiValidationSchema) => {
-  const { seasons, dateFrom, dateTo } = input
+  const { season, dateFrom, dateTo } = input
 
-  await db.deleteFrom('FixtureRound').where('season', 'in', seasons).execute()
-  await db.deleteFrom('Fixture').where('season', 'in', seasons).execute()
-  await db.deleteFrom('TeamToLeague').where('season', 'in', seasons).execute()
-  await db.deleteFrom('League').where('season', 'in', seasons).execute()
+  await db.deleteFrom('FixtureRound').where('season', '=', season).execute()
+  await db.deleteFrom('Fixture').where('season', '=', season).execute()
+  await db.deleteFrom('TeamToLeague').where('season', '=', season).execute()
+  await db.deleteFrom('League').where('season', '=', season).execute()
 
-  for (const season of seasons) {
-    const leagues = getSupportedLeagues(season)
+  const leagues = getSupportedLeagues(season)
 
-    // eslint-disable-next-line no-console
-    console.log(
-      `Fetching data for ${leagues.length} leagues [${leagues.map(l => l.name).join(', ')}] of season ${season}`,
-    )
+  // eslint-disable-next-line no-console
+  console.log(
+    `Fetching data for ${leagues.length} leagues [${leagues.map(l => l.name).join(', ')}] of season ${season}`,
+  )
 
-    for (const league of leagues) {
-      const leagueId = league.id
+  for (const league of leagues) {
+    const leagueId = league.id
 
-      const leagueData = await fetchLeagueInfo(leagueId, season)
-      await insertLeagueToDb({ leagueData, season })
-      await insertLeagueToSeasonToDb(leagueId, season)
+    const leagueData = await fetchLeagueInfo(leagueId, season)
+    await insertLeagueToDb({ leagueData, season })
+    await insertLeagueToSeasonToDb(leagueId, season)
 
-      const teamsData = await fetchTeamsInfo(leagueId, season)
-      await insertTeamsToDb({
-        leagueId,
-        season,
-        teamsData,
-      })
+    const teamsData = await fetchTeamsInfo(leagueId, season)
+    await insertTeamsToDb({
+      leagueId,
+      season,
+      teamsData,
+    })
 
-      const externalFixturesData = await fetchFixtures({
-        leagueIds: [leagueId],
-        season,
-        dateFrom,
-        dateTo,
-      })
-      await upsertFixtures(externalFixturesData, season)
+    const externalFixturesData = await fetchFixtures({
+      leagueIds: [leagueId],
+      season,
+      dateFrom,
+      dateTo,
+    })
+    await upsertFixtures(externalFixturesData, season)
 
-      await fetchAndInsertPlayers({ season, leagueIds: [leagueId] })
-    }
+    await fetchAndInsertPlayers({ season, leagueIds: [leagueId] })
   }
 }

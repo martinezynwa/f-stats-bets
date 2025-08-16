@@ -23,14 +23,13 @@ const router = Router()
 router.post(
   '/init-all-tables-from-csv',
   validateRequestWithBody(async (req: Request, res: Response) => {
-    const { shouldMockBetData, seasons, fixtureExternalLeagueIds, fixtureDateFrom, fixtureDateTo } =
+    const { shouldMockBetData, seasons, fixtureLeagueIds, fixtureDateFrom, fixtureDateTo } =
       req.body
 
     const tablesWithoutRelations: TableWithoutRelations[] = ['Season', 'League', 'Nation']
     const tablesWithRelations: TableWithRelations[] = ['Team']
 
-    const fixturesIncludedInSeed =
-      seasons && fixtureExternalLeagueIds && fixtureDateFrom && fixtureDateTo
+    const fixturesIncludedInSeed = seasons && fixtureLeagueIds && fixtureDateFrom && fixtureDateTo
 
     await initDatabase()
     const userData = await initUsersWithSettings()
@@ -40,7 +39,7 @@ router.post(
     if (fixturesIncludedInSeed) {
       for (const season of seasons) {
         const externalFixturesData = await fetchFixtures({
-          leagueIds: fixtureExternalLeagueIds,
+          leagueIds: fixtureLeagueIds,
           season,
           dateFrom: fixtureDateFrom,
           dateTo: fixtureDateTo,

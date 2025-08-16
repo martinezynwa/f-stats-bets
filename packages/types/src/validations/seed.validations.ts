@@ -7,7 +7,7 @@ export const seedValidationSchema = z.object({
 export type SeedValidationSchema = z.infer<typeof seedValidationSchema>
 
 export const seedFromExternalApiValidationSchema = z.object({
-  seasons: z.array(z.number()),
+  season: z.number(),
   dateFrom: z.string(),
   dateTo: z.string(),
   shouldIgnoreBaseData: z.boolean().optional(),

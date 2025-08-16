@@ -7,7 +7,7 @@ import {
 import { rawQueryArray } from '../../lib'
 
 export const getFixturesWithBets = async (input: FixturesBetsSchema): Promise<FixtureWithBet[]> => {
-  const { dateFrom, dateTo, externalLeagueIds, season, userId, betCompetitionId } = input
+  const { dateFrom, dateTo, leagueIds, season, userId, betCompetitionId } = input
 
   const fixtures = await rawQueryArray<FixtureWithBet>(`
     SELECT
@@ -17,14 +17,14 @@ export const getFixturesWithBets = async (input: FixturesBetsSchema): Promise<Fi
         'name', ht.name,
         'logo', ht.logo,
         'code', ht.code,
-        'externalTeamId', ht."externalTeamId"
+        'teamId', ht."teamId"
       ) AS "HomeTeam",
       JSON_BUILD_OBJECT(
         'id', at.id,
         'name', at.name,
         'logo', at.logo,
         'code', at.code,
-        'externalTeamId', at."externalTeamId"
+        'teamId', at."teamId"
       ) AS "AwayTeam",
       CASE 
         WHEN b."betId" IS NOT NULL THEN
@@ -48,7 +48,7 @@ export const getFixturesWithBets = async (input: FixturesBetsSchema): Promise<Fi
       AND b."betCompetitionId" = '${betCompetitionId}'
     WHERE f."date"::date BETWEEN '${dateFrom}'::date AND '${dateTo}'::date
     ${season ? `AND f."season" = ${Number(season)}` : ''}
-    ${externalLeagueIds?.length ? `AND f."externalLeagueId" IN (${externalLeagueIds.map(Number).join(',')})` : ''}
+    ${leagueIds?.length ? `AND f."leagueId" IN (${leagueIds.map(Number).join(',')})` : ''}
     ORDER BY f."date" ASC
   `)
 
@@ -56,7 +56,7 @@ export const getFixturesWithBets = async (input: FixturesBetsSchema): Promise<Fi
 }
 
 export const getFixtures = async (input: FixturesSchema) => {
-  const { dateFrom, dateTo, externalLeagueIds, season } = input
+  const { dateFrom, dateTo, leagueIds, season } = input
 
   const fixtures = await rawQueryArray<FixtureWithTeamDetails>(`
     SELECT
@@ -66,21 +66,21 @@ export const getFixtures = async (input: FixturesSchema) => {
         'name', ht.name,
         'logo', ht.logo,
         'code', ht.code,
-        'externalTeamId', ht."externalTeamId"
+        'teamId', ht."teamId"
       ) AS "homeTeam",
       JSON_BUILD_OBJECT(
         'id', at.id,
         'name', at.name,
         'logo', at.logo,
         'code', at.code,
-        'externalTeamId', at."externalTeamId"
+        'teamId', at."teamId"
       ) AS "awayTeam"
     FROM "Fixture" AS f
     LEFT JOIN "Team" AS ht ON f."homeTeamId" = ht.id
     LEFT JOIN "Team" AS at ON f."awayTeamId" = at.id
     WHERE f."date"::date BETWEEN '${dateFrom}'::date AND '${dateTo}'::date
     ${season ? `AND f."season" = ${Number(season)}` : ''}
-    ${externalLeagueIds?.length ? `AND f."externalLeagueId" IN (${externalLeagueIds.map(Number).join(',')})` : ''}
+    ${leagueIds?.length ? `AND f."leagueId" IN (${leagueIds.map(Number).join(',')})` : ''}
     ORDER BY f."date" ASC
   `)
 

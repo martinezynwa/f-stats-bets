@@ -49,9 +49,9 @@ router.post(
 router.get(
   '/leagues',
   validateRequestWithBody(async (req, res) => {
-    const { externalLeagueId, season } = req.body
+    const { leagueId, season } = req.body
 
-    const leagueData = await fetchLeagueInfo(externalLeagueId, season)
+    const leagueData = await fetchLeagueInfo(leagueId, season)
 
     res.json(leagueData)
   }, insertLeagueValidationSchema),
@@ -60,9 +60,9 @@ router.get(
 router.post(
   '/insert-league',
   validateRequestWithBody(async (req, res) => {
-    const { externalLeagueId, season } = req.body
+    const { leagueId, season } = req.body
 
-    const leagueData = await fetchLeagueInfo(externalLeagueId, season)
+    const leagueData = await fetchLeagueInfo(leagueId, season)
 
     const added = await insertLeagueToDb({ leagueData, season })
 

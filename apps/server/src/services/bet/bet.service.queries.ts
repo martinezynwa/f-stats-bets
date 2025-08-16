@@ -25,14 +25,14 @@ export const getBets = async (input: GetBetsSchema): Promise<GetBetsResponse> =>
         'name', ht.name,
         'logo', ht.logo,
         'code', ht.code,
-        'externalTeamId', ht."externalTeamId"
+        'teamId', ht."teamId"
       ) AS "HomeTeam",
       JSON_BUILD_OBJECT(
         'id', at.id,
         'name', at.name,
         'logo', at.logo,
         'code', at.code,
-        'externalTeamId', at."externalTeamId"
+        'teamId', at."teamId"
       ) AS "AwayTeam"
     FROM "Bet" b
     INNER JOIN "BetEvaluated" be ON b."betId" = be."betId"

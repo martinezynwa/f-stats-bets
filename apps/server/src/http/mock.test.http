@@ -6,7 +6,7 @@ POST {{baseUrl}}/bet-competitions
 Content-Type: application/json
 
 {
-  "externalLeagueIds": [39, 345],
+  "leagueIds": [39, 345],
   "season": 2025,
   "name": "Test Competition",
   "deletePrevious": true

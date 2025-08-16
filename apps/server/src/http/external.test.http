@@ -2,12 +2,12 @@
 
 
 ### Fetch and insert Leagues, Team, Fixtures for single season
-## params - externalLeagueId, season
+## params - leagueId, season
 POST {{baseUrl}}/init-leagues
 Content-Type: application/json
 
 {
-  "externalLeagueIds": [15],
+  "leagueIds": [15],
   "season": 2025
 }
 
@@ -23,27 +23,27 @@ Content-Type: application/json
 
 
 ### Fetch leagues
-## params - externalLeagueId, season
+## params - leagueId, season
 GET {{baseUrl}}/leagues
 Content-Type: application/json
 
 {
-  "externalLeagueId": 32,
+  "leagueId": 32,
   "season": 2024
 }
 
 ### Fetch and insert league
-## params - externalLeagueId, season
+## params - leagueId, season
 POST {{baseUrl}}/insert-league
 Content-Type: application/json
 
 {
-  "externalLeagueId": 15,
+  "leagueId": 15,
   "season": 2025
 }
 
 ### Fetch teams
-## params - externalLeagueId, season
+## params - leagueId, season
 POST {{baseUrl}}/teams
 Content-Type: application/json
 
@@ -53,65 +53,65 @@ Content-Type: application/json
 }
 
 ### Fetch and insert teams
-## params - externalLeagueId, season, leagueId
+## params - leagueId, season, leagueId
 POST {{baseUrl}}/insert-teams
 Content-Type: application/json
 
 {
-  "externalLeagueId": 15,
+  "leagueId": 15,
   "season": 2025,
   "leagueId": "d6dd86cb-6a43-4587-9472-b5b863e1f454"
 }
 
 ### Fetch fixtures
-## params - externalLeagueIds, ?season, ?dateFrom, ?dateTo
+## params - leagueIds, ?season, ?dateFrom, ?dateTo
 POST {{baseUrl}}/fixtures
 Content-Type: application/json
 
 {
-  "externalLeagueIds": [39],
+  "leagueIds": [39],
   "season": 2025,
   "dateFrom": "2025-08-15",
   "dateTo": "2025-08-19"
 }
 
 ### Fetch and insert fixtures
-## params - externalLeagueIds, ?season, ?dateFrom, ?dateTo
+## params - leagueIds, ?season, ?dateFrom, ?dateTo
 POST {{baseUrl}}/insert-fixtures
 Content-Type: application/json
 
 {
-  "externalLeagueIds": [15],
+  "leagueIds": [15],
   "season": 2025,
   "dateFrom": "2025-06-06",
   "dateTo": "2025-06-30"
 }
 
 ### Fetch players squads
-## params - externalLeagueIds
+## params - leagueIds
 POST {{baseUrl}}/players-squads-by-league
 Content-Type: application/json
 
 {
-  "externalLeagueIds": [39]
+  "leagueIds": [39]
 }
 
 ### Fetch players squads
-## params - externalTeamIds
+## params - teamIds
 POST {{baseUrl}}/players-squads
 Content-Type: application/json
 
 {
-  "externalTeamIds": [40],
+  "teamIds": [40],
   "season": 2025
 }
 
 ### Fetch and insert players
-## params - externalLeagueIds, externalTeamIds, season
+## params - leagueIds, teamIds, season
 POST {{baseUrl}}/insert-players
 Content-Type: application/json
 
 {
-  "externalTeamIds": [40],
+  "teamIds": [40],
   "season": 2025
 }
