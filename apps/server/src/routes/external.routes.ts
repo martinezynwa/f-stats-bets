@@ -5,6 +5,7 @@ import {
   initSupportedLeaguesValidationSchema,
   initLeaguesValidationSchema,
   insertPlayersValidationSchema,
+  fetchPlayersProfilesValidationSchema,
 } from '@f-stats-bets/types'
 import { Router } from 'express'
 import { db } from '../db'
@@ -18,7 +19,10 @@ import { insertTeamsToDb } from '../services/team/team.service.mutations'
 import { fetchFixturesValidationSchema } from './types'
 import { initLeagues } from '../services/external/external.service'
 import { getSupportedLeagues } from '../assets/league-data'
-import { fetchPlayersSquads } from '../services/external/external.player.service'
+import {
+  fetchPlayersProfiles,
+  fetchPlayersSquads,
+} from '../services/external/external.player.service'
 import { fetchAndInsertPlayers } from '../services/player/player.service.mutations'
 
 const router = Router()
@@ -144,6 +148,14 @@ router.post(
   }, insertPlayersValidationSchema),
 )
 
+router.post(
+  '/player-profiles',
+  validateRequestWithBody(async (req, res) => {
+    const playersData = await fetchPlayersProfiles(req.body.playerIds)
+
+    res.json(playersData)
+  }, fetchPlayersProfilesValidationSchema),
+)
 router.post(
   '/insert-players',
   validateRequestWithBody(async (req, res) => {

@@ -119,6 +119,8 @@ export const seedDatabaseFromExternalApi = async (input: SeedFromExternalApiVali
       teamsData,
     })
 
+    await fetchAndInsertPlayers({ season, leagueIds: [leagueId] })
+
     const externalFixturesData = await fetchFixtures({
       leagueIds: [leagueId],
       season,
@@ -126,7 +128,5 @@ export const seedDatabaseFromExternalApi = async (input: SeedFromExternalApiVali
       dateTo,
     })
     await upsertFixtures(externalFixturesData, season)
-
-    await fetchAndInsertPlayers({ season, leagueIds: [leagueId] })
   }
 }

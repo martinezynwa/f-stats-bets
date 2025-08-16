@@ -35,7 +35,7 @@ export const mockHandler = (input: MockHandlerProps) => {
     case ENDPOINTS.TEAMS:
       return teamsMock[season!][league!] || []
     case ENDPOINTS.PLAYERS_SQUADS:
-      return playersSquadsMock[team as keyof typeof playersSquadsMock] || []
+      return playersSquadsMock[season!][team!] || []
     case ENDPOINTS.PLAYERS_PROFILES:
       return playersProfilesMock[player as keyof typeof playersProfilesMock] || []
     default:

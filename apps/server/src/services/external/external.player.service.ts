@@ -6,7 +6,7 @@ import {
   ExternalPlayerSquadsResponse,
 } from '../../types/external/external-player.types'
 import { InsertPlayersValidationSchema } from '@f-stats-bets/types'
-import { PlayerWithTeam, TransformPlayerResponsesOutput } from './external.player.service.types'
+import { TransformPlayerResponsesOutput } from './external.player.service.types'
 
 export const fetchPlayersSquads = async (
   input: InsertPlayersValidationSchema,
@@ -29,7 +29,7 @@ export const fetchPlayersSquads = async (
   for (const team of selectedTeamIds) {
     const response = await externalRequestHandler<ExternalPlayerSquadsResponse>({
       endpoint: ENDPOINTS.PLAYERS_SQUADS,
-      params: { team },
+      params: { team, season: input.season },
       responseArray: [],
     })
 
@@ -40,14 +40,14 @@ export const fetchPlayersSquads = async (
 }
 
 export const fetchPlayersProfiles = async (
-  playersWithTeam: PlayerWithTeam[],
+  playerIds: number[],
 ): Promise<ExternalPlayerInfoResponse[]> => {
   const playersProfiles: ExternalPlayerInfoResponse[] = []
 
-  for (const player of playersWithTeam) {
+  for (const playerId of playerIds) {
     const response = await externalRequestHandler<ExternalPlayerInfoResponse>({
       endpoint: ENDPOINTS.PLAYERS_PROFILES,
-      params: { player: player!.playerId },
+      params: { player: playerId },
       responseArray: [],
     })
 

@@ -112,6 +112,15 @@ POST {{baseUrl}}/insert-players
 Content-Type: application/json
 
 {
-  "teamIds": [40],
-  "season": 2025
+  "season": 2024,
+  "leagueIds": [39]
+}
+
+### Fetch players profiles
+## params - playerIds
+POST {{baseUrl}}/player-profiles
+Content-Type: application/json
+
+{
+  "playerIds": [206254]
 }

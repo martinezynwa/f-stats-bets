@@ -39,3 +39,10 @@ export const insertPlayersValidationSchema = z.object({
   season: z.number(),
 })
 export type InsertPlayersValidationSchema = z.infer<typeof insertPlayersValidationSchema>
+
+export const fetchPlayersProfilesValidationSchema = z.object({
+  playerIds: z.array(z.number()),
+})
+export type FetchPlayersProfilesValidationSchema = z.infer<
+  typeof fetchPlayersProfilesValidationSchema
+>
