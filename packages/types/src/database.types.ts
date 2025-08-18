@@ -80,6 +80,8 @@ export interface DatabaseTypes {
   Log: Selectable<DB['Log']>
   Nation: Selectable<DB['Nation']>
   Player: Selectable<DB['Player']>
+  PlayerFixtureStats: Selectable<DB['PlayerFixtureStats']>
+  PlayerSeasonStats: Selectable<DB['PlayerSeasonStats']>
   PlayerToTeam: Selectable<DB['PlayerToTeam']>
   Season: Selectable<DB['Season']>
   Team: Selectable<DB['Team']>
@@ -132,6 +134,14 @@ export type UpdateNation = Updateable<DB['Nation']>
 export type Player = Selectable<DB['Player']>
 export type InsertPlayer = Insertable<DB['Player']>
 export type UpdatePlayer = Updateable<DB['Player']>
+
+export type PlayerFixtureStats = Selectable<DB['PlayerFixtureStats']>
+export type InsertPlayerFixtureStats = Insertable<DB['PlayerFixtureStats']>
+export type UpdatePlayerFixtureStats = Updateable<DB['PlayerFixtureStats']>
+
+export type PlayerSeasonStats = Selectable<DB['PlayerSeasonStats']>
+export type InsertPlayerSeasonStats = Insertable<DB['PlayerSeasonStats']>
+export type UpdatePlayerSeasonStats = Updateable<DB['PlayerSeasonStats']>
 
 export type PlayerToTeam = Selectable<DB['PlayerToTeam']>
 export type InsertPlayerToTeam = Insertable<DB['PlayerToTeam']>

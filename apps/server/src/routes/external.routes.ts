@@ -6,6 +6,8 @@ import {
   initLeaguesValidationSchema,
   insertPlayersValidationSchema,
   fetchPlayersProfilesValidationSchema,
+  insertPlayerFixtureStatsValidationSchema,
+  fetchPlayerFixtureStatsValidationSchema,
 } from '@f-stats-bets/types'
 import { Router } from 'express'
 import { db } from '../db'
@@ -20,10 +22,13 @@ import { fetchFixturesValidationSchema } from './types'
 import { initLeagues } from '../services/external/external.service'
 import { getSupportedLeagues } from '../assets/league-data'
 import {
+  fetchPlayerFixtureStats,
   fetchPlayersProfiles,
   fetchPlayersSquads,
 } from '../services/external/external.player.service'
 import { fetchAndInsertPlayers } from '../services/player/player.service.mutations'
+import { fetchAndInsertPlayerFixtureStats } from 'src/services/player-fixture-stats/player-fixture-stats.service.mutations'
+import { getManyFixturesDetail } from 'src/services/fixture/fixture.service.queries'
 
 const router = Router()
 
@@ -156,6 +161,7 @@ router.post(
     res.json(playersData)
   }, fetchPlayersProfilesValidationSchema),
 )
+
 router.post(
   '/insert-players',
   validateRequestWithBody(async (req, res) => {
@@ -163,6 +169,27 @@ router.post(
 
     res.json(playersData)
   }, insertPlayersValidationSchema),
+)
+
+router.post(
+  '/fetch-player-fixture-stats',
+  validateRequestWithBody(async (req, res) => {
+    const fixtureDetails = await getManyFixturesDetail(req.body.fixtureIds)
+
+    const playerFixtureStatsData = await fetchPlayerFixtureStats(fixtureDetails)
+
+    res.json(playerFixtureStatsData)
+  }, fetchPlayerFixtureStatsValidationSchema),
+)
+router.post(
+  '/insert-player-fixture-stats',
+  validateRequestWithBody(async (req, res) => {
+    const fixtureDetails = await getManyFixturesDetail(req.body)
+
+    const playerFixtureStatsData = await fetchAndInsertPlayerFixtureStats(fixtureDetails)
+
+    res.json(playerFixtureStatsData)
+  }, insertPlayerFixtureStatsValidationSchema),
 )
 
 export default router

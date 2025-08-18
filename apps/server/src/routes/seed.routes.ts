@@ -21,6 +21,23 @@ const router = Router()
 //router.use(requireAuth)
 
 router.post(
+  '/init-all-from-external-api',
+  validateRequestWithBody(async (req: Request, res: Response) => {
+    const { shouldIgnoreBaseData } = req.body
+
+    if (!shouldIgnoreBaseData) {
+      await initDatabase()
+      await initUsersWithSettings()
+      await seedDatabaseFromCsv(['Season', 'Nation'])
+    }
+
+    await seedDatabaseFromExternalApi(req.body)
+
+    res.json({ text: 'Database seeded from external API' })
+  }, seedFromExternalApiValidationSchema),
+)
+
+router.post(
   '/init-all-tables-from-csv',
   validateRequestWithBody(async (req: Request, res: Response) => {
     const { shouldMockBetData, seasons, fixtureLeagueIds, fixtureDateFrom, fixtureDateTo } =
@@ -80,23 +97,6 @@ router.post(
 
     res.json({ text: 'Database seeded from CSV files' })
   }, seedSpecificTablesValidationSchema),
-)
-
-router.post(
-  '/init-all-from-external-api',
-  validateRequestWithBody(async (req: Request, res: Response) => {
-    const { shouldIgnoreBaseData } = req.body
-
-    if (!shouldIgnoreBaseData) {
-      await initDatabase()
-      await initUsersWithSettings()
-      await seedDatabaseFromCsv(['Season', 'Nation'])
-    }
-
-    await seedDatabaseFromExternalApi(req.body)
-
-    res.json({ text: 'Database seeded from external API' })
-  }, seedFromExternalApiValidationSchema),
 )
 
 router.post(

@@ -1,0 +1,20 @@
+@baseUrl = http://localhost:3001/player-season-stats
+
+### Get player season stats
+POST {{baseUrl}}/player-season-stats
+Content-Type: application/json
+
+{
+  "season": 2025,
+  "leagueIds": [39]
+}
+
+### Create player season stats
+POST {{baseUrl}}/create-player-season-stats
+Content-Type: application/json
+
+{
+  "season": 2025,
+  "dateFrom": "2025-08-15",
+  "dateTo": "2025-08-15"
+}

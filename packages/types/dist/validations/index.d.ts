@@ -5,6 +5,8 @@ export * from './external.validations';
 export * from './fixture.validations';
 export * from './league.validations';
 export * from './mock.validations';
+export * from './player-fixture-stats.validations';
+export * from './player-season-stats.validations';
 export * from './seed.validations';
 export * from './shared.validations';
 export * from './team.validations';

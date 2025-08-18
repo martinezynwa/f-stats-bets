@@ -16,6 +16,8 @@ DROP TABLE IF EXISTS "Player" CASCADE;
 DROP TABLE IF EXISTS "PlayerToTeam" CASCADE;
 DROP TABLE IF EXISTS "TeamToLeague" CASCADE;
 DROP TABLE IF EXISTS "LeagueToSeason" CASCADE;
+DROP TABLE IF EXISTS "PlayerSeasonStats" CASCADE;
+DROP TABLE IF EXISTS "PlayerFixtureStats" CASCADE;
 DROP TYPE IF EXISTS federation_type;
 DROP TYPE IF EXISTS organization_type;
 DROP TYPE IF EXISTS league_type;
@@ -342,6 +344,73 @@ CREATE TABLE IF NOT EXISTS "PlayerToTeam" (
     FOREIGN KEY ("teamId") REFERENCES "Team"("teamId") ON DELETE CASCADE
 );
 
+CREATE TABLE IF NOT EXISTS "PlayerFixtureStats" (
+    "id" UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    "fixtureId" INTEGER NOT NULL,
+    "playerId" INTEGER NOT NULL,
+    "season" INTEGER NOT NULL, 
+    "leagueId" INTEGER NOT NULL,
+    "teamId" INTEGER NOT NULL,
+    "date" TEXT NOT NULL,
+    "minutes" INTEGER,
+    "rating" FLOAT,
+    "goals" INTEGER,
+    "assists" INTEGER,
+    "conceded" INTEGER,
+    "saves" INTEGER,
+    "shotsTotal" INTEGER,
+    "shotsOn" INTEGER,
+    "passesTotal" INTEGER,
+    "passesKey" INTEGER,
+    "passesAccuracy" FLOAT,
+    "captain" BOOLEAN,
+    "substitute" BOOLEAN,
+    "position" TEXT,
+    "createdAt" TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
+    "updatedAt" TIMESTAMP WITH TIME ZONE
+);
+
+CREATE TABLE IF NOT EXISTS "PlayerSeasonStats" (
+    "id" UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    "playerId" INTEGER NOT NULL,
+    "season" INTEGER NOT NULL,
+    "leagueId" INTEGER NOT NULL,
+    "teamId" INTEGER NOT NULL,
+    "appearences" INTEGER NOT NULL,
+    "lineups" INTEGER NOT NULL,
+    "captain" INTEGER NOT NULL,
+    "substitute" INTEGER NOT NULL,
+    "minutes" INTEGER NOT NULL,
+    "position" TEXT NOT NULL,
+    "eligibleForRanking" BOOLEAN NOT NULL,
+    "rating" FLOAT NOT NULL,
+    "substitutesIn" INTEGER NOT NULL,
+    "substitutesBench" INTEGER NOT NULL,
+    "goals" INTEGER NOT NULL,
+    "assists" INTEGER NOT NULL,
+    "conceded" INTEGER NOT NULL,
+    "saves" INTEGER NOT NULL,
+    "shotsTotal" INTEGER NOT NULL,
+    "shotsOn" INTEGER NOT NULL,
+    "passesTotal" INTEGER NOT NULL,
+    "passesKey" INTEGER NOT NULL,
+    "passesAccuracy" FLOAT NOT NULL,
+    "minutesPerGame" FLOAT NOT NULL,
+    "goalsAssists" INTEGER NOT NULL,
+    "goalsPerGame" FLOAT NOT NULL,
+    "goalsFrequency" FLOAT NOT NULL,
+    "assistsPerGame" FLOAT NOT NULL,
+    "assistsFrequency" FLOAT NOT NULL,
+    "concededPerGame" FLOAT NOT NULL,
+    "savesPerGame" FLOAT NOT NULL,
+    "shotsTotalPerGame" FLOAT NOT NULL,
+    "shotsOnPerGame" FLOAT NOT NULL,
+    "passesTotalPerGame" FLOAT NOT NULL,
+    "passesKeyPerGame" FLOAT NOT NULL,
+    "createdAt" TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
+    "updatedAt" TIMESTAMP WITH TIME ZONE
+);
+
 CREATE TABLE IF NOT EXISTS "Log" (
     "id" UUID PRIMARY KEY DEFAULT gen_random_uuid(),
     "userId" UUID,
@@ -373,3 +442,5 @@ ALTER TABLE "Player" ENABLE ROW LEVEL SECURITY;
 ALTER TABLE "PlayerToTeam" ENABLE ROW LEVEL SECURITY;
 ALTER TABLE "TeamToLeague" ENABLE ROW LEVEL SECURITY;
 ALTER TABLE "LeagueToSeason" ENABLE ROW LEVEL SECURITY;
+ALTER TABLE "PlayerFixtureStats" ENABLE ROW LEVEL SECURITY;
+ALTER TABLE "PlayerSeasonStats" ENABLE ROW LEVEL SECURITY;

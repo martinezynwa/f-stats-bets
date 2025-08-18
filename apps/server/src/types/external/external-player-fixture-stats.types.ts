@@ -81,13 +81,9 @@ export type FixtureDetail = {
   date: string
   season: number
   fixtureId: number
-  leagueId: string
-  extLeagueId: number
-  round: number
-  homeTeamId?: string //db team ID
-  awayTeamId?: string //db team ID
-  homeTeamExtId: number
-  awayTeamExtId: number
+  leagueId: number
+  homeTeamId?: number
+  awayTeamId?: number
 }
 
 export interface CustomPlayerFixtureDetail {

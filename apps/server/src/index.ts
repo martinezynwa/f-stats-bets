@@ -10,6 +10,8 @@ import fixturesRouter from './routes/fixture.routes'
 import leaguesRouter from './routes/league.routes'
 import mockRouter from './routes/mock.routes'
 import nationsRouter from './routes/nation.routes'
+import playerFixtureStatsRouter from './routes/player-fixture-stats.routes'
+import playerSeasonStatsRouter from './routes/player-season-stats.routes'
 import seasonsRouter from './routes/season.routes'
 import seedRouter from './routes/seed.routes'
 import teamsRouter from './routes/team.routes'
@@ -41,6 +43,8 @@ app.use('/teams', teamsRouter)
 app.use('/users', usersRouter)
 app.use('/seed', seedRouter)
 app.use('/mock', mockRouter)
+app.use('/player-fixture-stats', playerFixtureStatsRouter)
+app.use('/player-season-stats', playerSeasonStatsRouter)
 
 app.use((err: Error, req: Request, res: Response, next: NextFunction) => {
   errorHandler(err, req, res)

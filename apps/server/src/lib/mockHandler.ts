@@ -4,6 +4,7 @@ import { ENDPOINTS } from '../constants/enums'
 import { fixturesMock } from '../mock/fixture.mock'
 import { isDateInRange } from './date-and-time'
 import { playersProfilesMock, playersSquadsMock } from '../mock/player.mock'
+import { playerFixtureStatsMock } from 'src/mock/playerFixtureStats.mock'
 
 interface MockHandlerProps {
   endpoint: ENDPOINTS
@@ -15,12 +16,13 @@ interface MockHandlerProps {
     player?: number
     id?: number
     team?: number
+    fixture?: number
   }
 }
 
 export const mockHandler = (input: MockHandlerProps) => {
   const { endpoint, params } = input
-  const { league, season, from, to, player, id, team } = params || {}
+  const { league, season, from, to, player, id, team, fixture } = params || {}
 
   switch (endpoint) {
     case ENDPOINTS.FIXTURES:
@@ -38,6 +40,14 @@ export const mockHandler = (input: MockHandlerProps) => {
       return playersSquadsMock[season!][team!] || []
     case ENDPOINTS.PLAYERS_PROFILES:
       return playersProfilesMock[player as keyof typeof playersProfilesMock] || []
+    case ENDPOINTS.PLAYER_FIXTURE_STATS:
+      return playerFixtureStatsMock
+        .map(item => {
+          if (item.fixtureDetail.fixtureId === fixture) {
+            return item.response[0]!
+          }
+        })
+        .filter(Boolean)
     default:
       return []
   }

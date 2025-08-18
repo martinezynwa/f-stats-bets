@@ -241,6 +241,73 @@ export interface Player {
   weight: string | null;
 }
 
+export interface PlayerFixtureStats {
+  assists: number | null;
+  captain: boolean | null;
+  conceded: number | null;
+  createdAt: Generated<Timestamp | null>;
+  date: string;
+  fixtureId: number;
+  goals: number | null;
+  id: Generated<string>;
+  leagueId: number;
+  minutes: number | null;
+  passesAccuracy: number | null;
+  passesKey: number | null;
+  passesTotal: number | null;
+  playerId: number;
+  position: string | null;
+  rating: number | null;
+  saves: number | null;
+  season: number;
+  shotsOn: number | null;
+  shotsTotal: number | null;
+  substitute: boolean | null;
+  teamId: number;
+  updatedAt: Timestamp | null;
+}
+
+export interface PlayerSeasonStats {
+  appearences: number;
+  assists: number;
+  assistsFrequency: number;
+  assistsPerGame: number;
+  captain: number;
+  conceded: number;
+  concededPerGame: number;
+  createdAt: Generated<Timestamp | null>;
+  eligibleForRanking: boolean;
+  goals: number;
+  goalsAssists: number;
+  goalsFrequency: number;
+  goalsPerGame: number;
+  id: Generated<string>;
+  leagueId: number;
+  lineups: number;
+  minutes: number;
+  minutesPerGame: number;
+  passesAccuracy: number;
+  passesKey: number;
+  passesKeyPerGame: number;
+  passesTotal: number;
+  passesTotalPerGame: number;
+  playerId: number;
+  position: string;
+  rating: number;
+  saves: number;
+  savesPerGame: number;
+  season: number;
+  shotsOn: number;
+  shotsOnPerGame: number;
+  shotsTotal: number;
+  shotsTotalPerGame: number;
+  substitute: number;
+  substitutesBench: number;
+  substitutesIn: number;
+  teamId: number;
+  updatedAt: Timestamp | null;
+}
+
 export interface PlayerToTeam {
   playerId: number;
   season: number;
@@ -312,6 +379,8 @@ export interface DB {
   Log: Log;
   Nation: Nation;
   Player: Player;
+  PlayerFixtureStats: PlayerFixtureStats;
+  PlayerSeasonStats: PlayerSeasonStats;
   PlayerToTeam: PlayerToTeam;
   Season: Season;
   Team: Team;

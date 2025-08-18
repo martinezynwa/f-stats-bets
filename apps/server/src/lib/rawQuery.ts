@@ -7,6 +7,7 @@ export const buildWhereClause = (conditions: Condition[], joiner?: 'AND' | 'OR')
   const validConditions = conditions.filter(Boolean)
   if (validConditions.length === 0) return ''
   if (validConditions.length === 1) return `WHERE ${validConditions[0]}`
+  if (validConditions.length > 1 && !joiner) throw new Error('joiner is required')
   return `WHERE ${validConditions.join(` ${joiner} `)}`
 }
 

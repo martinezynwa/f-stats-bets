@@ -11,3 +11,13 @@ export const getLeagues = async () => {
 
   return leagues
 }
+
+export const getGamesPlayedInLeagues = async (leagueIds: number[]) => {
+  const gamesPlayed = await db
+    .selectFrom('League')
+    .where('League.leagueId', 'in', leagueIds)
+    .select(['League.gamesPlayed', 'League.leagueId'])
+    .execute()
+
+  return gamesPlayed
+}

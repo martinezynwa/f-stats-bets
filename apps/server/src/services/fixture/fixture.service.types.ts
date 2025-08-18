@@ -5,3 +5,10 @@ export type FixtureDetailWithRound = {
   round: number
   date: string
 }
+
+export interface FixtureSearchProps {
+  dateFrom?: string
+  dateTo?: string
+  season?: number
+  leagueIds?: number[]
+}

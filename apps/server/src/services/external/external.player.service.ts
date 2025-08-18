@@ -7,6 +7,11 @@ import {
 } from '../../types/external/external-player.types'
 import { InsertPlayersValidationSchema } from '@f-stats-bets/types'
 import { TransformPlayerResponsesOutput } from './external.player.service.types'
+import {
+  CustomPlayerFixtureDetail,
+  ExternalPlayerFixtureStatisticsResponse,
+  FixtureDetail,
+} from '../../types/external/external-player-fixture-stats.types'
 
 export const fetchPlayersSquads = async (
   input: InsertPlayersValidationSchema,
@@ -84,4 +89,23 @@ export const transformPlayerResponses = (
   }))
 
   return { players, playersToTeams }
+}
+
+export const fetchPlayerFixtureStats = async (fixtureDetails: FixtureDetail[]) => {
+  const playerFixtureStats: CustomPlayerFixtureDetail[] = []
+
+  for (const fixtureDetail of fixtureDetails) {
+    const response = await externalRequestHandler<ExternalPlayerFixtureStatisticsResponse>({
+      endpoint: ENDPOINTS.PLAYER_FIXTURE_STATS,
+      params: { fixture: fixtureDetail.fixtureId },
+      responseArray: [],
+    })
+
+    playerFixtureStats.push({
+      fixtureDetail,
+      response,
+    })
+  }
+
+  return playerFixtureStats
 }

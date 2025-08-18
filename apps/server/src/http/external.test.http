@@ -124,3 +124,21 @@ Content-Type: application/json
 {
   "playerIds": [206254]
 }
+
+### Fetch player fixture stats
+## params - fixtureIds
+POST {{baseUrl}}/fetch-player-fixture-stats
+Content-Type: application/json
+
+{
+  "fixtureIds": [1378969,1378973]
+}
+
+### Fetch and insert player fixture stats
+## params - fixtureIds
+POST {{baseUrl}}/insert-player-fixture-stats
+Content-Type: application/json
+
+{
+  "fixtureIds": [1378969,1378973]
+}

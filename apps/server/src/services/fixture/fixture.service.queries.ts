@@ -3,8 +3,11 @@ import {
   FixturesSchema,
   FixtureWithBet,
   FixtureWithTeamDetails,
+  InsertPlayerFixtureStatsValidationSchema,
 } from '@f-stats-bets/types'
-import { rawQueryArray } from '../../lib'
+import { buildWhereClause, rawQueryArray } from '../../lib'
+import { FixtureDetail } from 'src/types/external/external-player-fixture-stats.types'
+import { FixtureSearchProps } from './fixture.service.types'
 
 export const getFixturesWithBets = async (input: FixturesBetsSchema): Promise<FixtureWithBet[]> => {
   const { dateFrom, dateTo, leagueIds, season, userId, betCompetitionId } = input
@@ -85,4 +88,51 @@ export const getFixtures = async (input: FixturesSchema) => {
   `)
 
   return fixtures
+}
+
+export const getManyFixturesDetail = async (input: InsertPlayerFixtureStatsValidationSchema) => {
+  const { fixtureIds, leagueIds, dateFrom, dateTo } = input
+
+  const data = await rawQueryArray<FixtureDetail>(`
+    SELECT 
+      date,
+      season,
+      "fixtureId",
+      "leagueId",
+      "homeTeamId",
+      "awayTeamId"
+    FROM "Fixture" 
+    ${buildWhereClause(
+      [
+        dateFrom && dateTo
+          ? `"date"::date BETWEEN '${dateFrom}'::date AND '${dateTo}'::date`
+          : null,
+        fixtureIds?.length ? `"fixtureId" IN (${fixtureIds.map(Number).join(',')})` : null,
+        leagueIds?.length ? `"leagueId" IN (${leagueIds.map(Number).join(',')})` : null,
+      ],
+      'AND',
+    )}
+  `)
+
+  return data
+}
+
+export const getFixtureIds = async (input: FixtureSearchProps) => {
+  const { dateFrom, dateTo, season, leagueIds } = input
+
+  const data = await rawQueryArray<{ fixtureId: number }>(`
+    SELECT "fixtureId" FROM "Fixture"
+    ${buildWhereClause(
+      [
+        dateFrom && dateTo
+          ? `"date"::date BETWEEN '${dateFrom}'::date AND '${dateTo}'::date`
+          : null,
+        season ? `"season" = ${season}` : null,
+        leagueIds?.length ? `"leagueId" IN (${leagueIds.map(Number).join(',')})` : null,
+      ],
+      'AND',
+    )}
+  `)
+
+  return data.map(d => d.fixtureId)
 }

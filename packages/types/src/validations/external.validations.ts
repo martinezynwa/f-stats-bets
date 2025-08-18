@@ -46,3 +46,20 @@ export const fetchPlayersProfilesValidationSchema = z.object({
 export type FetchPlayersProfilesValidationSchema = z.infer<
   typeof fetchPlayersProfilesValidationSchema
 >
+
+export const fetchPlayerFixtureStatsValidationSchema = z.object({
+  fixtureIds: z.array(z.number()),
+})
+export type FetchPlayerFixtureStatsValidationSchema = z.infer<
+  typeof fetchPlayerFixtureStatsValidationSchema
+>
+
+export const insertPlayerFixtureStatsValidationSchema = z.object({
+  fixtureIds: z.array(z.number()).optional(),
+  leagueIds: z.array(z.number()).optional(),
+  dateFrom: z.string().optional(),
+  dateTo: z.string().optional(),
+})
+export type InsertPlayerFixtureStatsValidationSchema = z.infer<
+  typeof insertPlayerFixtureStatsValidationSchema
+>
