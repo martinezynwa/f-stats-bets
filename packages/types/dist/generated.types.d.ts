@@ -248,6 +248,7 @@ export interface PlayerSeasonStats {
     conceded: number;
     concededPerGame: number;
     createdAt: Generated<Timestamp | null>;
+    eligibileAppearencesForRating: number;
     eligibleForRanking: boolean;
     goals: number;
     goalsAssists: number;

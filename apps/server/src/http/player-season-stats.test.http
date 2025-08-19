@@ -14,7 +14,7 @@ POST {{baseUrl}}/create-player-season-stats
 Content-Type: application/json
 
 {
-  "season": 2025,
-  "dateFrom": "2025-08-15",
-  "dateTo": "2025-08-15"
+  "season": 2024,
+  "dateFrom": "2024-08-21",
+  "dateTo": "2024-08-26"
 }

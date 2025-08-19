@@ -1,4 +1,4 @@
-import { InsertPlayerSeasonStats, PlayerFixtureStats } from '@f-stats-bets/types'
+import { InsertPlayerSeasonStats, PlayerFixtureStats, PlayerSeasonStats } from '@f-stats-bets/types'
 import { limitDecimalPlaces } from '../../lib/util'
 import { RANKING_ELIGIBILITY_THRESHOLD } from 'src/constants/constants'
 import {
@@ -6,6 +6,8 @@ import {
   AccumulatedStats,
   GroupKey,
   PerGameStats,
+  allPlayerSeasonStatsKeys,
+  PlayerSeasonStatsSingleGameKeys,
 } from './player-season-stats.service.types'
 
 export const countPlayerSeasonStats = (
@@ -31,7 +33,6 @@ export const countPlayerSeasonStats = (
       teamId: keyAttributes.teamId,
       ...accumulatedStats,
       ...calculatedStats,
-      eligibileAppearencesForRating: undefined,
     }
   })
 }
@@ -139,3 +140,191 @@ export const getMostCommonValue = (data: PlayerFixtureStats[], attributeName: 'p
 
 export const isEligibleForRanking = (gamesPlayedInALeague: number, playerAppearences: number) =>
   playerAppearences >= gamesPlayedInALeague * RANKING_ELIGIBILITY_THRESHOLD
+
+export const countAndEditPlayerSeasonStats = (
+  playerSeasonStats: PlayerSeasonStats,
+  playerFixtureStats: PlayerFixtureStats,
+  gamesPlayedInALeague: number,
+) => {
+  const result = allPlayerSeasonStatsKeys.reduce(
+    (acc, key) => {
+      if (
+        key === 'id' ||
+        key === 'playerId' ||
+        key === 'leagueId' ||
+        key === 'teamId' ||
+        key === 'season' ||
+        key === 'position'
+      ) {
+        acc[key] = playerSeasonStats[key]
+
+        return acc
+      }
+
+      if (key === 'rating') {
+        const seasonAppearences = playerSeasonStats.appearences
+        const seasonRating = playerSeasonStats.rating
+        const eligibleForRating = playerFixtureStats.minutes! > 5
+
+        if (seasonRating === 0 && !playerFixtureStats[key]) {
+          acc[key] = 0
+
+          return acc
+        }
+
+        if (seasonRating === 0 && playerFixtureStats[key]) {
+          if (eligibleForRating) {
+            acc[key] = limitDecimalPlaces(playerFixtureStats[key])
+
+            return acc
+          }
+
+          acc[key] = 0
+
+          return acc
+        }
+
+        if (!eligibleForRating) {
+          acc[key] = seasonRating
+
+          return acc
+        }
+
+        const updatedRating =
+          (seasonRating * seasonAppearences + playerFixtureStats[key]!) / (seasonAppearences + 1)
+
+        acc[key] = limitDecimalPlaces(updatedRating)
+
+        return acc
+      }
+
+      if (
+        key === 'goalsFrequency' ||
+        key === 'assistsFrequency' ||
+        key === 'minutesPerGame' ||
+        key === 'goalsPerGame' ||
+        key === 'assistsPerGame' ||
+        key === 'concededPerGame' ||
+        key === 'savesPerGame' ||
+        key === 'shotsTotalPerGame' ||
+        key === 'shotsOnPerGame' ||
+        key === 'passesTotalPerGame' ||
+        key === 'passesKeyPerGame'
+      ) {
+        const parsedKey = key.replace('PerGame', '') as PlayerSeasonStatsSingleGameKeys
+        const played = !!playerFixtureStats.minutes
+
+        if (played) {
+          if (key === 'goalsFrequency' || key === 'assistsFrequency') {
+            const parsed = key.replace('Frequency', '') as PlayerSeasonStatsSingleGameKeys
+            const newTotalMinutes = playerSeasonStats.minutes + (playerFixtureStats.minutes ?? 0)
+
+            const newTotalValue = playerSeasonStats[parsed] + (playerFixtureStats[parsed] ?? 0)
+
+            acc[key] = newTotalValue === 0 ? 0 : newTotalMinutes / newTotalValue
+
+            return acc
+          }
+
+          const newTotalValue = playerSeasonStats[parsedKey] + (playerFixtureStats[parsedKey] ?? 0)
+          const newTotalAppearances =
+            playerSeasonStats.appearences + (playerFixtureStats.minutes ? 1 : 0)
+
+          const newValue = newTotalValue / newTotalAppearances
+          const value = limitDecimalPlaces(newValue)
+          acc[key] = value
+
+          return acc
+        }
+
+        return acc
+      }
+
+      if (key === 'goalsAssists') {
+        const playerSeasonStatValue = parseInt(playerSeasonStats[key] as unknown as string)
+
+        acc[key] =
+          (playerSeasonStatValue || 0) +
+          (playerFixtureStats.goals || 0) +
+          (playerFixtureStats.assists || 0)
+      }
+
+      if (
+        key === 'appearences' ||
+        key === 'eligibileAppearencesForRating' ||
+        key === 'lineups' ||
+        key === 'minutes' ||
+        key === 'substitutesIn' ||
+        key === 'substitutesBench' ||
+        key === 'goals' ||
+        key === 'assists' ||
+        key === 'conceded' ||
+        key === 'saves' ||
+        key === 'shotsTotal' ||
+        key === 'shotsOn' ||
+        key === 'passesTotal' ||
+        key === 'passesKey' ||
+        key === 'passesAccuracy'
+      ) {
+        if (key === 'appearences') {
+          acc[key] = !playerFixtureStats.minutes
+            ? playerSeasonStats[key]
+            : playerSeasonStats[key] + 1
+          return acc
+        }
+
+        if (key === 'lineups') {
+          acc[key] = playerFixtureStats.substitute
+            ? playerSeasonStats[key]
+            : playerSeasonStats[key] + 1
+          return acc
+        }
+
+        if (key === 'substitutesIn') {
+          acc[key] =
+            playerFixtureStats.substitute && playerFixtureStats.minutes
+              ? playerSeasonStats[key] + 1
+              : playerSeasonStats[key]
+          return acc
+        }
+
+        if (key === 'substitutesBench') {
+          acc[key] =
+            playerFixtureStats.substitute && !playerFixtureStats.minutes
+              ? playerSeasonStats[key] + 1
+              : playerSeasonStats[key]
+          return acc
+        }
+
+        if (key === 'eligibileAppearencesForRating') {
+          acc[key] =
+            playerFixtureStats.minutes && playerFixtureStats.minutes > 5
+              ? playerSeasonStats[key] + 1
+              : playerSeasonStats[key]
+          return acc
+        }
+
+        const playerSeasonStatValue = parseInt(playerSeasonStats[key] as unknown as string)
+        const playerFixtureStatValue = parseInt(playerFixtureStats[key] as unknown as string)
+
+        acc[key] = (playerSeasonStatValue || 0) + (playerFixtureStatValue || 0)
+
+        return acc
+      }
+
+      if (key === 'eligibleForRanking') {
+        acc[key] = isEligibleForRanking(
+          gamesPlayedInALeague,
+          playerSeasonStats.appearences + ((playerFixtureStats.minutes || 0) > 0 ? 1 : 0),
+        )
+
+        return acc
+      }
+
+      return acc
+    },
+    {} as Record<keyof PlayerSeasonStats, number | string | boolean>,
+  )
+
+  return result as unknown as PlayerSeasonStats //TODO fix this
+}

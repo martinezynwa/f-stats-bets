@@ -1,7 +1,10 @@
 import { InsertPlayerSeasonStats, PlayerFixtureStats, PlayerSeasonStats } from '@f-stats-bets/types'
 import { db } from '../../db'
 import { getGamesPlayedInLeagues } from '../league/league.service.queries'
-import { countPlayerSeasonStats } from './player-season-stats.service.helpers'
+import {
+  countAndEditPlayerSeasonStats,
+  countPlayerSeasonStats,
+} from './player-season-stats.service.helpers'
 import { rawQueryArray } from 'src/lib'
 
 export const insertPlayerSeasonStats = async (playerSeasonStats: InsertPlayerSeasonStats[]) => {
@@ -27,7 +30,7 @@ export const createAndInsertPlayerSeasonStats = async (fixtureIds: number[]) => 
   ].join(',')
 
   const existingPlayerSeasonStats = await rawQueryArray<PlayerSeasonStats>(`
-    SELECT "playerId", "leagueId" FROM "PlayerSeasonStats"
+    SELECT * FROM "PlayerSeasonStats"
     WHERE ("playerId", "leagueId") IN (${playerLeaguePairs})
   `)
 
@@ -60,6 +63,7 @@ export const createAndInsertPlayerSeasonStats = async (fixtureIds: number[]) => 
   const gamesPlayedInLeagues = await getGamesPlayedInLeagues(leagueIds)
 
   let addedPlayerSeasonStats: PlayerSeasonStats[] = []
+  let updatedPlayerSeasonStats: PlayerSeasonStats[] = []
 
   if (withoutSeasonStats.length > 0) {
     const groupedByPlayer = withoutSeasonStats.reduce(
@@ -86,5 +90,35 @@ export const createAndInsertPlayerSeasonStats = async (fixtureIds: number[]) => 
     //TODO create PlayerToTeam[] if necessary
   }
 
-  return { addedPlayerSeasonStats }
+  if (withSeasonStats.length > 0) {
+    //combine data for next step
+    const combinedData = existingPlayerSeasonStats.map(playerSeasonStats => ({
+      playerSeasonStats,
+      playerFixtureStats: withSeasonStats.find(p => p.playerId === playerSeasonStats.playerId),
+    }))
+
+    //go through each record and edit existing PlayerSeasonStats
+    updatedPlayerSeasonStats = combinedData.map(({ playerFixtureStats, playerSeasonStats }) =>
+      countAndEditPlayerSeasonStats(
+        playerSeasonStats,
+        playerFixtureStats!,
+        gamesPlayedInLeagues[0]!.gamesPlayed,
+      ),
+    )
+
+    //update existing PlayerSeasonStats in db
+    await db.transaction().execute(async trx => {
+      for (const stats of updatedPlayerSeasonStats) {
+        const { id, createdAt, updatedAt, ...updateData } = stats
+
+        await trx
+          .updateTable('PlayerSeasonStats')
+          .set({ ...updateData, updatedAt: new Date() })
+          .where('id', '=', id)
+          .execute()
+      }
+    })
+  }
+
+  return { addedPlayerSeasonStats, updatedPlayerSeasonStats }
 }

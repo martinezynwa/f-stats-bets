@@ -44,10 +44,11 @@ export const mockHandler = (input: MockHandlerProps) => {
       return playerFixtureStatsMock
         .map(item => {
           if (item.fixtureDetail.fixtureId === fixture) {
-            return item.response[0]!
+            return item.response
           }
         })
         .filter(Boolean)
+        .flat()
     default:
       return []
   }

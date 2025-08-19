@@ -70,9 +70,9 @@ Content-Type: application/json
 
 {
   "leagueIds": [39],
-  "season": 2025,
-  "dateFrom": "2025-08-15",
-  "dateTo": "2025-08-19"
+  "season": 2024,
+  "dateFrom": "2024-08-10",
+  "dateTo": "2024-09-03"
 }
 
 ### Fetch and insert fixtures
@@ -131,7 +131,7 @@ POST {{baseUrl}}/fetch-player-fixture-stats
 Content-Type: application/json
 
 {
-  "fixtureIds": [1378969,1378973]
+  "fixtureIds": [1208022,1208036,1208047]
 }
 
 ### Fetch and insert player fixture stats
@@ -140,5 +140,5 @@ POST {{baseUrl}}/insert-player-fixture-stats
 Content-Type: application/json
 
 {
-  "fixtureIds": [1378969,1378973]
+  "fixtureIds": [1208022,1208036,1208047]
 }

@@ -174,7 +174,7 @@ router.post(
 router.post(
   '/fetch-player-fixture-stats',
   validateRequestWithBody(async (req, res) => {
-    const fixtureDetails = await getManyFixturesDetail(req.body.fixtureIds)
+    const fixtureDetails = await getManyFixturesDetail(req.body)
 
     const playerFixtureStatsData = await fetchPlayerFixtureStats(fixtureDetails)
 

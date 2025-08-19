@@ -192,7 +192,7 @@ export const supportedLeagues: SupportedLeague = {
       variant: 'club',
       federation: FederationType.EUROPE,
       organization: OrganizationType.ENGLAND,
-      seasons: [2025],
+      seasons: [2024],
       disabled: false,
     },
     {

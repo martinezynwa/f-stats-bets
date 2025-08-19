@@ -383,6 +383,7 @@ CREATE TABLE IF NOT EXISTS "PlayerSeasonStats" (
     "minutes" INTEGER NOT NULL,
     "position" TEXT NOT NULL,
     "eligibleForRanking" BOOLEAN NOT NULL,
+    "eligibileAppearencesForRating" INTEGER NOT NULL,
     "rating" FLOAT NOT NULL,
     "substitutesIn" INTEGER NOT NULL,
     "substitutesBench" INTEGER NOT NULL,
