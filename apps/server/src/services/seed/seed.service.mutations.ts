@@ -8,11 +8,14 @@ import { fetchFixtures } from '../external/external.fixture.service'
 import { fetchLeagueInfo } from '../external/external.league.service'
 import { fetchTeamsInfo } from '../external/external.team.service'
 import { upsertFixtures } from '../fixture/fixture.service.mutations'
+import { getFixtureIds, getManyFixturesDetail } from '../fixture/fixture.service.queries'
 import { insertLeagueToDb, insertLeagueToSeasonToDb } from '../league/league.service.mutations'
+import { fetchAndInsertPlayerFixtureStats } from '../player-fixture-stats/player-fixture-stats.service.mutations'
+import { createAndInsertPlayerSeasonStats } from '../player-season-stats/player-season-stats.service.mutations'
+import { fetchAndInsertPlayers } from '../player/player.service.mutations'
 import { insertTeamsToDb } from '../team/team.service.mutations'
 import { getAssetPath, handleCsvSeed, parseCsv } from './seed.service.helpers'
 import { TableWithRelations, TableWithoutRelations } from './seed.service.types'
-import { fetchAndInsertPlayers } from '../player/player.service.mutations'
 
 export const initDatabase = async (dbSchemaPath?: string) => {
   try {
@@ -128,5 +131,15 @@ export const seedDatabaseFromExternalApi = async (input: SeedFromExternalApiVali
       dateTo,
     })
     await upsertFixtures(externalFixturesData, season)
+
+    const fixtureDetails = await getManyFixturesDetail({
+      leagueIds: [leagueId],
+      dateFrom,
+      dateTo,
+    })
+    await fetchAndInsertPlayerFixtureStats(fixtureDetails)
+
+    const fixtureIds = await getFixtureIds({ dateFrom, dateTo, leagueIds: [leagueId] })
+    await createAndInsertPlayerSeasonStats(fixtureIds)
   }
 }

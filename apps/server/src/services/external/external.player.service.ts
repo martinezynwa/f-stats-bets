@@ -1,17 +1,17 @@
+import { InsertPlayersValidationSchema } from '@f-stats-bets/types'
 import { db } from 'src/db'
 import { ENDPOINTS } from '../../constants/enums'
 import { externalRequestHandler } from '../../lib/externalRequestHandler'
-import {
-  ExternalPlayerInfoResponse,
-  ExternalPlayerSquadsResponse,
-} from '../../types/external/external-player.types'
-import { InsertPlayersValidationSchema } from '@f-stats-bets/types'
-import { TransformPlayerResponsesOutput } from './external.player.service.types'
 import {
   CustomPlayerFixtureDetail,
   ExternalPlayerFixtureStatisticsResponse,
   FixtureDetail,
 } from '../../types/external/external-player-fixture-stats.types'
+import {
+  ExternalPlayerInfoResponse,
+  ExternalPlayerSquadsResponse,
+} from '../../types/external/external-player.types'
+import { TransformPlayerResponsesOutput } from './external.player.service.types'
 
 export const fetchPlayersSquads = async (
   input: InsertPlayersValidationSchema,
@@ -75,7 +75,13 @@ export const transformPlayerResponses = (
     })),
   )
 
-  const players = playersProfiles.map(player => ({
+  const players = transformPlayerProfileResponse(playersProfiles)
+
+  return { players, playersToTeams }
+}
+
+export const transformPlayerProfileResponse = (input: ExternalPlayerInfoResponse[]) =>
+  input.map(player => ({
     playerId: player.player.id,
     name: player.player.name,
     firstName: player.player.firstname,
@@ -87,9 +93,6 @@ export const transformPlayerResponses = (
     weight: player.player.weight,
     photo: player.player.photo,
   }))
-
-  return { players, playersToTeams }
-}
 
 export const fetchPlayerFixtureStats = async (fixtureDetails: FixtureDetail[]) => {
   const playerFixtureStats: CustomPlayerFixtureDetail[] = []

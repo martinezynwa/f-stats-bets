@@ -12,6 +12,7 @@ import mockRouter from './routes/mock.routes'
 import nationsRouter from './routes/nation.routes'
 import playerFixtureStatsRouter from './routes/player-fixture-stats.routes'
 import playerSeasonStatsRouter from './routes/player-season-stats.routes'
+import playerRouter from './routes/player.routes'
 import seasonsRouter from './routes/season.routes'
 import seedRouter from './routes/seed.routes'
 import teamsRouter from './routes/team.routes'
@@ -41,6 +42,7 @@ app.use('/nations', nationsRouter)
 app.use('/seasons', seasonsRouter)
 app.use('/teams', teamsRouter)
 app.use('/users', usersRouter)
+app.use('/player', playerRouter)
 app.use('/seed', seedRouter)
 app.use('/mock', mockRouter)
 app.use('/player-fixture-stats', playerFixtureStatsRouter)

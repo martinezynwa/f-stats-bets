@@ -1,0 +1,31 @@
+@baseUrl = http://localhost:3001/player
+
+### Create Player and PlayerToTeam from Fixtures
+POST {{baseUrl}}/create-players-fully
+Content-Type: application/json
+
+{
+  "season": 2024,
+  "dateFrom": "2024-08-16",
+  "dateTo": "2024-08-19"
+}
+
+### Create Player Profile from Fixtures
+POST {{baseUrl}}/create-player-profile
+Content-Type: application/json
+
+{
+  "season": 2024,
+  "dateFrom": "2024-08-16",
+  "dateTo": "2024-08-19"
+}
+
+### Create PlayerToTeam from Fixtures
+POST {{baseUrl}}/create-player-to-team
+Content-Type: application/json  
+
+{
+  "season": 2024,
+  "dateFrom": "2024-08-16",
+  "dateTo": "2024-08-19"
+}

@@ -23,6 +23,7 @@ __exportStar(require("./league.validations"), exports);
 __exportStar(require("./mock.validations"), exports);
 __exportStar(require("./player-fixture-stats.validations"), exports);
 __exportStar(require("./player-season-stats.validations"), exports);
+__exportStar(require("./player.validations"), exports);
 __exportStar(require("./seed.validations"), exports);
 __exportStar(require("./shared.validations"), exports);
 __exportStar(require("./team.validations"), exports);

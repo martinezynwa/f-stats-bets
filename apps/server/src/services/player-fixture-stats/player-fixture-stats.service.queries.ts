@@ -2,11 +2,14 @@ import { PlayerFixtureStats } from '@f-stats-bets/types'
 import { buildWhereClause, rawQueryArray } from '../../lib'
 import { GetPlayerFixtureStatsProps } from './player-fixture-stats.service.types'
 
-export const getPlayerFixtureStats = async (input: GetPlayerFixtureStatsProps) => {
+export const getPlayerFixtureStats = async <T = PlayerFixtureStats>(
+  input: GetPlayerFixtureStatsProps,
+  selector?: string,
+): Promise<T[]> => {
   const { season, leagueIds, dateFrom, dateTo } = input
 
-  const data = await rawQueryArray<PlayerFixtureStats>(`
-    SELECT * FROM "PlayerFixtureStats"
+  const data = await rawQueryArray<T>(`
+    SELECT ${selector || '*'} FROM "PlayerFixtureStats"
     ${buildWhereClause(
       [
         season ? `"season" = ${season}` : null,
