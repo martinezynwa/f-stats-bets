@@ -144,3 +144,8 @@ export type ExternalPlayersTeamsResponse = {
   team: Team
   seasons: number[]
 }
+
+export type ExternalPlayersTeamsResponseWithPlayerId = {
+  playerId: number
+  response: ExternalPlayersTeamsResponse[]
+}

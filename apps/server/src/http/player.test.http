@@ -29,3 +29,13 @@ Content-Type: application/json
   "dateFrom": "2024-08-16",
   "dateTo": "2024-08-19"
 }
+
+### Create PlayerToTeam History
+POST {{baseUrl}}/create-player-to-team-history
+Content-Type: application/json
+
+{
+  "playerSquadsSeason": 2025,
+  "seasonHistoryInYears": 5,
+  "leagueIds": [39]
+}

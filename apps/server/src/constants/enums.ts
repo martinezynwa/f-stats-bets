@@ -10,6 +10,7 @@ export enum ENDPOINTS {
   PLAYERS_SQUADS = '/players/squads',
   PLAYERS_PROFILES = '/players/profiles',
   PLAYER_FIXTURE_STATS = '/fixtures/players',
+  PLAYERS_TEAMS = '/players/teams',
 }
 
 export enum SUBENDPOINTS {

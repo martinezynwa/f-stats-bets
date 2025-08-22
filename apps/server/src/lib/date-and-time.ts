@@ -24,3 +24,5 @@ export const isSelectedDateWithinPeriod = (
 
 export const formatDate = (date: Date, withTime?: boolean) =>
   format(date, withTime ? "yyyy-MM-dd'T'HH:mm:ssXXX" : 'yyyy-MM-dd')
+
+export const getCurrentYear = () => new Date().getFullYear()

@@ -18,3 +18,9 @@ export const getTeams = async (input: TeamsValidationSchema) => {
 
   return teams
 }
+
+export const getTeamIds = async () => {
+  const teams = await rawQueryArray<{ teamId: number }>(`SELECT "teamId" FROM "Team"`)
+
+  return teams.map(t => t.teamId)
+}

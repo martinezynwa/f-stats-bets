@@ -10,6 +10,8 @@ import {
 import {
   ExternalPlayerInfoResponse,
   ExternalPlayerSquadsResponse,
+  ExternalPlayersTeamsResponse,
+  ExternalPlayersTeamsResponseWithPlayerId,
 } from '../../types/external/external-player.types'
 import { TransformPlayerResponsesOutput } from './external.player.service.types'
 
@@ -112,4 +114,23 @@ export const fetchPlayerFixtureStats = async (fixtureDetails: FixtureDetail[]) =
   }
 
   return playerFixtureStats
+}
+
+export const fetchPlayersTeamsHistory = async (playerIds: number[]) => {
+  const playersTeams: ExternalPlayersTeamsResponseWithPlayerId[] = []
+
+  for (const playerId of playerIds) {
+    const response = await externalRequestHandler<ExternalPlayersTeamsResponse>({
+      endpoint: ENDPOINTS.PLAYERS_TEAMS,
+      params: { player: playerId },
+      responseArray: [],
+    })
+
+    playersTeams.push({
+      playerId,
+      response,
+    })
+  }
+
+  return playersTeams
 }

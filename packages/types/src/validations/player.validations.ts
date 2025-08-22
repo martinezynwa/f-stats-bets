@@ -17,3 +17,12 @@ export const createPlayerFromFixturesValidationSchema = z.object({
 export type CreatePlayerFromFixturesValidationSchema = z.infer<
   typeof createPlayerFromFixturesValidationSchema
 >
+
+export const createPlayerToTeamHistoryValidationSchema = z.object({
+  playerSquadsSeason: z.number(),
+  seasonHistoryInYears: z.number(),
+  leagueIds: z.array(z.number()).optional(),
+})
+export type CreatePlayerToTeamHistoryValidationSchema = z.infer<
+  typeof createPlayerToTeamHistoryValidationSchema
+>

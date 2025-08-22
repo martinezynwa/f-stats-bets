@@ -1,5 +1,6 @@
 import {
   CreatePlayerFromFixturesValidationSchema,
+  CreatePlayerToTeamHistoryValidationSchema,
   CreatePlayerToTeamValidationSchema,
   InsertPlayer,
   InsertPlayersValidationSchema,
@@ -11,12 +12,15 @@ import { rawQueryArray } from '../../lib'
 import {
   fetchPlayersProfiles,
   fetchPlayersSquads,
+  fetchPlayersTeamsHistory,
   transformPlayerProfileResponse,
   transformPlayerResponses,
 } from '../external/external.player.service'
 import { getPlayerFixtureStats } from '../player-fixture-stats/player-fixture-stats.service.queries'
 import { getPlayers } from './player.service.queries'
 import { PlayerFixtureStatsSimple } from './player.service.types'
+import { getLeagues } from '../league/league.service.queries'
+import { getCurrentYear } from 'src/lib/date-and-time'
 
 export const insertPlayers = async (players: InsertPlayer[]) => {
   const added = await db.insertInto('Player').values(players).returningAll().execute()
@@ -161,6 +165,46 @@ export const getExistingPlayerToTeamRelationships = async (
   const playerToTeamToInsert = playerToTeamObjects.filter(p => playerIdsInDb.includes(p.playerId))
 
   const added = await insertPlayersToTeams(playerToTeamToInsert)
+
+  return added
+}
+
+export const createPlayerToTeamHistory = async (
+  input: CreatePlayerToTeamHistoryValidationSchema,
+) => {
+  const { playerSquadsSeason, seasonHistoryInYears, leagueIds } = input
+  const allowedSeasons = Array.from(
+    { length: seasonHistoryInYears },
+    (_, i) => getCurrentYear() - i,
+  )
+
+  const selectedLeagueIds = leagueIds ?? (await getLeagues()).map(l => l.leagueId)
+
+  const playerSquadsResponse = await fetchPlayersSquads({
+    season: playerSquadsSeason,
+    leagueIds: selectedLeagueIds,
+  })
+
+  const playerIds = playerSquadsResponse.flatMap(
+    team => team.players?.map(player => player.id) || [],
+  )
+
+  const playersTeamsHistory = await fetchPlayersTeamsHistory(playerIds)
+
+  const playerToTeamObjects = playersTeamsHistory.flatMap(({ playerId, response }) =>
+    response.flatMap(r =>
+      r.seasons
+        .filter(s => allowedSeasons.includes(s))
+        .map(season => ({
+          playerId,
+          season,
+          teamId: r.team.id,
+          isActual: season === playerSquadsSeason,
+        })),
+    ),
+  )
+
+  const added = await insertPlayersToTeams(playerToTeamObjects)
 
   return added
 }

@@ -5,6 +5,7 @@ import { fixturesMock } from '../mock/fixture.mock'
 import { isDateInRange } from './date-and-time'
 import { playersProfilesMock, playersSquadsMock } from '../mock/player.mock'
 import { playerFixtureStatsMock } from 'src/mock/playerFixtureStats.mock'
+import { playersTeamsMock } from 'src/mock/playersTeams.mock'
 
 interface MockHandlerProps {
   endpoint: ENDPOINTS
@@ -49,6 +50,8 @@ export const mockHandler = (input: MockHandlerProps) => {
         })
         .filter(Boolean)
         .flat()
+    case ENDPOINTS.PLAYERS_TEAMS:
+      return playersTeamsMock[player!] || []
     default:
       return []
   }

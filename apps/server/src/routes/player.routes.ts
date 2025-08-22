@@ -1,5 +1,6 @@
 import {
   createPlayerFromFixturesValidationSchema,
+  createPlayerToTeamHistoryValidationSchema,
   createPlayerToTeamValidationSchema,
 } from '@f-stats-bets/types'
 import { Router } from 'express'
@@ -8,6 +9,7 @@ import {
   addNewPlayers,
   createPlayersFromFixtures,
   createPlayerToTeamFromFixtures,
+  createPlayerToTeamHistory,
 } from '../services/player/player.service.mutations'
 
 const router = Router()
@@ -39,6 +41,15 @@ router.post(
 
     res.json(data)
   }, createPlayerToTeamValidationSchema),
+)
+
+router.post(
+  '/create-player-to-team-history',
+  validateRequestWithBody(async (req, res) => {
+    const data = await createPlayerToTeamHistory(req.body)
+
+    res.json(data)
+  }, createPlayerToTeamHistoryValidationSchema),
 )
 
 export default router
