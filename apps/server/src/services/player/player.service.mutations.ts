@@ -30,6 +30,22 @@ export const insertPlayersToTeams = async (playersToTeams: InsertPlayerToTeam[])
   return added
 }
 
+export const updateManyPlayerToTeam = async (playerToTeam: PlayerToTeam[]) => {
+  const updated = await db.transaction().execute(async trx => {
+    for (const player of playerToTeam) {
+      await trx
+        .updateTable('PlayerToTeam')
+        .set({ ...player, isActual: false })
+        .where('season', '=', player.season)
+        .where('playerId', '=', player.playerId)
+        .where('teamId', '=', player.teamId)
+        .execute()
+    }
+  })
+
+  return updated
+}
+
 export const fetchAndInsertPlayers = async (input: InsertPlayersValidationSchema) => {
   const playerSquadsResponse = await fetchPlayersSquads(input)
 
@@ -136,7 +152,7 @@ export const getExistingPlayerToTeamRelationships = async (
 
   const playerToTeamObjects = newPlayerToTeamPairs.map(pair => {
     const [playerId, teamId, season] = pair.replace(/[()]/g, '').split(',').map(Number)
-    return { playerId, teamId, season }
+    return { playerId, teamId, season, isActual: true }
   })
 
   const playersInDb = await getPlayers({ playerIds: playerToTeamObjects.map(p => p.playerId) })

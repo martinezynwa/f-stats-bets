@@ -1,15 +1,20 @@
-import { TeamsValidationSchema } from '@f-stats-bets/types'
-import { db } from '../../db'
+import { Team, TeamsValidationSchema } from '@f-stats-bets/types'
+import { buildWhereClause, rawQueryArray } from '../../lib/rawQuery'
 
 export const getTeams = async (input: TeamsValidationSchema) => {
-  const { leagueId, season } = input
+  const { leagueIds, season } = input
 
-  const teams = await db
-    .selectFrom('Team')
-    .selectAll()
-    .where('leagueId', '=', leagueId)
-    .where('season', '=', season)
-    .execute()
+  const teams = await rawQueryArray<Team>(
+    `SELECT DISTINCT t.* FROM "Team" t
+    INNER JOIN "TeamToLeague" ttl ON t."teamId" = ttl."teamId"
+    ${buildWhereClause(
+      [
+        `ttl."season" = ${season}`,
+        `${leagueIds?.length ? `ttl."leagueId" IN (${leagueIds.join(',')})` : null}`,
+      ],
+      'AND',
+    )} `,
+  )
 
   return teams
 }

@@ -280,7 +280,14 @@ export interface PlayerSeasonStats {
     teamId: number;
     updatedAt: Timestamp | null;
 }
+export interface PlayerStatus {
+    isActive: boolean;
+    isWithoutClub: boolean;
+    playerId: number;
+}
 export interface PlayerToTeam {
+    isActual: boolean;
+    isDebutSeason: Generated<boolean>;
     playerId: number;
     season: number;
     teamId: number;
@@ -346,6 +353,7 @@ export interface DB {
     Player: Player;
     PlayerFixtureStats: PlayerFixtureStats;
     PlayerSeasonStats: PlayerSeasonStats;
+    PlayerStatus: PlayerStatus;
     PlayerToTeam: PlayerToTeam;
     Season: Season;
     Team: Team;

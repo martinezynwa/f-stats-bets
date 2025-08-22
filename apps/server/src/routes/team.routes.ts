@@ -7,7 +7,7 @@ const router = Router()
 
 //router.use(requireAuth)
 
-router.get(
+router.post(
   '/',
   validateRequestWithBody(async (req, res) => {
     const seasons = await getTeams(req.body)

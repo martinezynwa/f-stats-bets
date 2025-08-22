@@ -72,6 +72,7 @@ export const transformPlayerResponses = (
       playerId: player.id,
       teamId: team?.id!,
       season,
+      isActual: true,
     })),
   )
 
