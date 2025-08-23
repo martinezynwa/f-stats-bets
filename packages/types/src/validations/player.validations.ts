@@ -22,7 +22,17 @@ export const createPlayerToTeamHistoryValidationSchema = z.object({
   playerSquadsSeason: z.number(),
   seasonHistoryInYears: z.number(),
   leagueIds: z.array(z.number()).optional(),
+  ignoredSeasons: z.array(z.number()).optional(),
 })
 export type CreatePlayerToTeamHistoryValidationSchema = z.infer<
   typeof createPlayerToTeamHistoryValidationSchema
+>
+
+export const createHistoricalPlayerSeasonStatsValidationSchema = z.object({
+  firstSeason: z.number(),
+  totalSeasons: z.number(),
+  playerIds: z.array(z.number()).optional(),
+})
+export type CreateHistoricalPlayerSeasonStatsValidationSchema = z.infer<
+  typeof createHistoricalPlayerSeasonStatsValidationSchema
 >

@@ -39,3 +39,12 @@ Content-Type: application/json
   "seasonHistoryInYears": 5,
   "leagueIds": [39]
 }
+
+### Create Historical Player Season Stats
+POST {{baseUrl}}/create-historical-player-season-stats
+Content-Type: application/json
+
+{
+  "firstSeason": 2023,
+  "totalSeasons": 1
+}

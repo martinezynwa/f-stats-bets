@@ -8,8 +8,10 @@ Content-Type: application/json
 
 {
    "season": 2024,
-   "dateFrom": "2024-08-01",
-   "dateTo": "2024-09-03"
+   "fixturesDateFrom": "2024-08-01",
+   "fixturesDateTo": "2024-09-03",
+   "historicalDataFirstSeason": 2023,
+   "historicalDataTotalSeasons": 1
 }
 
 ### Initialize Database

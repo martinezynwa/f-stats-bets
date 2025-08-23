@@ -12,7 +12,10 @@ import { getFixtureIds, getManyFixturesDetail } from '../fixture/fixture.service
 import { insertLeagueToDb, insertLeagueToSeasonToDb } from '../league/league.service.mutations'
 import { fetchAndInsertPlayerFixtureStats } from '../player-fixture-stats/player-fixture-stats.service.mutations'
 import { createAndInsertPlayerSeasonStats } from '../player-season-stats/player-season-stats.service.mutations'
-import { fetchAndInsertPlayers } from '../player/player.service.mutations'
+import {
+  createHistoricalPlayerSeasonStats,
+  fetchAndInsertPlayers,
+} from '../player/player.service.mutations'
 import { insertTeamsToDb } from '../team/team.service.mutations'
 import { getAssetPath, handleCsvSeed, parseCsv } from './seed.service.helpers'
 import { TableWithRelations, TableWithoutRelations } from './seed.service.types'
@@ -94,7 +97,14 @@ export const seedRelationDataFromCsv = async (tableNames: TableWithRelations[]) 
 }
 
 export const seedDatabaseFromExternalApi = async (input: SeedFromExternalApiValidationSchema) => {
-  const { season, dateFrom, dateTo } = input
+  const {
+    season,
+    fixturesDateFrom,
+    fixturesDateTo,
+    historicalDataFirstSeason,
+    historicalDataTotalSeasons,
+    historicalDataPlayerIds,
+  } = input
 
   await db.deleteFrom('FixtureRound').where('season', '=', season).execute()
   await db.deleteFrom('Fixture').where('season', '=', season).execute()
@@ -127,19 +137,34 @@ export const seedDatabaseFromExternalApi = async (input: SeedFromExternalApiVali
     const externalFixturesData = await fetchFixtures({
       leagueIds: [leagueId],
       season,
-      dateFrom,
-      dateTo,
+      dateFrom: fixturesDateFrom,
+      dateTo: fixturesDateTo,
     })
     await upsertFixtures(externalFixturesData, season)
 
     const fixtureDetails = await getManyFixturesDetail({
       leagueIds: [leagueId],
-      dateFrom,
-      dateTo,
+      dateFrom: fixturesDateFrom,
+      dateTo: fixturesDateTo,
     })
     await fetchAndInsertPlayerFixtureStats(fixtureDetails)
 
-    const fixtureIds = await getFixtureIds({ dateFrom, dateTo, leagueIds: [leagueId] })
+    const fixtureIds = await getFixtureIds({
+      dateFrom: fixturesDateFrom,
+      dateTo: fixturesDateTo,
+      leagueIds: [leagueId],
+    })
     await createAndInsertPlayerSeasonStats(fixtureIds)
+  }
+
+  const shouldFetchHistoricalPlayerSeasonStats =
+    historicalDataFirstSeason && historicalDataTotalSeasons
+
+  if (shouldFetchHistoricalPlayerSeasonStats) {
+    await createHistoricalPlayerSeasonStats({
+      firstSeason: historicalDataFirstSeason,
+      totalSeasons: historicalDataTotalSeasons,
+      playerIds: historicalDataPlayerIds,
+    })
   }
 }

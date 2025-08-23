@@ -1,4 +1,5 @@
 import {
+  createHistoricalPlayerSeasonStatsValidationSchema,
   createPlayerFromFixturesValidationSchema,
   createPlayerToTeamHistoryValidationSchema,
   createPlayerToTeamValidationSchema,
@@ -7,6 +8,7 @@ import { Router } from 'express'
 import { validateRequestWithBody } from '../lib'
 import {
   addNewPlayers,
+  createHistoricalPlayerSeasonStats,
   createPlayersFromFixtures,
   createPlayerToTeamFromFixtures,
   createPlayerToTeamHistory,
@@ -50,6 +52,15 @@ router.post(
 
     res.json(data)
   }, createPlayerToTeamHistoryValidationSchema),
+)
+
+router.post(
+  '/create-historical-player-season-stats',
+  validateRequestWithBody(async (req, res) => {
+    const data = await createHistoricalPlayerSeasonStats(req.body)
+
+    res.json(data)
+  }, createHistoricalPlayerSeasonStatsValidationSchema),
 )
 
 export default router

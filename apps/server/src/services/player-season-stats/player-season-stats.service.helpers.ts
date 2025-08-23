@@ -328,3 +328,18 @@ export const countAndEditPlayerSeasonStats = (
 
   return result as unknown as PlayerSeasonStats //TODO fix this
 }
+
+export const getStatValue = (
+  value: number | null | undefined,
+  divisor: number | null | undefined,
+  type: 'perGame' | 'frequency',
+) => {
+  if (!divisor || !value) return 0.0
+
+  if (type === 'perGame') {
+    return limitDecimalPlaces(value / divisor)
+  } else if (type === 'frequency') {
+    return limitDecimalPlaces(divisor / value)
+  }
+  return 0.0
+}

@@ -244,7 +244,7 @@ export interface PlayerSeasonStats {
     assists: number;
     assistsFrequency: number;
     assistsPerGame: number;
-    captain: number;
+    captain: number | null;
     conceded: number;
     concededPerGame: number;
     createdAt: Generated<Timestamp | null>;
@@ -256,17 +256,17 @@ export interface PlayerSeasonStats {
     goalsPerGame: number;
     id: Generated<string>;
     leagueId: number;
-    lineups: number;
+    lineups: number | null;
     minutes: number;
     minutesPerGame: number;
-    passesAccuracy: number;
+    passesAccuracy: number | null;
     passesKey: number;
-    passesKeyPerGame: number;
+    passesKeyPerGame: number | null;
     passesTotal: number;
     passesTotalPerGame: number;
     playerId: number;
     position: string;
-    rating: number;
+    rating: number | null;
     saves: number;
     savesPerGame: number;
     season: number;
@@ -274,9 +274,9 @@ export interface PlayerSeasonStats {
     shotsOnPerGame: number;
     shotsTotal: number;
     shotsTotalPerGame: number;
-    substitute: number;
-    substitutesBench: number;
-    substitutesIn: number;
+    substitute: number | null;
+    substitutesBench: number | null;
+    substitutesIn: number | null;
     teamId: number;
     updatedAt: Timestamp | null;
 }

@@ -7,8 +7,9 @@ export interface GetPlayers {
 }
 
 export interface GetPlayerToTeam {
-  season: number
-  playerIds: number[]
+  season?: number
+  playerIds?: number[]
+  isActual?: boolean
 }
 
 export interface GetPlayerStatus {

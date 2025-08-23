@@ -1,4 +1,7 @@
-import { InsertPlayersValidationSchema } from '@f-stats-bets/types'
+import {
+  FetchPlayerSeasonStatisticsValidationSchema,
+  InsertPlayersValidationSchema,
+} from '@f-stats-bets/types'
 import { db } from 'src/db'
 import { ENDPOINTS } from '../../constants/enums'
 import { externalRequestHandler } from '../../lib/externalRequestHandler'
@@ -9,6 +12,7 @@ import {
 } from '../../types/external/external-player-fixture-stats.types'
 import {
   ExternalPlayerInfoResponse,
+  ExternalPlayerInfoWithStatsResponse,
   ExternalPlayerSquadsResponse,
   ExternalPlayersTeamsResponse,
   ExternalPlayersTeamsResponseWithPlayerId,
@@ -133,4 +137,26 @@ export const fetchPlayersTeamsHistory = async (playerIds: number[]) => {
   }
 
   return playersTeams
+}
+
+export const fetchPlayerSeasonStatistics = async (
+  input: FetchPlayerSeasonStatisticsValidationSchema,
+) => {
+  const { playerIds, seasons } = input
+
+  const playerSeasonStatistics: ExternalPlayerInfoWithStatsResponse[] = []
+
+  for (const playerId of playerIds) {
+    for (const season of seasons) {
+      const response = await externalRequestHandler<ExternalPlayerInfoWithStatsResponse>({
+        endpoint: ENDPOINTS.PLAYER_SEASON_STATISTICS,
+        params: { id: playerId, season },
+        responseArray: [],
+      })
+
+      playerSeasonStatistics.push(...response)
+    }
+  }
+
+  return playerSeasonStatistics
 }

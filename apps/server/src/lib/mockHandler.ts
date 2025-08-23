@@ -4,8 +4,9 @@ import { ENDPOINTS } from '../constants/enums'
 import { fixturesMock } from '../mock/fixture.mock'
 import { isDateInRange } from './date-and-time'
 import { playersProfilesMock, playersSquadsMock } from '../mock/player.mock'
-import { playerFixtureStatsMock } from 'src/mock/playerFixtureStats.mock'
-import { playersTeamsMock } from 'src/mock/playersTeams.mock'
+import { playerFixtureStatsMock } from '../mock/playerFixtureStats.mock'
+import { playersTeamsMock } from '../mock/playersTeams.mock'
+import { playerSeasonStatisticsMock } from '../mock/playerSeasonStatistics.mock'
 
 interface MockHandlerProps {
   endpoint: ENDPOINTS
@@ -52,6 +53,8 @@ export const mockHandler = (input: MockHandlerProps) => {
         .flat()
     case ENDPOINTS.PLAYERS_TEAMS:
       return playersTeamsMock[player!] || []
+    case ENDPOINTS.PLAYER_SEASON_STATISTICS:
+      return playerSeasonStatisticsMock[season!][id!] || []
     default:
       return []
   }

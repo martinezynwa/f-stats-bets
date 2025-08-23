@@ -1,6 +1,7 @@
 type Birth = {
   date: string
   country: string
+  place: string
 }
 
 type Team = {
@@ -10,82 +11,82 @@ type Team = {
 }
 
 type League = {
-  id: number
-  name: string
-  country: string
-  logo: string
-  flag: string
-  season: number
+  id: number | null
+  name: string | null
+  country: string | null
+  logo: string | null
+  flag: string | null
+  season: number | null
 }
 
 type Games = {
-  appearences: number
-  lineups: number
-  minutes: number
-  number: string
-  position: string
-  rating: string
-  captain: boolean
+  appearences: number | null
+  lineups: number | null
+  minutes: number | null
+  number: string | null
+  position: string | null
+  rating: string | null
+  captain: boolean | null
 }
 
 type Substitutes = {
-  in: number
-  out: number
-  bench: number
+  in: number | null
+  out: number | null
+  bench: number | null
 }
 
 type Shots = {
-  total: number
-  on: number
+  total: number | null
+  on: number | null
 }
 
 type Goals = {
-  total: number
-  conceded: number
-  assists: number
-  saves: number
+  total: number | null
+  conceded: number | null
+  assists: number | null
+  saves: number | null
 }
 
 type Passes = {
-  total: number
-  key: number
-  accuracy: number
+  total: number | null
+  key: number | null
+  accuracy: number | null
 }
 
 type Tackles = {
-  total: number
-  blocks: number
-  interceptions: number
+  total: number | null
+  blocks: number | null
+  interceptions: number | null
 }
 
 type Duels = {
-  total: number
-  won: number
+  total: number | null
+  won: number | null
 }
 
 type Dribbles = {
-  attempts: number
-  success: number
-  past: number
+  attempts: number | null
+  success: number | null
+  past: number | null
 }
 
 type Fouls = {
-  drawn: number
-  committed: number
+  drawn: number | null
+  committed: number | null
 }
 
 type Cards = {
-  yellow: number
-  yellowred: number
-  red: number
+  yellow: number | null
+  yellowred: number | null
+  red: number | null
 }
 
 type Penalty = {
-  won: number
-  commited: number
-  scored: number
-  missed: number
-  saved: number
+  won: number | null
+  commited: number | null
+  scored: number | null
+  missed: number | null
+  saved: number | null
 }
 
 export type Player = {
@@ -99,9 +100,10 @@ export type Player = {
   height: string
   weight: string
   photo: string
+  injured: boolean
 }
 
-type ExternalPlayerStatistics = {
+export type ExternalPlayerStatistics = {
   team: Team
   league: League
   games: Games
@@ -115,7 +117,7 @@ type ExternalPlayerStatistics = {
   fouls: Fouls
   cards: Cards
   penalty: Penalty
-  offsides: number
+  offsides?: number
 }
 
 export type ExternalPlayerInfoWithStatsResponse = {

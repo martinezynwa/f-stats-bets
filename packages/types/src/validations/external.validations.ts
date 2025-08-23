@@ -63,3 +63,19 @@ export const insertPlayerFixtureStatsValidationSchema = z.object({
 export type InsertPlayerFixtureStatsValidationSchema = z.infer<
   typeof insertPlayerFixtureStatsValidationSchema
 >
+
+export const fetchPlayerSeasonStatisticsValidationSchema = z.object({
+  playerIds: z.array(z.number()),
+  seasons: z.array(z.number()),
+})
+export type FetchPlayerSeasonStatisticsValidationSchema = z.infer<
+  typeof fetchPlayerSeasonStatisticsValidationSchema
+>
+
+export const insertPlayerSeasonStatisticsValidationSchema = z.object({
+  playerIds: z.array(z.number()),
+  seasons: z.array(z.number()),
+})
+export type InsertPlayerSeasonStatisticsValidationSchema = z.infer<
+  typeof insertPlayerSeasonStatisticsValidationSchema
+>

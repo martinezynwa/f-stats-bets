@@ -142,3 +142,22 @@ Content-Type: application/json
 {
   "fixtureIds": [1208022,1208036,1208047]
 }
+
+### Fetch player season statistics
+POST {{baseUrl}}/fetch-player-season-statistics
+Content-Type: application/json
+
+{
+  "playerIds": [306],
+  "seasons": [2023, 2024]
+}
+
+
+### Fetch and insert player season statistics
+POST {{baseUrl}}/insert-player-season-statistics
+Content-Type: application/json
+
+{
+  "playerIds": [306],
+  "seasons": [2023, 2024]
+}

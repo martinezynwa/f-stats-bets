@@ -13,13 +13,17 @@ export const getPlayers = async (input?: GetPlayers) => {
 }
 
 export const getPlayerToTeam = async (input: GetPlayerToTeam) => {
-  const { season, playerIds } = input
+  const { season, playerIds, isActual } = input
 
   const playerToTeam = await rawQueryArray<PlayerToTeam>(
-    `SELECT * FROM "PlayerToTeam" 
-    WHERE "season" = ${season} 
-    AND "playerId" IN (${playerIds.join(',')}) 
-    AND "isActual" = true`,
+    `SELECT * FROM "PlayerToTeam" ${buildWhereClause(
+      [
+        season ? `"season" = ${season}` : null,
+        playerIds?.length ? `"playerId" IN (${playerIds.map(Number).join(',')})` : null,
+        isActual ? `"isActual" = ${isActual}` : null,
+      ],
+      'AND',
+    )}`,
   )
 
   return playerToTeam

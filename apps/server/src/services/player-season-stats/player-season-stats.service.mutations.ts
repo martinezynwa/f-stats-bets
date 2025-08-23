@@ -1,11 +1,18 @@
 import { InsertPlayerSeasonStats, PlayerFixtureStats, PlayerSeasonStats } from '@f-stats-bets/types'
 import { db } from '../../db'
-import { getGamesPlayedInLeagues } from '../league/league.service.queries'
+import { getGamesPlayedInLeagues, getLeagues } from '../league/league.service.queries'
 import {
   countAndEditPlayerSeasonStats,
   countPlayerSeasonStats,
+  getStatValue,
+  isEligibleForRanking,
 } from './player-season-stats.service.helpers'
-import { rawQueryArray } from 'src/lib'
+import { rawQueryArray } from '../../lib'
+import {
+  ExternalPlayerInfoWithStatsResponse,
+  ExternalPlayerStatistics,
+} from '../../types/external/external-player.types'
+import { limitDecimalPlaces, getNumberValue, getStringValue } from '../../lib/util'
 
 export const insertPlayerSeasonStats = async (playerSeasonStats: InsertPlayerSeasonStats[]) => {
   const added = await db
@@ -121,4 +128,85 @@ export const createAndInsertPlayerSeasonStats = async (fixtureIds: number[]) => 
   }
 
   return { addedPlayerSeasonStats, updatedPlayerSeasonStats }
+}
+
+export const createAndInsertPlayerSeasonStatsFromExternalApi = async (
+  data: ExternalPlayerInfoWithStatsResponse[],
+) => {
+  const categorizedStatsByLeague = data.reduce(
+    (acc, curr) => {
+      const playerId = curr.player.id
+
+      if (!acc[playerId]) {
+        acc[playerId] = []
+      }
+
+      acc[playerId].push(...curr.statistics)
+
+      return acc
+    },
+    {} as Record<number, ExternalPlayerStatistics[]>,
+  )
+
+  const leagues = await getLeagues()
+  const leaguesWithGamesPlayed = new Map(
+    leagues.map(l => [`${l.leagueId}-${l.season}`, l.gamesPlayed]),
+  )
+
+  const playerSeasonStatsToInsert = Object.entries(categorizedStatsByLeague).flatMap(
+    ([playerId, statistics]) =>
+      statistics.map(stat => {
+        const object: InsertPlayerSeasonStats = {
+          playerId: parseInt(playerId),
+          season: getNumberValue(stat.league.season),
+          leagueId: getNumberValue(stat.league.id),
+          teamId: getNumberValue(stat.team.id),
+          appearences: getNumberValue(stat.games.appearences),
+          lineups: stat.games.lineups,
+          captain: undefined, //TODO
+          substitute: stat.substitutes.bench,
+          minutes: getNumberValue(stat.games.minutes),
+          position: getStringValue(stat.games.position),
+          rating: stat.games.rating ? limitDecimalPlaces(parseFloat(stat.games.rating)) : undefined,
+          goals: getNumberValue(stat.goals.total),
+          assists: getNumberValue(stat.goals.assists),
+          conceded: getNumberValue(stat.goals.conceded),
+          saves: getNumberValue(stat.goals.saves),
+          shotsTotal: getNumberValue(stat.shots.total),
+          shotsOn: getNumberValue(stat.shots.on),
+          passesTotal: getNumberValue(stat.passes.total),
+          passesKey: getNumberValue(stat.passes.key),
+          passesAccuracy: stat.passes.accuracy,
+          goalsPerGame: getStatValue(stat.goals.total, stat.games.appearences, 'perGame'),
+          goalsFrequency: getStatValue(stat.goals.total, stat.games.minutes, 'frequency'),
+          goalsAssists: getNumberValue(stat.goals.total) + getNumberValue(stat.goals.assists),
+          assistsPerGame: getStatValue(stat.goals.assists, stat.games.appearences, 'perGame'),
+          assistsFrequency: getStatValue(stat.goals.assists, stat.games.minutes, 'frequency'),
+          concededPerGame: getStatValue(stat.goals.conceded, stat.games.appearences, 'perGame'),
+          eligibileAppearencesForRating: getNumberValue(stat.games.appearences),
+          eligibleForRanking: stat.games.appearences
+            ? isEligibleForRanking(
+                leaguesWithGamesPlayed.get(`${stat.league.id}-${stat.league.season}`)!,
+                stat.games.appearences,
+              )
+            : false,
+          minutesPerGame: getStatValue(stat.games.minutes, stat.games.appearences, 'perGame'),
+          substitutesIn: stat.substitutes.in,
+          substitutesBench: stat.substitutes.bench,
+          passesKeyPerGame: stat.passes.key
+            ? getStatValue(stat.passes.key, stat.games.appearences, 'perGame')
+            : undefined,
+          passesTotalPerGame: getStatValue(stat.passes.total, stat.games.appearences, 'perGame'),
+          savesPerGame: getStatValue(stat.goals.saves, stat.games.appearences, 'perGame'),
+          shotsOnPerGame: getStatValue(stat.shots.on, stat.games.appearences, 'perGame'),
+          shotsTotalPerGame: getStatValue(stat.shots.total, stat.games.appearences, 'perGame'),
+        }
+
+        return object
+      }),
+  )
+
+  const added = await insertPlayerSeasonStats(playerSeasonStatsToInsert)
+
+  return added
 }

@@ -8,6 +8,8 @@ import {
   fetchPlayersProfilesValidationSchema,
   insertPlayerFixtureStatsValidationSchema,
   fetchPlayerFixtureStatsValidationSchema,
+  fetchPlayerSeasonStatisticsValidationSchema,
+  insertPlayerSeasonStatisticsValidationSchema,
 } from '@f-stats-bets/types'
 import { Router } from 'express'
 import { db } from '../db'
@@ -23,12 +25,14 @@ import { initLeagues } from '../services/external/external.service'
 import { getSupportedLeagues } from '../assets/league-data'
 import {
   fetchPlayerFixtureStats,
+  fetchPlayerSeasonStatistics,
   fetchPlayersProfiles,
   fetchPlayersSquads,
 } from '../services/external/external.player.service'
 import { fetchAndInsertPlayers } from '../services/player/player.service.mutations'
-import { fetchAndInsertPlayerFixtureStats } from 'src/services/player-fixture-stats/player-fixture-stats.service.mutations'
-import { getManyFixturesDetail } from 'src/services/fixture/fixture.service.queries'
+import { fetchAndInsertPlayerFixtureStats } from '../services/player-fixture-stats/player-fixture-stats.service.mutations'
+import { getManyFixturesDetail } from '../services/fixture/fixture.service.queries'
+import { createAndInsertPlayerSeasonStatsFromExternalApi } from '../services/player-season-stats/player-season-stats.service.mutations'
 
 const router = Router()
 
@@ -190,6 +194,28 @@ router.post(
 
     res.json(playerFixtureStatsData)
   }, insertPlayerFixtureStatsValidationSchema),
+)
+
+router.post(
+  '/fetch-player-season-statistics',
+  validateRequestWithBody(async (req, res) => {
+    const playerSeasonStatisticsData = await fetchPlayerSeasonStatistics(req.body)
+
+    res.json(playerSeasonStatisticsData)
+  }, fetchPlayerSeasonStatisticsValidationSchema),
+)
+
+router.post(
+  '/insert-player-season-statistics',
+  validateRequestWithBody(async (req, res) => {
+    const playerSeasonStatisticsData = await fetchPlayerSeasonStatistics(req.body)
+
+    const created = await createAndInsertPlayerSeasonStatsFromExternalApi(
+      playerSeasonStatisticsData,
+    )
+
+    res.json(created)
+  }, insertPlayerSeasonStatisticsValidationSchema),
 )
 
 export default router

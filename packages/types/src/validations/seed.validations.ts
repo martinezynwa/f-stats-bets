@@ -8,9 +8,12 @@ export type SeedValidationSchema = z.infer<typeof seedValidationSchema>
 
 export const seedFromExternalApiValidationSchema = z.object({
   season: z.number(),
-  dateFrom: z.string(),
-  dateTo: z.string(),
+  fixturesDateFrom: z.string(),
+  fixturesDateTo: z.string(),
   shouldIgnoreBaseData: z.boolean().optional(),
+  historicalDataFirstSeason: z.number().optional(),
+  historicalDataTotalSeasons: z.number().optional(),
+  historicalDataPlayerIds: z.array(z.number()).optional(),
 })
 
 export type SeedFromExternalApiValidationSchema = z.infer<

@@ -1,4 +1,5 @@
 import {
+  CreateHistoricalPlayerSeasonStatsValidationSchema,
   CreatePlayerFromFixturesValidationSchema,
   CreatePlayerToTeamHistoryValidationSchema,
   CreatePlayerToTeamValidationSchema,
@@ -10,6 +11,7 @@ import {
 import { db } from '../../db'
 import { rawQueryArray } from '../../lib'
 import {
+  fetchPlayerSeasonStatistics,
   fetchPlayersProfiles,
   fetchPlayersSquads,
   fetchPlayersTeamsHistory,
@@ -17,10 +19,12 @@ import {
   transformPlayerResponses,
 } from '../external/external.player.service'
 import { getPlayerFixtureStats } from '../player-fixture-stats/player-fixture-stats.service.queries'
-import { getPlayers } from './player.service.queries'
+import { getPlayers, getPlayerToTeam } from './player.service.queries'
 import { PlayerFixtureStatsSimple } from './player.service.types'
 import { getLeagues } from '../league/league.service.queries'
 import { getCurrentYear } from 'src/lib/date-and-time'
+import { createAndInsertPlayerSeasonStatsFromExternalApi } from '../player-season-stats/player-season-stats.service.mutations'
+import { getTeamIds } from '../team/team.service.queries'
 
 export const insertPlayers = async (players: InsertPlayer[]) => {
   const added = await db.insertInto('Player').values(players).returningAll().execute()
@@ -53,7 +57,7 @@ export const updateManyPlayerToTeam = async (playerToTeam: PlayerToTeam[]) => {
 export const fetchAndInsertPlayers = async (input: InsertPlayersValidationSchema) => {
   const playerSquadsResponse = await fetchPlayersSquads(input)
 
-  const existingPlayers = await getPlayers({})
+  const existingPlayers = await getPlayers()
   const existingPlayersIds = existingPlayers.map(player => player.playerId)
 
   const playerIds = playerSquadsResponse.flatMap(
@@ -172,7 +176,7 @@ export const getExistingPlayerToTeamRelationships = async (
 export const createPlayerToTeamHistory = async (
   input: CreatePlayerToTeamHistoryValidationSchema,
 ) => {
-  const { playerSquadsSeason, seasonHistoryInYears, leagueIds } = input
+  const { playerSquadsSeason, seasonHistoryInYears, leagueIds, ignoredSeasons } = input
   const allowedSeasons = Array.from(
     { length: seasonHistoryInYears },
     (_, i) => getCurrentYear() - i,
@@ -194,7 +198,7 @@ export const createPlayerToTeamHistory = async (
   const playerToTeamObjects = playersTeamsHistory.flatMap(({ playerId, response }) =>
     response.flatMap(r =>
       r.seasons
-        .filter(s => allowedSeasons.includes(s))
+        .filter(s => allowedSeasons.includes(s) && !ignoredSeasons?.includes(s))
         .map(season => ({
           playerId,
           season,
@@ -207,4 +211,62 @@ export const createPlayerToTeamHistory = async (
   const added = await insertPlayersToTeams(playerToTeamObjects)
 
   return added
+}
+
+/**
+ * Should be used for fetching data from completed seasons only.
+ */
+export const createHistoricalPlayerSeasonStats = async (
+  input: CreateHistoricalPlayerSeasonStatsValidationSchema,
+) => {
+  const { firstSeason, totalSeasons, playerIds } = input
+
+  const seasons = Array.from({ length: totalSeasons }, (_, i) => firstSeason - i)
+
+  let selectedPlayerIds: number[] = []
+
+  if (!playerIds || playerIds.length === 0) {
+    const playerToTeam = await getPlayerToTeam({ isActual: true })
+    selectedPlayerIds = [...new Set(playerToTeam.map(player => player.playerId))]
+  } else {
+    selectedPlayerIds = playerIds
+  }
+
+  const playerSeasonStatistics = await fetchPlayerSeasonStatistics({
+    playerIds: selectedPlayerIds,
+    seasons,
+  })
+
+  const supportedTeamIds = await getTeamIds()
+
+  const playerSeasonStatisticsWithSupportedTeams = playerSeasonStatistics.flatMap(playerStats => {
+    return {
+      player: playerStats.player,
+      statistics: playerStats.statistics.filter(team => supportedTeamIds.includes(team.team.id)),
+    }
+  })
+
+  const createdPlayerSeasonStats = await createAndInsertPlayerSeasonStatsFromExternalApi(
+    playerSeasonStatisticsWithSupportedTeams,
+  )
+
+  const playerToTeamToInsert = createdPlayerSeasonStats.reduce(
+    (acc, stats) => {
+      const key = `${stats.playerId}-${stats.teamId}-${stats.season}`
+      if (!acc.some(item => `${item.playerId}-${item.teamId}-${item.season}` === key)) {
+        acc.push({
+          playerId: stats.playerId,
+          season: stats.season,
+          teamId: stats.teamId,
+          isActual: false,
+        })
+      }
+      return acc
+    },
+    [] as { playerId: number; teamId: number; season: number; isActual: boolean }[],
+  )
+
+  const createdPlayerToTeam = await insertPlayersToTeams(playerToTeamToInsert)
+
+  return { createdPlayerSeasonStats, createdPlayerToTeam }
 }
