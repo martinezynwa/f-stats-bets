@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 export const jsonToCsv = (json: any[], order: string) => {
   const columns = order.split(',')
 

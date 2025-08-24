@@ -2,8 +2,6 @@ import {
   BetCompetitionWithLeagues,
   GetBetCompetitionsSchema,
   GetBetCompetitionStandingsSchema,
-  GetUserNamesOfBetCompetitionSchema,
-  User,
   UserWithName,
 } from '@f-stats-bets/types'
 import { rawQueryArray, rawQuerySingle } from '../../lib'

@@ -5,7 +5,7 @@ import { requireJobAuth } from '../middleware'
 
 const router = Router()
 
-//router.use(requireJobAuth)
+router.use(requireJobAuth)
 
 router.get(
   '/daily-data-update',
