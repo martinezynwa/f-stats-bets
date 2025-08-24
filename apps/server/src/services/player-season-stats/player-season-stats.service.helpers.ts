@@ -185,13 +185,13 @@ export const countAndEditPlayerSeasonStats = (
         }
 
         if (!eligibleForRating) {
-          acc[key] = seasonRating
+          acc[key] = seasonRating!
 
           return acc
         }
 
         const updatedRating =
-          (seasonRating * seasonAppearences + playerFixtureStats[key]!) / (seasonAppearences + 1)
+          (seasonRating! * seasonAppearences + playerFixtureStats[key]!) / (seasonAppearences + 1)
 
         acc[key] = limitDecimalPlaces(updatedRating)
 
@@ -275,24 +275,24 @@ export const countAndEditPlayerSeasonStats = (
 
         if (key === 'lineups') {
           acc[key] = playerFixtureStats.substitute
-            ? playerSeasonStats[key]
-            : playerSeasonStats[key] + 1
+            ? playerSeasonStats[key] || 0
+            : (playerSeasonStats[key] || 0) + 1
           return acc
         }
 
         if (key === 'substitutesIn') {
           acc[key] =
             playerFixtureStats.substitute && playerFixtureStats.minutes
-              ? playerSeasonStats[key] + 1
-              : playerSeasonStats[key]
+              ? (playerSeasonStats[key] || 0) + 1
+              : playerSeasonStats[key] || 0
           return acc
         }
 
         if (key === 'substitutesBench') {
           acc[key] =
             playerFixtureStats.substitute && !playerFixtureStats.minutes
-              ? playerSeasonStats[key] + 1
-              : playerSeasonStats[key]
+              ? (playerSeasonStats[key] || 0) + 1
+              : playerSeasonStats[key] || 0
           return acc
         }
 

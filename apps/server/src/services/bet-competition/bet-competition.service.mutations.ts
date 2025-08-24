@@ -28,6 +28,7 @@ export const createBetCompetitionToLeague = async (
 
   const betCompetitionToLeague = await db
     .insertInto('BetCompetitionToLeague')
+    // @ts-ignore TODO: fix this
     .values(values)
     .execute()
 
