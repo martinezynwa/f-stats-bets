@@ -1,15 +1,16 @@
-import { db } from 'src/db'
+import { Season } from '@f-stats-bets/types'
+import { rawQueryArray, buildWhereClause } from '../../lib'
+import { GetSeasonsProps } from './season.service.types'
 
-interface GetSeasonsProps {
-  supported?: boolean
-}
+export const getSeasons = async (input: GetSeasonsProps) => {
+  const { supported, isActual } = input
 
-export const getSeasons = async ({ supported = false }: GetSeasonsProps) => {
-  const seasons = await db
-    .selectFrom('Season')
-    .selectAll()
-    .where('isSupported', '=', supported)
-    .execute()
+  const seasons = await rawQueryArray<Season>(
+    `SELECT * FROM "Season" ${buildWhereClause([
+      supported ? 'isSupported = true' : null,
+      isActual ? 'isActual = true' : null,
+    ])}`,
+  )
 
   return seasons
 }

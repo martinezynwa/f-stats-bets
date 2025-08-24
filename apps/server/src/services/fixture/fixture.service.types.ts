@@ -1,3 +1,5 @@
+import { FIXTURE_STATUS } from '@f-stats-bets/types'
+
 export type FixtureDetailWithRound = {
   fixtureId: number
   leagueId: number
@@ -11,4 +13,8 @@ export interface FixtureSearchProps {
   dateTo?: string
   season?: number
   leagueIds?: number[]
+}
+
+export type CategorizedFixtures = {
+  [K in keyof typeof FIXTURE_STATUS]: number[]
 }

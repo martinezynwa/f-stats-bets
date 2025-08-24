@@ -26,7 +26,7 @@ router.post(
   validateRequestWithBody(async (req: Request, res: Response) => {
     const fixtureIds = await getFixtureIds(req.body)
 
-    const created = await createAndInsertPlayerSeasonStats(fixtureIds)
+    const created = await createAndInsertPlayerSeasonStats({ fixtureIds })
 
     res.json(created)
   }, insertPlayerSeasonStatsValidationSchema),

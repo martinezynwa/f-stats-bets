@@ -1,0 +1,11 @@
+@baseUrl = http://localhost:3001/jobs
+
+### Daily data update
+GET {{baseUrl}}/daily-data-update
+Content-Type: application/json
+
+### Regular data update
+GET {{baseUrl}}/regular-data-update
+Content-Type: application/json
+
+$

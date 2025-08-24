@@ -149,3 +149,8 @@ export const allPlayerSeasonStatsKeys = [
   ...playerSeasonStatsPerGameKeys,
   ...playerSeasonStatsOtherKeys,
 ]
+
+export interface CreateAndInsertPlayerSeasonStatsInput {
+  fixtureIds?: number[]
+  playerFixtureStatsInput?: PlayerFixtureStats[]
+}

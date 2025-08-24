@@ -13,6 +13,7 @@ import {
   ExternalPlayerStatistics,
 } from '../../types/external/external-player.types'
 import { limitDecimalPlaces, getNumberValue, getStringValue } from '../../lib/util'
+import { CreateAndInsertPlayerSeasonStatsInput } from './player-season-stats.service.types'
 
 export const insertPlayerSeasonStats = async (playerSeasonStats: InsertPlayerSeasonStats[]) => {
   const added = await db
@@ -24,11 +25,17 @@ export const insertPlayerSeasonStats = async (playerSeasonStats: InsertPlayerSea
   return added
 }
 
-export const createAndInsertPlayerSeasonStats = async (fixtureIds: number[]) => {
-  const playerFixtureStats = await rawQueryArray<PlayerFixtureStats>(`
-    SELECT * FROM "PlayerFixtureStats"
-    WHERE "fixtureId" IN (${fixtureIds.join(',')})
-  `)
+export const createAndInsertPlayerSeasonStats = async (
+  input: CreateAndInsertPlayerSeasonStatsInput,
+) => {
+  const { fixtureIds, playerFixtureStatsInput } = input
+
+  const playerFixtureStats = fixtureIds
+    ? await rawQueryArray<PlayerFixtureStats>(`
+          SELECT * FROM "PlayerFixtureStats"
+          WHERE "fixtureId" IN (${fixtureIds.join(',')})
+        `)
+    : playerFixtureStatsInput!
 
   const leagueIds = [...new Set(playerFixtureStats.map(p => p.leagueId))]
 

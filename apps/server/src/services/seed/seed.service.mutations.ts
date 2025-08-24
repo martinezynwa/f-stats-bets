@@ -154,7 +154,7 @@ export const seedDatabaseFromExternalApi = async (input: SeedFromExternalApiVali
       dateTo: fixturesDateTo,
       leagueIds: [leagueId],
     })
-    await createAndInsertPlayerSeasonStats(fixtureIds)
+    await createAndInsertPlayerSeasonStats({ fixtureIds })
   }
 
   const shouldFetchHistoricalPlayerSeasonStats =

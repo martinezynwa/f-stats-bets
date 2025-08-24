@@ -1,13 +1,20 @@
-import { LeagueType } from '@f-stats-bets/types'
+import { League, LeagueType } from '@f-stats-bets/types'
 import { db } from 'src/db'
+import { buildWhereClause, rawQueryArray } from 'src/lib'
 
-export const getLeagues = async () => {
-  const leagues = await db
-    .selectFrom('League')
-    .where('League.type', 'not in', [LeagueType.UNASSIGNED, LeagueType.TOTALS])
-    .selectAll()
-    .orderBy('League.name')
-    .execute()
+export const getLeagues = async (season?: number) => {
+  const leagues = await rawQueryArray<League>(
+    `SELECT * FROM "League" 
+    ${buildWhereClause(
+      [
+        season ? `League.season = ${season}` : null,
+        `League.type not in (${LeagueType.UNASSIGNED}, ${LeagueType.TOTALS})`,
+      ],
+      'AND',
+    )}
+    ORDER BY "League"."name"
+    `,
+  )
 
   return leagues
 }

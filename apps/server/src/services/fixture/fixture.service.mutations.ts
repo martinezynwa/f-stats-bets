@@ -1,7 +1,7 @@
 import { Fixture, FixtureRound, InsertFixture, completedFixtureStatuses } from '@f-stats-bets/types'
 import { db } from '../../db'
 import { ExternalFixtureResponse } from '../../types/external/external-fixture.types'
-import { prepareFixturesForInsertion } from './fixture.service.helpers'
+import { prepareFixturesForInsertion, getFixtureWinnerWithGoals } from './fixture.service.helpers'
 import { FixtureDetailWithRound } from './fixture.service.types'
 
 export const createFixtures = async (fixtures: InsertFixture[]) => {
@@ -212,4 +212,61 @@ export const updateExistingFixturesWithNewDate = async (fixtures: Fixture[]) => 
  */
 export const updateManyFixtureRoundStatus = async (fixtures: Fixture[]) => {
   //TODO
+}
+
+export const updateFixtureStatus = async (fixtures: ExternalFixtureResponse[]) => {
+  const updated = await db.transaction().execute(async trx => {
+    const updates = fixtures.map(fixture =>
+      trx
+        .updateTable('Fixture')
+        .set({ status: fixture.fixture.status.short })
+        .where('fixtureId', '=', fixture.fixture.id)
+        .returningAll()
+        .execute(),
+    )
+    return await Promise.all(updates)
+  })
+
+  return updated
+}
+
+/**
+ * Update many fixtures in db with finished info
+ *
+ * usecase - updating already existing fixtures with finished state
+ *
+ * @fixtures finished fixtures
+ * @teamInfo both API and DB ids of teams from finished fixtures
+ */
+export const updateFinishedFixtureData = async (fixtures: ExternalFixtureResponse[]) => {
+  const updated = await db.transaction().execute(async trx => {
+    const updates = fixtures.map(fixture => {
+      const { awayTeamGoalsFinish, homeTeamGoalsFinish, teamIdWon } =
+        getFixtureWinnerWithGoals(fixture) || {}
+
+      return trx
+        .updateTable('Fixture')
+        .set({
+          status: fixture?.fixture.status?.short,
+          referee: fixture?.fixture.referee,
+          venue: fixture?.fixture.venue.name,
+          elapsed: fixture?.fixture.status?.elapsed,
+          teamIdWon,
+          homeTeamGoalsFinish,
+          homeTeamGoalsHalf: fixture.score?.halftime?.home,
+          homeTeamGoalsExtra: fixture.score?.extratime?.home,
+          homeTeamGoalsPenalty: fixture.score?.penalty?.home,
+          awayTeamGoalsFinish,
+          awayTeamGoalsHalf: fixture.score?.halftime?.away,
+          awayTeamGoalsExtra: fixture.score?.extratime?.away,
+          awayTeamGoalsPenalty: fixture.score?.penalty?.away,
+        })
+        .where('fixtureId', '=', fixture?.fixture.id)
+        .returningAll()
+        .execute()
+    })
+    return await Promise.all(updates)
+  })
+
+  return updated.flat()
 }

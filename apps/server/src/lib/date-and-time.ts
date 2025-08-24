@@ -1,4 +1,16 @@
-import { addDays, endOfDay, format, isAfter, isBefore, parseISO, startOfDay } from 'date-fns'
+import {
+  addDays,
+  addHours as addHoursFn,
+  endOfDay,
+  format,
+  isAfter as isAfterFn,
+  isBefore,
+  parseISO,
+  startOfDay,
+} from 'date-fns'
+
+export const isAfter = isAfterFn
+export const addHours = addHoursFn
 
 export const isDateInRange = (date: string, from?: string, to?: string): boolean => {
   const fixtureDate = startOfDay(parseISO(date))
@@ -26,3 +38,7 @@ export const formatDate = (date: Date, withTime?: boolean) =>
   format(date, withTime ? "yyyy-MM-dd'T'HH:mm:ssXXX" : 'yyyy-MM-dd')
 
 export const getCurrentYear = () => new Date().getFullYear()
+export const getCurrentDate = () => format(new Date(), 'yyyy-MM-dd')
+
+export const getCurrentDateAndTimeInDateFormat = (date?: string) =>
+  `${format(date ? new Date(date) : new Date(), "yyyy-MM-dd'T'HH:mm:ss.SSS")}Z`

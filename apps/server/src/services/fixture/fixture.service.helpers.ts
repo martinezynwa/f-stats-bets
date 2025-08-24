@@ -1,7 +1,15 @@
-import { FixtureStatus, InsertFixture, League, LeagueType } from '@f-stats-bets/types'
+import {
+  FIXTURE_STATUS,
+  FixtureStatus,
+  InsertFixture,
+  League,
+  LeagueType,
+} from '@f-stats-bets/types'
 import { CUP_ROUNDS, MATCH_LAST_TWO_NUMBERS } from '../../constants/constants'
 import { ExternalFixtureResponse } from '../../types/external/external-fixture.types'
 import { getLeagues } from '../league/league.service.queries'
+import { addHours, getCurrentDateAndTimeInDateFormat, isAfter } from 'src/lib/date-and-time'
+import { CategorizedFixtures } from './fixture.service.types'
 
 export const prepareFixturesForInsertion = async (
   fixtures: ExternalFixtureResponse[],
@@ -101,4 +109,49 @@ export const getFixtureWinnerWithGoals = (fixture: ExternalFixtureResponse) => {
     homeTeamGoalsFinish: fixture.goals?.home,
     awayTeamGoalsFinish: fixture.goals?.away,
   }
+}
+
+/**
+ * Verify if any fixture of the day has started already
+ *
+ * @fixtureStartsAt UTC time - YYYY-MM-DDTHH:MM:SS+00:00
+ */
+export const checkFirstFixtureInPlay = (fixtureStartsAt: string) => {
+  const fixtureStartDate = getCurrentDateAndTimeInDateFormat(fixtureStartsAt)
+  const currentDateTimeDate = getCurrentDateAndTimeInDateFormat()
+
+  const estimatedFixtureFinishDate = addHours(fixtureStartDate, 2)
+
+  const hasFixtureFinished = isAfter(currentDateTimeDate, estimatedFixtureFinishDate)
+
+  return {
+    hasFixtureFinished,
+    fixtureStartDate,
+    currentDateTimeDate,
+    estimatedFixtureFinishDate,
+  }
+}
+
+/**
+ * Categorize fixtures by their status from API
+ */
+export const categorizeFixturesByStatus = (fixtures: ExternalFixtureResponse[]) => {
+  const fixturesCategorized = fixtures.reduce((acc, { fixture }) => {
+    const category = Object.keys(FIXTURE_STATUS).find(key =>
+      FIXTURE_STATUS[key as keyof typeof FIXTURE_STATUS].includes(fixture.status.short),
+    )
+
+    if (category) {
+      acc[category as keyof CategorizedFixtures] = acc[category as keyof CategorizedFixtures] || []
+      acc[category as keyof CategorizedFixtures].push(fixture.id)
+    }
+
+    return acc
+  }, {} as CategorizedFixtures)
+
+  const { cancelled, suspended, finished, notPlayed } = fixturesCategorized || {}
+
+  const cancelledFixtureIds = [...(cancelled || []), ...(suspended || []), ...(notPlayed || [])]
+
+  return { cancelledFixtureIds, finishedFixtureIds: finished }
 }

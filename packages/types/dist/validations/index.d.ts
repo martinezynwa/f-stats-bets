@@ -3,6 +3,7 @@ export * from './bet-evaluate.validations';
 export * from './bet.validations';
 export * from './external.validations';
 export * from './fixture.validations';
+export * from './job.validations';
 export * from './league.validations';
 export * from './mock.validations';
 export * from './player-fixture-stats.validations';

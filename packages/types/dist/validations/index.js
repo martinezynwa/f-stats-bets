@@ -19,6 +19,7 @@ __exportStar(require("./bet-evaluate.validations"), exports);
 __exportStar(require("./bet.validations"), exports);
 __exportStar(require("./external.validations"), exports);
 __exportStar(require("./fixture.validations"), exports);
+__exportStar(require("./job.validations"), exports);
 __exportStar(require("./league.validations"), exports);
 __exportStar(require("./mock.validations"), exports);
 __exportStar(require("./player-fixture-stats.validations"), exports);
