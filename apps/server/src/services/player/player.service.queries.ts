@@ -1,5 +1,5 @@
 import { Player, PlayerStatus, PlayerToTeam } from '@f-stats-bets/types'
-import { buildWhereClause, rawQueryArray } from 'src/lib'
+import { buildWhereClause, rawQueryArray } from '../../lib'
 import { GetPlayers, GetPlayerStatus, GetPlayerToTeam } from './player.service.types'
 
 export const getPlayers = async (input?: GetPlayers) => {

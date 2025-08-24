@@ -1,6 +1,6 @@
 import { League, LeagueType } from '@f-stats-bets/types'
-import { db } from 'src/db'
-import { buildWhereClause, rawQueryArray } from 'src/lib'
+import { db } from '../../db'
+import { buildWhereClause, rawQueryArray } from '../../lib'
 
 export const getLeagues = async (season?: number) => {
   const leagues = await rawQueryArray<League>(

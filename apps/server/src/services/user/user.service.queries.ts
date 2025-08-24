@@ -1,4 +1,4 @@
-import { db } from 'src/db'
+import { db } from '../../db'
 
 export const getAllUsers = async () => {
   return await db.selectFrom('User').selectAll().execute()

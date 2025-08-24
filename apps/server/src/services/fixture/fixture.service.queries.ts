@@ -6,7 +6,7 @@ import {
   InsertPlayerFixtureStatsValidationSchema,
 } from '@f-stats-bets/types'
 import { buildWhereClause, rawQueryArray } from '../../lib'
-import { FixtureDetail } from 'src/types/external/external-player-fixture-stats.types'
+import { FixtureDetail } from '../../types/external/external-player-fixture-stats.types'
 import { FixtureSearchProps } from './fixture.service.types'
 
 export const getFixturesWithBets = async (input: FixturesBetsSchema): Promise<FixtureWithBet[]> => {

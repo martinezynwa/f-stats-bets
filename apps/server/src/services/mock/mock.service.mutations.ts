@@ -6,7 +6,7 @@ import {
   MockBetsSchema,
   SeedAllTablesValidationSchema,
 } from '@f-stats-bets/types'
-import { db } from 'src/db'
+import { db } from '../../db'
 import { END_OF_DAY, START_OF_DAY } from '../../constants/constants'
 import { createUserToBetCompetition } from '../bet-competition/bet-competition.service.mutations'
 import { evaluateBets } from '../bet-evaluate/bet-evalute.service.mutations'
@@ -95,6 +95,7 @@ export const mockBetCompetitions = async (input: MockBetCompetitionsSchema) => {
 
   const addedBetCompetitionToLeague = await db
     .insertInto('BetCompetitionToLeague')
+    // @ts-ignore TODO
     .values(betCompetitionToLeague)
     .returningAll()
     .execute()

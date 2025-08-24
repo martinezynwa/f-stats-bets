@@ -1,5 +1,5 @@
 import { LogType } from '@packages/types'
-import { db } from 'src/db'
+import { db } from '../db'
 
 interface LoggerProps {
   action: string

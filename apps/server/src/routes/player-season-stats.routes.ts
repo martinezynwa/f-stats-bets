@@ -6,7 +6,7 @@ import {
   insertPlayerSeasonStatsValidationSchema,
 } from '@f-stats-bets/types'
 import { createAndInsertPlayerSeasonStats } from '../services/player-season-stats/player-season-stats.service.mutations'
-import { getFixtureIds } from 'src/services/fixture/fixture.service.queries'
+import { getFixtureIds } from '../services/fixture/fixture.service.queries'
 
 const router = Router()
 

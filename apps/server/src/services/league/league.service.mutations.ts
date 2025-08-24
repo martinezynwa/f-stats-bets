@@ -1,5 +1,5 @@
 import { InsertLeague } from '@f-stats-bets/types'
-import { getSupportedLeagueDetail } from 'src/assets/league-data'
+import { getSupportedLeagueDetail } from '../../assets/league-data'
 import { db } from '../../db'
 import { InsertLeagueToDbProps } from './league.service.types'
 

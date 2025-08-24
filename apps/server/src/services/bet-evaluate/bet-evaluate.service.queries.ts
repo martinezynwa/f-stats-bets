@@ -1,5 +1,5 @@
 import { BetEvaluated, GetBetEvaluatedSchema } from '@f-stats-bets/types'
-import { buildWhereClause, rawQueryArray } from 'src/lib'
+import { buildWhereClause, rawQueryArray } from '../../lib'
 
 export const getBetsEvaluated = async (input: GetBetEvaluatedSchema) => {
   const { dateFrom, dateTo, betCompetitionId } = input

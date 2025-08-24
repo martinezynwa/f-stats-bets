@@ -1,6 +1,6 @@
 import { InsertPlayerSeasonStats, PlayerFixtureStats, PlayerSeasonStats } from '@f-stats-bets/types'
 import { limitDecimalPlaces } from '../../lib/util'
-import { RANKING_ELIGIBILITY_THRESHOLD } from 'src/constants/constants'
+import { RANKING_ELIGIBILITY_THRESHOLD } from '../../constants/constants'
 import {
   GroupedStats,
   AccumulatedStats,

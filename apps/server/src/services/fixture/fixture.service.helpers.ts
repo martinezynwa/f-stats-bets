@@ -8,7 +8,7 @@ import {
 import { CUP_ROUNDS, MATCH_LAST_TWO_NUMBERS } from '../../constants/constants'
 import { ExternalFixtureResponse } from '../../types/external/external-fixture.types'
 import { getLeagues } from '../league/league.service.queries'
-import { addHours, getCurrentDateAndTimeInDateFormat, isAfter } from 'src/lib/date-and-time'
+import { addHours, getCurrentDateAndTimeInDateFormat, isAfter } from '../../lib/date-and-time'
 import { CategorizedFixtures } from './fixture.service.types'
 
 export const prepareFixturesForInsertion = async (

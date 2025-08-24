@@ -2,7 +2,7 @@ import {
   FetchPlayerSeasonStatisticsValidationSchema,
   InsertPlayersValidationSchema,
 } from '@f-stats-bets/types'
-import { db } from 'src/db'
+import { db } from '../../db'
 import { ENDPOINTS } from '../../constants/enums'
 import { externalRequestHandler } from '../../lib/externalRequestHandler'
 import {

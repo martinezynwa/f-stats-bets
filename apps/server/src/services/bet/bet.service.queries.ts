@@ -8,7 +8,7 @@ import {
   GetBetsSchema,
   UserBetsFromFixtureIdsSchema,
 } from '@f-stats-bets/types'
-import { TAKE_LIMIT } from 'src/constants/constants'
+import { TAKE_LIMIT } from '../../constants/constants'
 import { rawQueryArray, rawQuerySingle } from '../../lib'
 
 export const getBets = async (input: GetBetsSchema): Promise<GetBetsResponse> => {

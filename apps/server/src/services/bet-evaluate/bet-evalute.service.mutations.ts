@@ -1,5 +1,5 @@
 import { BetForEvaluation, EvaluateBetsSchema, InsertBetEvaluated } from '@f-stats-bets/types'
-import { db } from 'src/db'
+import { db } from '../../db'
 import { getBetsForEvaluation } from '../bet/bet.service.queries'
 import { fixtureResultCheck } from './bet-evaluate.service.helpers'
 
@@ -32,7 +32,12 @@ export const evaluateSingleBet = (bet: BetForEvaluation) => {
   const { fixtureResultPoints, betCompetitionId } = BetCompetition
 
   const isFixtureResultSuccess = fixtureResultBet
-    ? fixtureResultCheck({ fixtureResultBet, homeTeamId, awayTeamId, teamIdWon })
+    ? fixtureResultCheck({
+        fixtureResultBet,
+        homeTeamId: homeTeamId.toString(),
+        awayTeamId: awayTeamId.toString(),
+        teamIdWon: teamIdWon?.toString() ?? null,
+      })
     : undefined
 
   const evaluatedBet: InsertBetEvaluated = {

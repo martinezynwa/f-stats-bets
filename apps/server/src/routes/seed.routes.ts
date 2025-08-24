@@ -4,9 +4,9 @@ import {
   seedFromExternalApiValidationSchema,
 } from '@f-stats-bets/types'
 import { Request, Response, Router } from 'express'
-import { fetchFixtures } from 'src/services/external/external.fixture.service'
-import { upsertFixtures } from 'src/services/fixture/fixture.service.mutations'
-import { mockBetData } from 'src/services/mock/mock.service.mutations'
+import { fetchFixtures } from '../services/external/external.fixture.service'
+import { upsertFixtures } from '../services/fixture/fixture.service.mutations'
+import { mockBetData } from '../services/mock/mock.service.mutations'
 import { validateRequest, validateRequestWithBody } from '../lib'
 import {
   initDatabase,
@@ -15,7 +15,7 @@ import {
   seedDatabaseFromExternalApi,
   seedRelationDataFromCsv,
 } from '../services/seed/seed.service.mutations'
-import { TableWithoutRelations, TableWithRelations } from 'src/services/seed/seed.service.types'
+import { TableWithoutRelations, TableWithRelations } from '../services/seed/seed.service.types'
 const router = Router()
 
 //router.use(requireAuth)

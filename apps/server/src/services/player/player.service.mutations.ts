@@ -22,7 +22,7 @@ import { getPlayerFixtureStats } from '../player-fixture-stats/player-fixture-st
 import { getPlayers, getPlayerToTeam } from './player.service.queries'
 import { PlayerFixtureStatsSimple } from './player.service.types'
 import { getLeagues } from '../league/league.service.queries'
-import { getCurrentYear } from 'src/lib/date-and-time'
+import { getCurrentYear } from '../../lib/date-and-time'
 import { createAndInsertPlayerSeasonStatsFromExternalApi } from '../player-season-stats/player-season-stats.service.mutations'
 import { getTeamIds } from '../team/team.service.queries'
 

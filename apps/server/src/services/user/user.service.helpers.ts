@@ -1,4 +1,4 @@
-import { db } from 'src/db'
+import { db } from '../../db'
 
 export const checkIsUsernameUsed = async (username: string) => {
   const user = await db

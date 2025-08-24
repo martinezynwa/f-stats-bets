@@ -1,7 +1,8 @@
 import { CreateBetSchema, DeleteBetSchema, UpdateBetSchema } from '@f-stats-bets/types'
-import { db } from 'src/db'
+import { db } from '../../db'
 
 export const createBet = async (input: CreateBetSchema) => {
+  // @ts-ignore TODO
   const bet = await db.insertInto('Bet').values(input).returningAll().execute()
 
   return bet

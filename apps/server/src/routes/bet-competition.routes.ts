@@ -2,10 +2,9 @@ import {
   createBetCompetitionSchema,
   getBetCompetitionsSchema,
   getBetCompetitionStandingsSchema,
-  getUserNamesOfBetCompetitionSchema,
 } from '@f-stats-bets/types'
 import { Router } from 'express'
-import { requireAuth } from 'src/middleware'
+import { requireAuth } from '../middleware'
 import { validateRequest, validateRequestWithBody, validateRequestWithParams } from '../lib'
 import {
   createBetCompetition,

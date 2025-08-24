@@ -1,5 +1,5 @@
 import { InsertUserSettings, RegisterUserInput } from '@f-stats-bets/types'
-import { db } from 'src/db'
+import { db } from '../../db'
 import { CreateUserSettingsInput } from './user.service.types'
 
 export const registerUser = async (data: RegisterUserInput) => {
