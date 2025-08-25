@@ -68,7 +68,6 @@ export const insertTeamsToDb = async ({ leagueId, season, teamsData }: InsertTea
     season,
     leagueId,
   })
-
   let addedTeams: Team[] = []
   let addedTeamsToLeague: TeamToLeague[] = []
 

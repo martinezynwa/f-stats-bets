@@ -55,24 +55,33 @@ export const updateManyPlayerToTeam = async (playerToTeam: PlayerToTeam[]) => {
 }
 
 export const fetchAndInsertPlayers = async (input: InsertPlayersValidationSchema) => {
+  const { season, shouldMockResponse } = input
+
   const playerSquadsResponse = await fetchPlayersSquads(input)
 
   const existingPlayers = await getPlayers()
   const existingPlayersIds = existingPlayers.map(player => player.playerId)
 
-  const playerIds = playerSquadsResponse.flatMap(
-    team =>
-      team.players
-        ?.filter(player => team.team?.id && !existingPlayersIds.includes(player.id))
-        .map(player => player.id) || [],
-  )
+  const playerIds = [
+    ...new Set(
+      playerSquadsResponse.flatMap(
+        team =>
+          team.players
+            ?.filter(
+              player => team.team?.id && !existingPlayersIds.includes(player.id) && player.id !== 0,
+            )
+            .map(player => player.id) || [],
+      ),
+    ),
+  ]
 
-  const playersProfilesResponse = playerIds.length > 0 ? await fetchPlayersProfiles(playerIds) : []
+  const playersProfilesResponse =
+    playerIds.length > 0 ? await fetchPlayersProfiles(playerIds, shouldMockResponse) : []
 
   const playersProfilesData = transformPlayerResponses(
     playerSquadsResponse,
     playersProfilesResponse,
-    input.season,
+    season,
   )
 
   const addedPlayers =

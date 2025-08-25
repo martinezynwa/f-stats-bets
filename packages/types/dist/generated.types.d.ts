@@ -205,9 +205,9 @@ export interface Player {
     birthCountry: string | null;
     birthDate: string | null;
     createdAt: Generated<Timestamp | null>;
-    firstName: string;
+    firstName: string | null;
     height: string | null;
-    lastName: string;
+    lastName: string | null;
     name: string;
     photo: string | null;
     playerId: number;

@@ -16,6 +16,7 @@ import {
   seedRelationDataFromCsv,
 } from '../services/seed/seed.service.mutations'
 import { TableWithoutRelations, TableWithRelations } from '../services/seed/seed.service.types'
+
 const router = Router()
 
 //router.use(requireAuth)
@@ -31,9 +32,9 @@ router.post(
       await seedDatabaseFromCsv(['Season', 'Nation'])
     }
 
-    await seedDatabaseFromExternalApi(req.body)
+    const response = await seedDatabaseFromExternalApi(req.body)
 
-    res.json({ text: 'Database seeded from external API' })
+    res.json({ text: 'Database seeded from external API', response })
   }, seedFromExternalApiValidationSchema),
 )
 

@@ -20,3 +20,6 @@ export const rawQueryArray = async <T>(query: string): Promise<T[]> => {
   const result = await sql<T>`${sql.raw(query)}`.execute(db)
   return result.rows.map(row => row)
 }
+
+export const formatSqlStringValues = (values: string[]): string =>
+  values.map(value => `'${value}'`).join(', ')

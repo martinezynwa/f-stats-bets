@@ -1,4 +1,5 @@
 import { z } from 'zod'
+import { FixtureStatus } from '../types'
 
 export const insertLeagueValidationSchema = z.object({
   leagueId: z.number(),
@@ -37,6 +38,7 @@ export const insertPlayersValidationSchema = z.object({
   leagueIds: z.array(z.number()).optional(),
   teamIds: z.array(z.number()).optional(),
   season: z.number(),
+  shouldMockResponse: z.boolean().optional(),
 })
 export type InsertPlayersValidationSchema = z.infer<typeof insertPlayersValidationSchema>
 
@@ -59,6 +61,7 @@ export const insertPlayerFixtureStatsValidationSchema = z.object({
   leagueIds: z.array(z.number()).optional(),
   dateFrom: z.string().optional(),
   dateTo: z.string().optional(),
+  status: z.array(z.enum(Object.values(FixtureStatus) as [string, ...string[]])).optional(),
 })
 export type InsertPlayerFixtureStatsValidationSchema = z.infer<
   typeof insertPlayerFixtureStatsValidationSchema

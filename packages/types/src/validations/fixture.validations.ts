@@ -1,5 +1,6 @@
 import { z } from 'zod'
 import { datePeriodSchema } from './shared.validations'
+import { FixtureStatus } from '../types'
 
 export const fixturesBetsSchema = z
   .object({
@@ -21,3 +22,12 @@ export const fixturesSchema = z
   .merge(datePeriodSchema)
 
 export type FixturesSchema = z.infer<typeof fixturesSchema>
+
+export const fixtureDetailsSchema = z.object({
+  fixtureIds: z.array(z.number()).optional(),
+  leagueIds: z.array(z.number()).optional(),
+  dateFrom: z.string().optional(),
+  dateTo: z.string().optional(),
+  status: z.array(z.enum(Object.values(FixtureStatus) as [string, ...string[]])).optional(),
+})
+export type FixtureDetailsSchema = z.infer<typeof fixtureDetailsSchema>

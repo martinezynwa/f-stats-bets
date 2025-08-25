@@ -12,7 +12,6 @@ import {
   insertPlayerSeasonStatisticsValidationSchema,
 } from '@f-stats-bets/types'
 import { Router } from 'express'
-import { db } from '../db'
 import { validateRequestWithBody } from '../lib'
 import { fetchFixtures } from '../services/external/external.fixture.service'
 import { fetchLeagueInfo } from '../services/external/external.league.service'
@@ -131,9 +130,6 @@ router.post(
   '/insert-fixtures',
   validateRequestWithBody(async (req, res) => {
     const { leagueIds, season, dateFrom, dateTo } = req.body
-
-    await db.deleteFrom('Fixture').execute()
-    await db.deleteFrom('FixtureRound').execute()
 
     const externalFixturesData = await fetchFixtures({
       leagueIds,

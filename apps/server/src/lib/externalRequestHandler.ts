@@ -17,6 +17,7 @@ interface ExternalRequestHandlerProps<T> {
   subEndpoint?: SUBENDPOINTS
   params?: Record<string, string | number | undefined>
   responseArray: T[]
+  shouldMockResponse?: boolean
 }
 
 export const externalRequestHandler = async <T>({
@@ -25,14 +26,16 @@ export const externalRequestHandler = async <T>({
   endpoint,
   subEndpoint,
   responseArray,
+  shouldMockResponse,
 }: ExternalRequestHandlerProps<T>): Promise<T[]> => {
-  if (process.env.MOCK === 'true') {
-    //@ts-ignore
+  if (process.env.MOCK === 'true' || shouldMockResponse) {
     return mockHandler({ endpoint, params })
   }
 
   try {
     const url = new URL(`${process.env.API_FOOTBALL_HOST}${endpoint}${subEndpoint ?? ''}`)
+    // eslint-disable-next-line no-console
+    console.log(`Fetching | ${url.toString()} | Params: ${JSON.stringify(params)}`)
 
     if (params && requestMethod !== RequestMethod.POST) {
       Object.entries(params).forEach(([key, value]) => {
@@ -55,7 +58,7 @@ export const externalRequestHandler = async <T>({
     if (response.headers.get('x-ratelimit-remaining') === '0') {
       // eslint-disable-next-line no-console
       console.log('rate limit at 0')
-      await new Promise(resolve => setTimeout(resolve, 25000))
+      await new Promise(resolve => setTimeout(resolve, 40000))
     }
 
     const data: ExternalResponse<T> = await response.json()

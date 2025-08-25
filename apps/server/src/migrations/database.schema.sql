@@ -324,8 +324,8 @@ ALTER TABLE "BetEvaluated" ADD CONSTRAINT "BetEvaluated_betCompetitionId_fkey"
 CREATE TABLE IF NOT EXISTS "Player" (
     "playerId" INTEGER PRIMARY KEY,
     "name" TEXT NOT NULL,
-    "firstName" TEXT NOT NULL,
-    "lastName" TEXT NOT NULL,
+    "firstName" TEXT,
+    "lastName" TEXT,
     "age" INTEGER,
     "birthDate" TEXT,
     "birthCountry" TEXT,

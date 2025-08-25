@@ -81,10 +81,10 @@ POST {{baseUrl}}/insert-fixtures
 Content-Type: application/json
 
 {
-  "leagueIds": [15],
+  "leagueIds": [39],
   "season": 2025,
-  "dateFrom": "2025-06-06",
-  "dateTo": "2025-06-30"
+  "dateFrom": "2025-08-01",
+  "dateTo": "2025-08-19"
 }
 
 ### Fetch players squads
@@ -102,7 +102,7 @@ POST {{baseUrl}}/players-squads
 Content-Type: application/json
 
 {
-  "teamIds": [40],
+  "teamIds": [33],
   "season": 2025
 }
 
@@ -112,7 +112,7 @@ POST {{baseUrl}}/insert-players
 Content-Type: application/json
 
 {
-  "season": 2024,
+  "season": 2025,
   "leagueIds": [39]
 }
 
@@ -122,7 +122,7 @@ POST {{baseUrl}}/player-profiles
 Content-Type: application/json
 
 {
-  "playerIds": [206254]
+  "playerIds": [526535]
 }
 
 ### Fetch player fixture stats

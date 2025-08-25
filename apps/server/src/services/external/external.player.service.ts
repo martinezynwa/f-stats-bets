@@ -18,11 +18,12 @@ import {
   ExternalPlayersTeamsResponseWithPlayerId,
 } from '../../types/external/external-player.types'
 import { TransformPlayerResponsesOutput } from './external.player.service.types'
+import { stopFunction } from 'src/lib/util'
 
 export const fetchPlayersSquads = async (
   input: InsertPlayersValidationSchema,
 ): Promise<ExternalPlayerSquadsResponse[]> => {
-  const { leagueIds, teamIds } = input
+  const { leagueIds, teamIds, shouldMockResponse } = input
 
   const allTeamIds = leagueIds
     ? await db
@@ -32,6 +33,10 @@ export const fetchPlayersSquads = async (
         .execute()
     : teamIds
 
+  if (allTeamIds?.length === 0) {
+    throw new Error('No teams found')
+  }
+
   const selectedTeamIds =
     allTeamIds?.map(team => (typeof team === 'number' ? team : team.teamId)) || []
 
@@ -40,26 +45,39 @@ export const fetchPlayersSquads = async (
   for (const team of selectedTeamIds) {
     const response = await externalRequestHandler<ExternalPlayerSquadsResponse>({
       endpoint: ENDPOINTS.PLAYERS_SQUADS,
-      params: { team, season: input.season },
+      params: { team },
       responseArray: [],
+      shouldMockResponse,
     })
 
     playersSquads.push(...response)
   }
 
-  return playersSquads
+  //bug, sometimes squad has player with id 0 which is not valid
+  const validPlayerSquadValues = playersSquads.map(item => ({
+    ...item,
+    players: item.players?.filter(player => player.id !== 0) || [],
+  }))
+
+  return validPlayerSquadValues
 }
 
 export const fetchPlayersProfiles = async (
   playerIds: number[],
+  shouldMockResponse?: boolean,
 ): Promise<ExternalPlayerInfoResponse[]> => {
   const playersProfiles: ExternalPlayerInfoResponse[] = []
 
   for (const playerId of playerIds) {
+    if (!shouldMockResponse) {
+      await stopFunction(1000)
+    }
+
     const response = await externalRequestHandler<ExternalPlayerInfoResponse>({
       endpoint: ENDPOINTS.PLAYERS_PROFILES,
       params: { player: playerId },
       responseArray: [],
+      shouldMockResponse,
     })
 
     playersProfiles.push(response[0]!)
@@ -82,7 +100,7 @@ export const transformPlayerResponses = (
     })),
   )
 
-  const players = transformPlayerProfileResponse(playersProfiles)
+  const players = transformPlayerProfileResponse(playersProfiles.filter(Boolean))
 
   return { players, playersToTeams }
 }
@@ -90,7 +108,7 @@ export const transformPlayerResponses = (
 export const transformPlayerProfileResponse = (input: ExternalPlayerInfoResponse[]) =>
   input.map(player => ({
     playerId: player.player.id,
-    name: player.player.name,
+    name: player.player.name ?? '',
     firstName: player.player.firstname,
     lastName: player.player.lastname,
     age: player.player.age,

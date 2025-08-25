@@ -7,11 +7,10 @@ POST {{baseUrl}}/init-all-from-external-api
 Content-Type: application/json
 
 {
-   "season": 2024,
-   "fixturesDateFrom": "2024-08-01",
-   "fixturesDateTo": "2024-09-03",
-   "historicalDataFirstSeason": 2023,
-   "historicalDataTotalSeasons": 1
+   "season": 2025,
+   "fixturesDateFrom": "2025-07-01",
+   "fixturesDateTo": "2026-06-30",
+   "mockActions": ["fetchAndInsertPlayers"]
 }
 
 ### Initialize Database

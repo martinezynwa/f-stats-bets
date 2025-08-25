@@ -1,7 +1,11 @@
-import { fixturesBetsSchema, fixturesSchema } from '@f-stats-bets/types'
+import { fixtureDetailsSchema, fixturesBetsSchema, fixturesSchema } from '@f-stats-bets/types'
 import { Router } from 'express'
 import { validateRequestWithBody, validateRequestWithParams } from '../lib'
-import { getFixtures, getFixturesWithBets } from '../services/fixture/fixture.service.queries'
+import {
+  getFixtures,
+  getFixturesWithBets,
+  getManyFixturesDetail,
+} from '../services/fixture/fixture.service.queries'
 
 const router = Router()
 
@@ -26,6 +30,15 @@ router.get(
 
     res.json(fixturesWithBets)
   }, fixturesBetsSchema),
+)
+
+router.post(
+  '/fixture-details',
+  validateRequestWithBody(async (req, res) => {
+    const fixtureDetails = await getManyFixturesDetail(req.body)
+
+    res.json(fixtureDetails)
+  }, fixtureDetailsSchema),
 )
 
 export default router

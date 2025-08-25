@@ -1,9 +1,9 @@
 import {
+  FixtureDetailsSchema,
   FixturesBetsSchema,
   FixturesSchema,
   FixtureWithBet,
   FixtureWithTeamDetails,
-  InsertPlayerFixtureStatsValidationSchema,
 } from '@f-stats-bets/types'
 import { buildWhereClause, rawQueryArray } from '../../lib'
 import { FixtureDetail } from '../../types/external/external-player-fixture-stats.types'
@@ -90,8 +90,8 @@ export const getFixtures = async (input: FixturesSchema) => {
   return fixtures
 }
 
-export const getManyFixturesDetail = async (input: InsertPlayerFixtureStatsValidationSchema) => {
-  const { fixtureIds, leagueIds, dateFrom, dateTo } = input
+export const getManyFixturesDetail = async (input: FixtureDetailsSchema) => {
+  const { fixtureIds, leagueIds, dateFrom, dateTo, status } = input
 
   const data = await rawQueryArray<FixtureDetail>(`
     SELECT 
@@ -109,6 +109,7 @@ export const getManyFixturesDetail = async (input: InsertPlayerFixtureStatsValid
           : null,
         fixtureIds?.length ? `"fixtureId" IN (${fixtureIds.map(Number).join(',')})` : null,
         leagueIds?.length ? `"leagueId" IN (${leagueIds.map(Number).join(',')})` : null,
+        status?.length ? `"status" IN (${status.map(s => `'${s}'`).join(',')})` : null,
       ],
       'AND',
     )}

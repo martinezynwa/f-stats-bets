@@ -6,6 +6,8 @@ export const seedValidationSchema = z.object({
 })
 export type SeedValidationSchema = z.infer<typeof seedValidationSchema>
 
+const seedActions = ['fetchAndInsertPlayers'] as const
+
 export const seedFromExternalApiValidationSchema = z.object({
   season: z.number(),
   fixturesDateFrom: z.string(),
@@ -14,6 +16,7 @@ export const seedFromExternalApiValidationSchema = z.object({
   historicalDataFirstSeason: z.number().optional(),
   historicalDataTotalSeasons: z.number().optional(),
   historicalDataPlayerIds: z.array(z.number()).optional(),
+  mockActions: z.array(z.enum(seedActions)).optional(),
 })
 
 export type SeedFromExternalApiValidationSchema = z.infer<

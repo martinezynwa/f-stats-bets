@@ -1,14 +1,14 @@
 import { League, LeagueType } from '@f-stats-bets/types'
 import { db } from '../../db'
-import { buildWhereClause, rawQueryArray } from '../../lib'
+import { buildWhereClause, rawQueryArray, formatSqlStringValues } from '../../lib'
 
 export const getLeagues = async (season?: number) => {
   const leagues = await rawQueryArray<League>(
     `SELECT * FROM "League" 
     ${buildWhereClause(
       [
-        season ? `League.season = ${season}` : null,
-        `League.type not in (${LeagueType.UNASSIGNED}, ${LeagueType.TOTALS})`,
+        season ? `"League".season = ${season}` : null,
+        `"League".type not in (${formatSqlStringValues([LeagueType.UNASSIGNED, LeagueType.TOTALS])})`,
       ],
       'AND',
     )}

@@ -3,6 +3,7 @@ import { db } from '../../db'
 import { ExternalFixtureResponse } from '../../types/external/external-fixture.types'
 import { prepareFixturesForInsertion, getFixtureWinnerWithGoals } from './fixture.service.helpers'
 import { FixtureDetailWithRound } from './fixture.service.types'
+import { buildWhereClause, formatSqlStringValues, rawQueryArray } from 'src/lib'
 
 export const createFixtures = async (fixtures: InsertFixture[]) => {
   const added = await db.insertInto('Fixture').values(fixtures).returningAll().execute()
@@ -20,13 +21,17 @@ export const upsertFixtures = async (
 ) => {
   const externalFixtureIds = externalFixturesData.map(fixture => fixture.fixture.id)
 
-  const existingFixturesInDb = await db
-    .selectFrom('Fixture')
-    .where('season', '=', season)
-    .where('fixtureId', 'in', externalFixtureIds)
-    .where('status', 'not in', completedFixtureStatuses) //to ignore already played fixtures
-    .selectAll()
-    .execute()
+  const existingFixturesInDb = await rawQueryArray<Fixture>(`
+      SELECT * FROM "Fixture"
+      ${buildWhereClause(
+        [
+          `"season" = ${season}`,
+          `"fixtureId" IN (${externalFixtureIds.join(',')})`,
+          `"status" NOT IN (${formatSqlStringValues(completedFixtureStatuses)})`,
+        ],
+        'AND',
+      )}
+    `)
 
   const existingFixturesMap = new Map(
     existingFixturesInDb?.map(fixture => [fixture.fixtureId, fixture]),
@@ -109,12 +114,11 @@ export const upsertFixtures = async (
  * use-case once Fixture[] is created
  */
 export const createFixtureRounds = async (fixtureIds: number[]) => {
-  const fixtures = await db
-    .selectFrom('Fixture')
-    .select(['fixtureId', 'leagueId', 'season', 'round', 'date'])
-    .where('fixtureId', 'in', fixtureIds)
-    .where('round', '>=', 1)
-    .execute()
+  const fixtures = await rawQueryArray<Fixture>(`
+    SELECT "fixtureId", "leagueId", "season", "round", "date"
+    FROM "Fixture"
+    ${buildWhereClause([`"fixtureId" IN (${fixtureIds.join(',')})`, `"round" >= 1`], 'AND')}
+  `)
 
   const rounds = fixtures.reduce(
     (acc, curr) => {

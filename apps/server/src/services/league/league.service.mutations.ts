@@ -36,11 +36,14 @@ export const insertLeagueToDb = async ({ leagueData, season }: InsertLeagueToDbP
 }
 
 export const insertLeagueToSeasonToDb = async (leagueId: number, season: number) => {
-  await db
+  const added = await db
     .insertInto('LeagueToSeason')
     .values({
       leagueId,
       season,
     })
-    .execute()
+    .returningAll()
+    .executeTakeFirst()
+
+  return added
 }

@@ -1,4 +1,11 @@
-import { SeedFromExternalApiValidationSchema, Team, User, UserSettings } from '@f-stats-bets/types'
+/* eslint-disable no-console */
+import {
+  FixtureStatus,
+  SeedFromExternalApiValidationSchema,
+  Team,
+  User,
+  UserSettings,
+} from '@f-stats-bets/types'
 import fs from 'fs'
 import { sql } from 'kysely'
 import path from 'path'
@@ -104,6 +111,7 @@ export const seedDatabaseFromExternalApi = async (input: SeedFromExternalApiVali
     historicalDataFirstSeason,
     historicalDataTotalSeasons,
     historicalDataPlayerIds,
+    mockActions,
   } = input
 
   await db.deleteFrom('FixtureRound').where('season', '=', season).execute()
@@ -113,7 +121,6 @@ export const seedDatabaseFromExternalApi = async (input: SeedFromExternalApiVali
 
   const leagues = getSupportedLeagues(season)
 
-  // eslint-disable-next-line no-console
   console.log(
     `Fetching data for ${leagues.length} leagues [${leagues.map(l => l.name).join(', ')}] of season ${season}`,
   )
@@ -122,17 +129,41 @@ export const seedDatabaseFromExternalApi = async (input: SeedFromExternalApiVali
     const leagueId = league.id
 
     const leagueData = await fetchLeagueInfo(leagueId, season)
-    await insertLeagueToDb({ leagueData, season })
-    await insertLeagueToSeasonToDb(leagueId, season)
+    console.log(`Fetched league ${leagueId} | ${leagueData.league.name}`)
+
+    const insertedLeague = await insertLeagueToDb({ leagueData, season })
+    console.log(`Inserted league ${leagueId} | ${insertedLeague?.name}`)
+
+    const insertedLeagueToSeason = await insertLeagueToSeasonToDb(leagueId, season)
+    console.log(
+      `Inserted LeagueToSeason ${insertedLeagueToSeason?.leagueId}-${insertedLeagueToSeason?.season}`,
+    )
 
     const teamsData = await fetchTeamsInfo(leagueId, season)
-    await insertTeamsToDb({
+    console.log(`Fetched teams for leagueId ${leagueId} | got ${teamsData.length} teams`)
+
+    const insertedTeams = await insertTeamsToDb({
       leagueId,
       season,
       teamsData,
     })
 
-    await fetchAndInsertPlayers({ season, leagueIds: [leagueId] })
+    console.log(
+      `Inserted teams for leagueId ${leagueId} | added ${insertedTeams.addedTeams.length} teams`,
+    )
+    console.log(
+      `Inserted TeamToLeague for leagueId ${leagueId} | added ${insertedTeams.addedTeamsToLeague.length} records`,
+    )
+
+    const insertedPlayers = await fetchAndInsertPlayers({
+      season,
+      leagueIds: [leagueId],
+      shouldMockResponse: mockActions?.includes('fetchAndInsertPlayers'),
+    })
+    console.log(`Inserted ${insertedPlayers.addedPlayers.length} players from leagueId ${leagueId}`)
+    console.log(
+      `Inserted ${insertedPlayers.addedPlayersToTeams.length} PlayerToTeam records based on players from leagueId ${leagueId}`,
+    )
 
     const externalFixturesData = await fetchFixtures({
       leagueIds: [leagueId],
@@ -140,21 +171,37 @@ export const seedDatabaseFromExternalApi = async (input: SeedFromExternalApiVali
       dateFrom: fixturesDateFrom,
       dateTo: fixturesDateTo,
     })
-    await upsertFixtures(externalFixturesData, season)
+    console.log(`Fetched fixtures for ${leagueId} | ${externalFixturesData.length} fixtures`)
+
+    const insertedFixtures = await upsertFixtures(externalFixturesData, season)
+    console.log(
+      `Inserted ${insertedFixtures?.newFixtures.length} new fixtures | ${insertedFixtures?.updatedFixtures.length} updated fixtures`,
+    )
 
     const fixtureDetails = await getManyFixturesDetail({
       leagueIds: [leagueId],
       dateFrom: fixturesDateFrom,
       dateTo: fixturesDateTo,
+      status: [FixtureStatus.FINISHED],
     })
-    await fetchAndInsertPlayerFixtureStats(fixtureDetails)
+    console.log(`Got ${fixtureDetails.length} fixture details for ${leagueId}`)
+
+    const insertedPlayerFixtureStats = await fetchAndInsertPlayerFixtureStats(fixtureDetails)
+    console.log(
+      `Inserted player fixture stats for ${leagueId} | ${insertedPlayerFixtureStats.length} records`,
+    )
 
     const fixtureIds = await getFixtureIds({
       dateFrom: fixturesDateFrom,
       dateTo: fixturesDateTo,
       leagueIds: [leagueId],
     })
-    await createAndInsertPlayerSeasonStats({ fixtureIds })
+    console.log(`Fetched fixture ids for ${leagueId} | ${fixtureIds.length} fixture ids`)
+
+    const insertedPlayerSeasonStats = await createAndInsertPlayerSeasonStats({ fixtureIds })
+    console.log(
+      `Added ${insertedPlayerSeasonStats.addedPlayerSeasonStats.length} player season stats | ${insertedPlayerSeasonStats.updatedPlayerSeasonStats.length} updated player season stats`,
+    )
   }
 
   const shouldFetchHistoricalPlayerSeasonStats =
