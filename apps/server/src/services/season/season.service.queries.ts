@@ -7,8 +7,8 @@ export const getSeasons = async (input: GetSeasonsProps) => {
 
   const seasons = await rawQueryArray<Season>(
     `SELECT * FROM "Season" ${buildWhereClause([
-      supported ? 'isSupported = true' : null,
-      isActual ? 'isActual = true' : null,
+      supported ? '"isSupported" = true' : null,
+      isActual ? '"isActual" = true' : null,
     ])}`,
   )
 

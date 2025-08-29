@@ -21,11 +21,13 @@ export const getLatestPlayerClubFromTransfers = (
 ): PlayersWithActualClub[] => {
   const data = playerTransfers
     .map(item => {
-      const transfers = item.transfers.filter(
-        transfer =>
-          !isOldDateFormat(transfer.date) &&
-          isSelectedDateWithinPeriod(transfer.date, dateFrom, formatDate(new Date())),
-      )
+      const transfers = item.transfers
+        .filter(
+          transfer =>
+            !isOldDateFormat(transfer.date) &&
+            isSelectedDateWithinPeriod(transfer.date, dateFrom, formatDate(new Date())),
+        )
+        .sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime())
 
       return transfers.length > 0
         ? {

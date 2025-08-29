@@ -102,7 +102,7 @@ POST {{baseUrl}}/players-squads
 Content-Type: application/json
 
 {
-  "teamIds": [33],
+  "teamIds": [35],
   "season": 2025
 }
 

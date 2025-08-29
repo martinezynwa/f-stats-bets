@@ -14,3 +14,13 @@ export const fetchTeamsInfo = async (leagueId: number, season: number) => {
 
   return data
 }
+
+export const fetchTeamInfo = async (teamId: number) => {
+  const data = await externalRequestHandler<ExternalTeamResponse>({
+    endpoint: ENDPOINTS.TEAMS,
+    params: { id: teamId },
+    responseArray: [],
+  })
+
+  return data
+}

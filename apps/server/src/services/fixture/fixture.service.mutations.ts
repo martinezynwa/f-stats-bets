@@ -72,7 +72,7 @@ export const upsertFixtures = async (
     updatedFixtureData.newFixtures.length === 0 &&
     updatedFixtureData.updatedFixtures.length === 0
   ) {
-    return
+    return { newFixtures: [], updatedFixtures: [] }
   }
 
   const response: {

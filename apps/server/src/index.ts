@@ -17,6 +17,7 @@ import seasonsRouter from './routes/season.routes'
 import seedRouter from './routes/seed.routes'
 import teamsRouter from './routes/team.routes'
 import usersRouter from './routes/user.routes'
+import jobRouter from './routes/job.routes'
 
 dotenv.config()
 
@@ -47,6 +48,7 @@ app.use('/seed', seedRouter)
 app.use('/mock', mockRouter)
 app.use('/player-fixture-stats', playerFixtureStatsRouter)
 app.use('/player-season-stats', playerSeasonStatsRouter)
+app.use('/jobs', jobRouter)
 
 app.use((err: Error, req: Request, res: Response, next: NextFunction) => {
   errorHandler(err, req, res)

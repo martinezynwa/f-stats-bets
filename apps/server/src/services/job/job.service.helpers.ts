@@ -1,4 +1,3 @@
-import { ExternalFixtureResponse } from '../../types/external/external-fixture.types'
 import { FixtureDetail } from '../../types/external/external-player-fixture-stats.types'
 import {
   fetchPlayersProfiles,
@@ -64,21 +63,18 @@ export const handleFixtureUpdateAndAddition = async (seasonData: Season, dateFro
   const { seasonId: season, seasonEndDate } = seasonData
 
   const leagues = await getLeagues(season)
+  const leagueIds = leagues.map(league => league.leagueId)
 
-  const externalFixtureData: ExternalFixtureResponse[] = []
-  for (const league of leagues) {
-    const externalFixtureData = await fetchFixtures({
-      leagueIds: [league.leagueId],
-      season,
-      dateFrom: dateFrom ?? getCurrentDate(),
-      dateTo: seasonEndDate,
-    })
+  const externalFixtureData = await fetchFixtures({
+    leagueIds,
+    season,
+    dateFrom: dateFrom ?? getCurrentDate(),
+    dateTo: seasonEndDate,
+  })
 
-    externalFixtureData.push(...externalFixtureData)
+  if (externalFixtureData.length === 0) {
+    return { newFixtures: [], updatedFixtures: [] }
   }
-
-  // No new fixtures fetched
-  if (externalFixtureData.length === 0) return
 
   const fixtures = await upsertFixtures(externalFixtureData, season)
 
@@ -86,5 +82,7 @@ export const handleFixtureUpdateAndAddition = async (seasonData: Season, dateFro
 }
 
 export const handlePlayerTransfers = async (season: number) => {
-  await handleTransfers(season)
+  const transfers = await handleTransfers(season)
+
+  return transfers
 }

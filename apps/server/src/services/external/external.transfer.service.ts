@@ -7,8 +7,24 @@ import { PLAYER_TRANSFER_DATE_FROM_DAYS } from '../../constants/constants'
 import { getLatestPlayerClubFromTransfers } from './external.transfer.service.helpers'
 import { getPlayerStatus, getPlayerToTeam } from '../player/player.service.queries'
 import { insertPlayersToTeams, updateManyPlayerToTeam } from '../player/player.service.mutations'
+import { createNewTeamsBasedOnTransfers } from '../team/team.service.mutations'
 
-export const fetchLatestTransfers = async (teamIds: number[]) => {
+export const fetchLatestTransfersForPlayers = async (playerIds: number[]) => {
+  const transferData: ExternalTransferResponse[] = []
+
+  for (const player of playerIds) {
+    const data = await externalRequestHandler<ExternalTransferResponse>({
+      endpoint: ENDPOINTS.TRANSFERS,
+      params: { player },
+      responseArray: [],
+    })
+    transferData.push(...data)
+  }
+
+  return transferData
+}
+
+export const fetchLatestTransfersForTeams = async (teamIds: number[]) => {
   const transferData: ExternalTransferResponse[] = []
 
   for (const team of teamIds) {
@@ -28,14 +44,18 @@ export const handleTransfers = async (season: number) => {
   const teams = await getTeams({ season })
   const teamIds = teams.map(team => team.teamId)
 
-  const transfers = await fetchLatestTransfers(teamIds)
+  const transfers = await fetchLatestTransfersForTeams(teamIds)
 
   const dateFrom = adjustDateByDays(-PLAYER_TRANSFER_DATE_FROM_DAYS)
 
   const playersFromTransfers = getLatestPlayerClubFromTransfers(transfers, dateFrom)
   const playerIdsFromTransfers = playersFromTransfers.map(p => p.playerId)
 
-  const playerToTeamFromDb = await getPlayerToTeam({ season, playerIds: playerIdsFromTransfers })
+  const playerToTeamFromDb = await getPlayerToTeam({
+    season,
+    playerIds: playerIdsFromTransfers,
+    isActual: true,
+  })
   const playersWithoutTeam = await getPlayerStatus({
     playerIds: playerIdsFromTransfers,
     isWithoutClub: true,
@@ -62,7 +82,9 @@ export const handleTransfers = async (season: number) => {
     })
     .filter(Boolean)
 
-  if (playersWithNewTeam.length === 0) return []
+  if (playersWithNewTeam.length === 0) {
+    return []
+  }
 
   const newPlayerToTeam = playersWithNewTeam.map(player => ({
     playerId: player!.playerId,
@@ -73,13 +95,16 @@ export const handleTransfers = async (season: number) => {
 
   const newPlayerToTeamKeys = newPlayerToTeam.map(p => `${p.playerId}-${p.teamId}-${season}`)
 
+  const teamIdsFromNewPlayerToTeam = newPlayerToTeam.map(p => p.teamId)
+  await createNewTeamsBasedOnTransfers(teamIdsFromNewPlayerToTeam)
+
   const newPlayerToTeamInserted = await insertPlayersToTeams(newPlayerToTeam)
 
   const playerToTeamNoLongerActual = playerToTeamFromDb
     .filter(p => p.isActual)
     .filter(p => !newPlayerToTeamKeys.includes(`${p.playerId}-${p.teamId}-${season}`))
 
-  const playerToTeamNotActual = await updateManyPlayerToTeam(playerToTeamNoLongerActual)
+  await updateManyPlayerToTeam(playerToTeamNoLongerActual)
 
-  return { newPlayerToTeamInserted, playerToTeamNotActual }
+  return newPlayerToTeamInserted
 }

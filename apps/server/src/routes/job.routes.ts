@@ -9,7 +9,7 @@ router.use(requireJobAuth)
 
 router.get(
   '/daily-data-update',
-  validateRequest(async (req, res) => {
+  validateRequest(async (_, res) => {
     const data = await dailyDataUpdate()
 
     res.json(data)
@@ -18,7 +18,7 @@ router.get(
 
 router.get(
   '/regular-data-update',
-  validateRequest(async (req, res) => {
+  validateRequest(async (_, res) => {
     const data = await regularDataUpdate()
 
     res.json(data)

@@ -17,12 +17,18 @@ import {
   handleFixtureUpdateAndAddition,
   handlePlayerTransfers,
 } from './job.service.helpers'
+import { log } from '../../lib/util'
 
 export const dailyDataUpdate = async (input?: DailyDataUpdateSchema) => {
   const seasons = await getSeasons({ isActual: true })
 
-  await handleFixtureUpdateAndAddition(seasons[0])
-  await handlePlayerTransfers(seasons[0].seasonId)
+  const fixtures = await handleFixtureUpdateAndAddition(seasons[0])
+  log(
+    `Added ${fixtures?.newFixtures.length} new fixtures | Updated ${fixtures?.updatedFixtures.length} fixtures`,
+  )
+
+  const newPlayerToTeamInserted = await handlePlayerTransfers(seasons[0].seasonId)
+  log(`Added ${newPlayerToTeamInserted.length} new players to team`)
 }
 
 export const regularDataUpdate = async (input?: RegularDataUpdateSchema) => {

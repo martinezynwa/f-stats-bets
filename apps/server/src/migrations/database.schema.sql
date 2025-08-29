@@ -165,11 +165,13 @@ CREATE TABLE IF NOT EXISTS "TeamToLeague" (
     "teamId" INTEGER NOT NULL,
     "season" INTEGER NOT NULL,
     "leagueId" INTEGER NOT NULL,
-    PRIMARY KEY ("teamId", "season")
+    PRIMARY KEY ("teamId", "season", "leagueId")
 );
 
 ALTER TABLE "TeamToLeague" ADD CONSTRAINT "TeamToLeague_teamId_fkey" 
     FOREIGN KEY ("teamId") REFERENCES "Team"("teamId") ON DELETE CASCADE;
+ALTER TABLE "TeamToLeague" ADD CONSTRAINT "TeamToLeague_leagueId_season_fkey" 
+    FOREIGN KEY ("leagueId", "season") REFERENCES "League"("leagueId", "season") ON DELETE CASCADE;
 
 CREATE TABLE IF NOT EXISTS "Fixture" (
     "fixtureId" INTEGER PRIMARY KEY,

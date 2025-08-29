@@ -1,8 +1,25 @@
 import { InsertTeam, Team, TeamToLeague } from '@f-stats-bets/types'
 import { db } from '../../db'
 import { GetTeamKeyProps, InsertTeamToDbProps, PrepareTeamsDataProps } from './team.service.types'
+import { ExternalTeamResponse } from 'src/types/external/external-team.types'
+import { fetchTeamInfo } from '../external/external.team.service'
+import { getTeamIds } from './team.service.queries'
 
 const getTeamKey = (input: GetTeamKeyProps) => `${input.teamId}-${input.season}-${input.leagueId}`
+
+export const transformTeamDataForInsert = (input: ExternalTeamResponse) => {
+  const { team, venue } = input
+
+  return {
+    teamId: team.id,
+    code: team.code ? team.code : team.name.replace(/\s+/g, '').substring(0, 3).toUpperCase(),
+    country: team.country,
+    logo: team.logo,
+    name: team.name,
+    national: team.national,
+    venue: venue.name || '',
+  }
+}
 
 const prepareTeamsDataForInsert = async (input: PrepareTeamsDataProps) => {
   const { teamsData, season, leagueId } = input
@@ -18,15 +35,7 @@ const prepareTeamsDataForInsert = async (input: PrepareTeamsDataProps) => {
 
   const teamDataToInsert: InsertTeam[] = teamsData
     .filter(team => !existingTeamIds.includes(team.team.id))
-    .map(({ team, venue }) => ({
-      teamId: team.id,
-      code: team.code ? team.code : team.name.replace(/\s+/g, '').substring(0, 3).toUpperCase(),
-      country: team.country,
-      logo: team.logo,
-      name: team.name,
-      national: team.national,
-      venue: venue.name || '',
-    }))
+    .map(item => transformTeamDataForInsert(item))
 
   const existingTeamsToLeagueRecords = await db
     .selectFrom('TeamToLeague')
@@ -84,4 +93,24 @@ export const insertTeamsToDb = async ({ leagueId, season, teamsData }: InsertTea
   }
 
   return { addedTeams, addedTeamsToLeague }
+}
+
+export const createNewTeamsBasedOnTransfers = async (teamIds: number[]) => {
+  const existingTeamIds = await getTeamIds()
+  const newTeamIds = teamIds.filter(id => !existingTeamIds.includes(id))
+
+  if (newTeamIds.length === 0) return []
+
+  const newTeams: ExternalTeamResponse[] = []
+
+  for (const teamId of newTeamIds) {
+    const team = await fetchTeamInfo(teamId)
+    newTeams.push(...team)
+  }
+
+  const dataToInsert = newTeams.map(item => transformTeamDataForInsert(item))
+
+  const addedTeams = await db.insertInto('Team').values(dataToInsert).returningAll().execute()
+
+  return addedTeams
 }

@@ -25,6 +25,7 @@ import { getLeagues } from '../league/league.service.queries'
 import { getCurrentYear } from '../../lib/date-and-time'
 import { createAndInsertPlayerSeasonStatsFromExternalApi } from '../player-season-stats/player-season-stats.service.mutations'
 import { getTeamIds } from '../team/team.service.queries'
+import { filterDuplicatedPlayersInSquadsResponse } from './player.service.helpers'
 
 export const insertPlayers = async (players: InsertPlayer[]) => {
   const added = await db.insertInto('Player').values(players).returningAll().execute()
@@ -39,7 +40,7 @@ export const insertPlayersToTeams = async (playersToTeams: InsertPlayerToTeam[])
 }
 
 export const updateManyPlayerToTeam = async (playerToTeam: PlayerToTeam[]) => {
-  const updated = await db.transaction().execute(async trx => {
+  await db.transaction().execute(async trx => {
     for (const player of playerToTeam) {
       await trx
         .updateTable('PlayerToTeam')
@@ -50,8 +51,6 @@ export const updateManyPlayerToTeam = async (playerToTeam: PlayerToTeam[]) => {
         .execute()
     }
   })
-
-  return updated
 }
 
 export const fetchAndInsertPlayers = async (input: InsertPlayersValidationSchema) => {
@@ -59,27 +58,26 @@ export const fetchAndInsertPlayers = async (input: InsertPlayersValidationSchema
 
   const playerSquadsResponse = await fetchPlayersSquads(input)
 
+  const filteredPlayerSquadsResponse =
+    await filterDuplicatedPlayersInSquadsResponse(playerSquadsResponse)
+
   const existingPlayers = await getPlayers()
   const existingPlayersIds = existingPlayers.map(player => player.playerId)
 
-  const playerIds = [
-    ...new Set(
-      playerSquadsResponse.flatMap(
-        team =>
-          team.players
-            ?.filter(
-              player => team.team?.id && !existingPlayersIds.includes(player.id) && player.id !== 0,
-            )
-            .map(player => player.id) || [],
-      ),
-    ),
-  ]
+  const playerIds = filteredPlayerSquadsResponse.flatMap(
+    team =>
+      team.players
+        ?.filter(
+          player => team.team?.id && !existingPlayersIds.includes(player.id) && player.id !== 0,
+        )
+        .map(player => player.id) || [],
+  )
 
   const playersProfilesResponse =
     playerIds.length > 0 ? await fetchPlayersProfiles(playerIds, shouldMockResponse) : []
 
   const playersProfilesData = transformPlayerResponses(
-    playerSquadsResponse,
+    filteredPlayerSquadsResponse,
     playersProfilesResponse,
     season,
   )
