@@ -30,7 +30,8 @@ export const createPlayerDataFromFixtures = async (
     playerId => !existingPlayers.some(player => player.playerId === playerId),
   )
 
-  if (newPlayerIds.length === 0) return { addedPlayers: [], addedPlayerToTeams: [] }
+  if (newPlayerIds.length === 0)
+    return { addedPlayers: [], addedPlayerToTeams: [], playerFixtureStats }
 
   const playerProfiles = await fetchPlayersProfiles(newPlayerIds)
 

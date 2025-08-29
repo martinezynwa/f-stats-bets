@@ -87,6 +87,18 @@ Content-Type: application/json
   "dateTo": "2025-08-19"
 }
 
+### Mock fixtures
+## params - leagueIds, ?season, ?dateFrom, ?dateTo
+POST {{baseUrl}}/mock-fixtures
+Content-Type: application/json
+
+{
+  "leagueIds": [39],
+  "season": 2025,
+  "dateFrom": "2025-08-25",
+  "dateTo": "2025-08-25"
+}
+
 ### Fetch players squads
 ## params - leagueIds
 POST {{baseUrl}}/players-squads-by-league

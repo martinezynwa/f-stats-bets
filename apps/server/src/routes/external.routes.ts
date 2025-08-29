@@ -16,7 +16,7 @@ import { validateRequestWithBody } from '../lib'
 import { fetchFixtures } from '../services/external/external.fixture.service'
 import { fetchLeagueInfo } from '../services/external/external.league.service'
 import { fetchTeamsInfo } from '../services/external/external.team.service'
-import { upsertFixtures } from '../services/fixture/fixture.service.mutations'
+import { mockFixtures, upsertFixtures } from '../services/fixture/fixture.service.mutations'
 import { insertLeagueToDb } from '../services/league/league.service.mutations'
 import { insertTeamsToDb } from '../services/team/team.service.mutations'
 import { fetchFixturesValidationSchema } from './types'
@@ -139,6 +139,24 @@ router.post(
     })
 
     const fixturesData = await upsertFixtures(externalFixturesData, season)
+
+    res.json(fixturesData)
+  }, insertFixturesValidationSchema),
+)
+
+router.post(
+  '/mock-fixtures',
+  validateRequestWithBody(async (req, res) => {
+    const { leagueIds, season, dateFrom, dateTo } = req.body
+
+    const externalFixturesData = await fetchFixtures({
+      leagueIds,
+      season,
+      dateFrom,
+      dateTo,
+    })
+
+    const fixturesData = await mockFixtures(externalFixturesData, season)
 
     res.json(fixturesData)
   }, insertFixturesValidationSchema),

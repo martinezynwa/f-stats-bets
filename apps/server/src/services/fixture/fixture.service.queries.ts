@@ -65,22 +65,22 @@ export const getFixtures = async (input: FixturesSchema) => {
     SELECT
       f.*,
       JSON_BUILD_OBJECT(
-        'id', ht.id,
+        'id', ht."teamId",
         'name', ht.name,
         'logo', ht.logo,
         'code', ht.code,
         'teamId', ht."teamId"
       ) AS "homeTeam",
       JSON_BUILD_OBJECT(
-        'id', at.id,
+        'id', at."teamId",
         'name', at.name,
         'logo', at.logo,
         'code', at.code,
         'teamId', at."teamId"
       ) AS "awayTeam"
     FROM "Fixture" AS f
-    LEFT JOIN "Team" AS ht ON f."homeTeamId" = ht.id
-    LEFT JOIN "Team" AS at ON f."awayTeamId" = at.id
+    LEFT JOIN "Team" AS ht ON f."homeTeamId" = ht."teamId"
+    LEFT JOIN "Team" AS at ON f."awayTeamId" = at."teamId"
     WHERE f."date"::date BETWEEN '${dateFrom}'::date AND '${dateTo}'::date
     ${season ? `AND f."season" = ${Number(season)}` : ''}
     ${leagueIds?.length ? `AND f."leagueId" IN (${leagueIds.map(Number).join(',')})` : ''}

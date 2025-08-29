@@ -1,4 +1,10 @@
-import { Fixture, FixtureRound, InsertFixture, completedFixtureStatuses } from '@f-stats-bets/types'
+import {
+  Fixture,
+  FixtureRound,
+  FixtureStatus,
+  InsertFixture,
+  completedFixtureStatuses,
+} from '@f-stats-bets/types'
 import { db } from '../../db'
 import { ExternalFixtureResponse } from '../../types/external/external-fixture.types'
 import { prepareFixturesForInsertion, getFixtureWinnerWithGoals } from './fixture.service.helpers'
@@ -273,4 +279,28 @@ export const updateFinishedFixtureData = async (fixtures: ExternalFixtureRespons
   })
 
   return updated.flat()
+}
+
+/**
+ * For testing purposes only
+ * Create already finished fixtures as non-finished
+ */
+export const mockFixtures = async (
+  externalFixturesData: ExternalFixtureResponse[],
+  season: number,
+) => {
+  const fixturesAsNonFinished: InsertFixture[] = externalFixturesData.map(fixture => ({
+    fixtureId: fixture.fixture.id,
+    leagueId: fixture.league.id,
+    season,
+    date: fixture.fixture.date,
+    homeTeamId: fixture.teams.home.id,
+    awayTeamId: fixture.teams.away.id,
+    round: 0,
+    status: FixtureStatus.NOT_STARTED,
+  }))
+
+  const addedFixtures = await createFixtures(fixturesAsNonFinished)
+
+  return addedFixtures
 }
